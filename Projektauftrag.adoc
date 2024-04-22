@@ -1,0 +1,61 @@
+= Projektauftrag
+
+== Allgemeines
+
+=== Projektbezeichnung:
+ASL (**A**i **S**ign **L**anguage)
+
+== Projektstart/Projektend
+22.04.2024 -> 19.06.2024
+
+=== Projektauftraggeber:
+HTBLA Leonding
+-> Herr Prof. Aitenbichler
+
+=== Projektziel(e)
+Das erlernen von Zeichensprache leichter, schneller und allgemein verfügbar machen.
+
+== Projekthintergrund
+Es gibt viele Wege, Zeichensprache zu lernen, aber ein effektiver Ansatz ist ein Kurs vor Ort mit begleitenden Trainingseinheiten in einer App. Bekannte Apps wie Lingvano, The ASL App und ASL Bloom bieten Bild- oder Text-zu-Zeichensprach-Paare, aber keine Möglichkeit zur eigenen Übung und Bewertung. Diese Lücke könnte durch Online-Zeichensprachkurse geschlossen werden, unterstützt durch eine KI, die TF-Action-Recognition nutzt, um Nutzer*innen zu erkennen und ihre Gesten zu korrigieren. Dies würde den Zugang zu Zeichensprachkursen erweitern und Menschen erreichen, die keinen Zugang zu lokalen Kursen haben.
+
+== Projektergebnis
+Das Ergbnis sollte eine Web-App sein, in welcher NutzerInnen Zeichensprache auf konventionelle Art (wie bei Projekthintergrund beschrieben) und KI ünterstützt mit eigenen Handzeichen üben/lernen können.
+
+== Projektbeschreibung
+Bei dem Projekt handelt es sich um eine Webanwendung in welcher NutzerInnen Zeichensprache üben können. Dies vor allem durch zeigen von Handbewegungen/Handzeichen. Üblich ist momentan das Üben durch verbinden von Zeichen mit Bild/Text, bei diesem Projekt geht es vor allem um Üben mit eigenen Handbewegungen um den Lernprozess zu beschleunigen.
+
+== Projektphase/Meilensteine
+Die Meilensteine sind grobe Einschätzungen und beschreiben bei Abschluss einen gerade-so akzeptablen Projektstatus. Bei etwaigem Zeitüberschuss werden diverse Punkte nach dem SCRUM-Prinzip optimiert.
+|===
+|Phase | Meilenstein | Soll-Termin
+
+|Initiierung | Dokumentation (Antrag & Co.), Issues und sonstige Projektplanungsaspekte sind fertig | 24.04.2024
+
+|Daten Sammlung | Alle Trainingsbilder/-daten sind gesammelt und mit Keypoints versehen (bereit für training der KI) | (bis exklusive) 01.05.2024
+
+|Implementierung | KI ist laufbereit (zumindest in Tensorflow python, optimal in TensorflowJS) | (bis inklusive) 04.05.2024
+
+|Setup | Server für KI, Backend und Frontend sind mit Umgebung vorbereitet (z.B. Nginx für Frontend) | (bis inklusive 06.05.2024)
+
+|Implementierung | Backend mit generation von Sätzen und Bild, Wort paaren. Bilder für jene Paare sind auch gesammelt. | (bis inklusive) 15.05.2024
+
+|Implementierung | Front-End (vor allem bindung mit TFJS und dem Backend) | (bis inklusive) 30.05.2024
+|===
+
+== Projektrisiken
+* Diverse Probleme mit Dependencies von Tensorflow bzw. Tensorflow Action Recognition
+
+Lösung: Tensorflow object-detection als (weniger akkurate aber leichtere) Alternative
+
+* Probleme bei Einbindung mit TensorflowJS
+
+Lösung: Troubleshooting mit Studenten der TU Wien
+
+== Projektorganisation
+Die Projektorganisation geschieht nach SCRUM
+
+Product-Owner: Elija Lambourne
+
+Scrum-Master: Abwechselnd
+
+Developer: Tsolmonbat Batbold, Resch Alexander, Elija Lambourne
