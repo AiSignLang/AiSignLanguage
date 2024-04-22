@@ -59,3 +59,23 @@ Product-Owner: Elija Lambourne
 Scrum-Master: Abwechselnd
 
 Developer: Tsolmonbat Batbold, Resch Alexander, Elija Lambourne
+
+== Abschluss des Projektauftrags
+
+.Alexander Resch:
+* Datum: 22.04.2024
+* Unterschrift: 
++
+image::signatures/alexander_resch.png[170,170]
+
+.Elija Lambourne-Grüneis:
+* Datum: 22.04.2024
+* Unterschrift:
++
+image::signatures/Elija_Lambourne-Grüneis.png[170,170]
+
+.Batbold Zolmon.Bat:
+* Datum: dd.MM.YYYY
+* Unterschrift:
++
+image::signatures/Batbold_Zolmon.Bat.png[170,170]
