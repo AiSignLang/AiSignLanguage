@@ -1,0 +1,11 @@
+= Aufwandsschätzung ("Expertenschätzung")
+
+== Faktoren
+* Dependency fehler.
+* Trainingsprobleme der KI
+* Ungeplanter umstieg auf object detection
+* Unterschätzung des Aufwands
+
+Der Aufwand ist verhältnismäßig niedrig. Am schwierigsten wird das Tensorflow model zum laufen zu bekommen. Von diesem Punkt an kann nicht mehr viel schief gehen. 
+
+Je nach Umfang der App kann es zwischen 8 Wochen bis hin mehrere Monate dauern. Arbeiten alle drei paralell (einer am Backend, einer am Frontend und einer an der KI) sollte es sich bis zur Abgabefrist knapp ausgehen.
