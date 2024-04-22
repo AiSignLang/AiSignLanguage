@@ -1,0 +1,14 @@
+= Projektidee
+
+== Ist-Zustand
+Es gibt viele Wege Zeichensprache zu lernen. Den besten Weg stellt aber noch ein Kurs dar, welcher vor ort geschieht und von Trainingseinheiten in einer App begleitet wird.
+
+Apps dieser Art sind https://play.google.com/store/apps/details?id=com.lingvano.app&hl=en&gl=US[Lingvano], https://theaslapp.com[The ASL App], https://play.google.com/store/apps/details?id=com.toleio.us[ASL Bloom].
+Da alle drei dafür gedacht sind neben einem Kurs genutzt zu werden, kann man nur Bilder oder Text mit deren Zeichensprach Paaren verbunden werden. In keiner der populären apps gibt es die Möglichkeit selbst zu üben und die eigene Zeichensprache bewertet zu bekommen. All das passiert im Kurs vor Ort.
+
+== Soll-Zustand 
+Dies könnte aber anders sein. Kurse für Zeichensprache könnten größtenteils bis vollständig auf Online verlagert werden. Zeichensprach Kurse überall, wann auch immer und wie auch immer man will. Das ist das Ziel.
+
+Erreicht werden soll dieses Ziel durch eine KI, welche die Action Recognition von Tensorflow nutzt. Mit TF-Action-Recogniton können Zeichen von NutzerInnen gelesen werden und bei Bedarf kann man diese korrigieren.
+
+Somit können NutzerInnen Zeichensprachkurse wann und wo auch immer ablegen. Auch öffnet diese Möglichkeit die Türen zur Zeichensprache an größere Teile der Gesellschaft, welche, zum Beispiel, keinen Zugriff auf Kurse vor Ort haben.
