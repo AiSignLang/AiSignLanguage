@@ -1,0 +1,58 @@
+= Pflichtenheft
+
+=== Ausgangslage
+Projektbezeichung: ASL (**A**i **S**ign **L**anguage)
+Auftraggeber: HTBLA Leonding -> Herr Prof. Aitenbichler
+
+=== Zielsetzung
+Das erlernen von Zeichensprache leichter, schneller und allgemein verfügbar machen.
+Das Ergbnis sollte eine Web-App sein, in welcher NutzerInnen Zeichensprache auf konventionelle Art (wie bei Projekthintergrund beschrieben) und KI ünterstützt mit eigenen Handzeichen üben/lernen können.
+
+=== Anforderung
+Nutzerinnen und Nutzer sollen nach der Fertigstellung des Projekts in der Lage dazu sein auf der Webseite Ihr Profil zu verwalten (Profilbilder, Nickname, ...) und Ihre Kurse zu verwalten. Zu den Kursen zählen diverse Sprachen der Zeichensprache (American Sign Language, Austrian Sign Language, ...).
+
+Innerhalb dieser Kurse können NutzerInnen Ihre Units (Einheiten) durcharbeiten, beginnend von Unit 1. Jede Unit sollte aus Übungen bestehen, welche erledigt werden müssen, um zur nächsten Unit aufsteigen zu können.
+
+Jede Übung besteht aus diversen Teilübungen (verbinden von Bild und Handzeichen, Verbinden von Handzeichen und Text, ...) welche einen Fokus auf "learning by doing" haben. Es sollen alles Nutzerinnen und Nutzer selbst Sätze oder Wörter mit Zeichensprache bilden.
+
+== Mengengerüst
+Unter annahme von JSON Strukturen die wie folgt sind:
+[json]
+----
+{
+  "type": "T2Z",
+  "text": [
+    {
+      "word": "Thank you",
+      "imgId": "c7105d7b-56d3-455c-bebb-30998b195c00"
+    },
+       {
+      "word": "for",
+      "imgId": "ab1297fd-37b7-4012-88f8-66b36f76f057"
+    },       {
+      "word": "the tea",
+      "imgId": "ba1e1ccf-84a5-49e0-8b06-ec22c7a9fc8a"
+    },
+       {
+      "word": "and",
+      "imgId": "a2efd400-d3b0-47b9-8341-6bd5b6d8c9f2"
+    },
+       {
+      "word": "biscuits",
+      "imgId": "54161632-44af-4332-9462-7a33527d9a90"
+    }
+  ]
+}
+----
+braucht man c.a **709 Bytes pro Level**.
+Das sind ~ **14 070 Bytes pro Unit**
+Grobe Einschätzungen wären ~ 12 Units pro Kurs zu machen.
+
+== Administratives
+Budgetrahmen: ~ 6€/Monat
+
+Abgabetermin: 19.06.2024
+
+Team: Tsolmonbat Batbold, Alexander Resch, Elija Lambourne
+
+Eine Teimleitung im traditionellen Sinne ist nicht gedacht, weil mit **SCRUM** gearbeitet wird.
