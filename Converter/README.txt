@@ -1,0 +1,1 @@
+﻿Der Converter braucht eine ander Version als die aktuelle, desshalb ein neues venv 
