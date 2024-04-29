@@ -1,26 +1,30 @@
 ﻿#!/bin/bash
 
-# Define the Python version, the name of the virtual environment, and the dependencies
+# Define the Python version and the name of the virtual environment
 PYTHON_VERSION="3.10.11"
 VENV_NAME=".venv"
-DEPENDENCIES="numpy jupyter matplotlib tensorflow==2.16.1 opencv-python mediapipe scikit-learn matplotlib keras==3.0"
 
-# Download Python
-wget https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz
+if command -v python3.10 >/dev/null 2>&1; then
+    echo "python3.10 is installed."
+else
+    # Download Python
+    wget https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz
 
-# Extract the downloaded file
-tar -xvf Python-$PYTHON_VERSION.tgz
+    # Extract the downloaded file
+    tar -xvf Python-$PYTHON_VERSION.tgz
 
-# Go to the Python directory
-cd Python-$PYTHON_VERSION
+    # Go to the Python directory
+    cd Python-$PYTHON_VERSION
 
-# Configure and install Python
-./configure
-make
-sudo make install
+    # Configure and install Python
+    ./configure
+    make
+    sudo make install
 
-# Go back to the previous directory
-cd ..
+    # Go back to the previous directory
+    cd ..
+    rm -r Python-$PYTHON_VERSION.tgz Python-$PYTHON_VERSION
+fi
 
 # Create the virtual environment
 python3.10 -m venv $VENV_NAME
@@ -28,10 +32,13 @@ python3.10 -m venv $VENV_NAME
 # Activate the virtual environment
 source $VENV_NAME/bin/activate
 
+# Update pip
+python -m pip install --upgrade pip
+
 # Install the dependencies
-for dep in $DEPENDENCIES; do
+while read dep; do
     pip install $dep
-done
+done < requirements.txt
 
 # Deactivate the virtual environment
 deactivate
