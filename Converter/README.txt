@@ -1,1 +1,1 @@
-﻿Der Converter braucht eine ander Version als die aktuelle, desshalb ein neues venv 
+﻿Der Converter braucht eine andere tenserflow Version als die aktuelle, desshalb ein neues venv 
