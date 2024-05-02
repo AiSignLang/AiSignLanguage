@@ -5,7 +5,7 @@ import {IVideoLoadingProps} from "./models/props";
 const VideoLoading: FC<IVideoLoadingProps> = ({loading,VideoRef}) => {
     return (
         <div
-            className={`${loading?'':'hidden'} relative items-center bg-black block bg-white border-gray-100 rounded-lg  dark:bg-gray-800 dark:border-gray-800 dark:hover:bg-gray-700`} 
+            className={`${loading?'':'hidden'} relative items-center bg-black block border-gray-100 rounded-lg  dark:bg-gray-800 dark:border-gray-800 dark:hover:bg-gray-700`} 
             style={{
                 width: VideoRef.current?.videoWidth ?? 720,
                 height: VideoRef.current?.videoHeight ?? 480
