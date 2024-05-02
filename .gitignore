@@ -1,6 +1,5 @@
-/CollectionBase/MP_Data/
-/CollectionBase/og/
-/CollectionBase/0.npy
+/CollectionBase/*.npy
+.idea/
 
 
 # Byte-compiled / optimized / DLL files
