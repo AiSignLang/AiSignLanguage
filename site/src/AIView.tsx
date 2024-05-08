@@ -10,7 +10,8 @@ import {time} from "@tensorflow/tfjs";
 
 const AIView: React.FC = () =>{
     //const [holistic,setHolistic] = useState<Holistic|null>(null);
-
+    const VideoWidth = 1280;
+    const VideoHeight = 720;
 
     const contextRef = useRef<CanvasRenderingContext2D | null>(null);
     const canvasRef = useRef<HTMLCanvasElement| null >(null);
@@ -53,8 +54,8 @@ const AIView: React.FC = () =>{
             enableSegmentation: true,
             smoothSegmentation: true,
             refineFaceLandmarks: true,
-            minDetectionConfidence: 0.5,
-            minTrackingConfidence: 0.5
+            minDetectionConfidence: 0.2,
+            minTrackingConfidence: 0.2
         });
         holistic.onResults(onResults);
 
@@ -87,6 +88,7 @@ const AIView: React.FC = () =>{
             canvasRef.current.width,
             canvasRef.current.height
         );
+        
         contextRef.current.drawImage(
             results.image,
             0,
@@ -130,14 +132,15 @@ const AIView: React.FC = () =>{
         <>
             <div
                 className={"relative items-center block bg-white border border-gray-100 dark:bg-gray-800 dark:border-gray-800 dark:hover:bg-gray-700"}
-                style={loaded?{}: {width: 1280, height: 720}}
-            >
-                
+                style={{width: VideoWidth, height: VideoHeight}}>
                 <video autoPlay ref={(el) => {
                     videoRef.current = el;
                     setInputVideoReady(!!el);
-                }} className={`${loaded ? 'hidden' : ''} transform scale-x-[-1] opacity-55`}>
+                }} className={`${loaded ? 'hidden' : 'opacity-55'} transform scale-x-[-1]`}>
                 </video>
+                <canvas className={`scale-x-[-1] absolute transform left-0 top-0 bg-transparent ${loaded?'':'hidden'}`} ref={canvasRef}
+                        width={videoRef.current?.videoWidth ?? VideoWidth}
+                        height={videoRef.current?.videoHeight ?? VideoHeight}/>
                 <div role="status" className={`${loaded ? 'hidden' : ''} absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2`}>
                     <svg aria-hidden="true" className={"w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"}
                          viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -151,7 +154,7 @@ const AIView: React.FC = () =>{
                     <span className={"sr-only"}>Loading...</span>
                 </div>
             </div>
-            <canvas className={"transform scale-x-[-1]"} ref={canvasRef} width={1280} height={720} style={{display: loaded ? "" : "none"}}/>
+            
         </>
     );
 }
