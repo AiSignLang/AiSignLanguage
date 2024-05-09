@@ -1,5 +1,7 @@
 /CollectionBase/*.npy
 .idea/
+*.h5
+*.keras
 
 
 # Byte-compiled / optimized / DLL files
