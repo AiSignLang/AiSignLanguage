@@ -1,5 +1,8 @@
 /CollectionBase/*.npy
 .idea/
+SavedModels/*.h5
+SavedModels/*.keras
+SavedModels/*.npy
 
 
 # Byte-compiled / optimized / DLL files
