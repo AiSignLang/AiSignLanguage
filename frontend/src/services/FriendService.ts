@@ -1,14 +1,53 @@
+
 class FriendService{
 
     // TODO: correct fetchRestEndpoint
 
-    async getFriends(){
-        const response = await fetchRestEndpoint('http://localhost:5000/friends', 'GET');
-        const friends = await response.json();
-        return friends;
+    public async getFriends(){
+        //const response = await fetchRestEndpoint('http://localhost:5000/friends', 'GET');
+
+        //const friends = await response.json();
+        /*return [
+            {friendID: 1, scoreID: 1},
+            {friendID: 2, scoreID: 2},
+            {friendID: 3, scoreID: 3},
+            {friendID: 4, scoreID: 4},
+            {friendID: 5, scoreID: 5},
+            {friendID: 6, scoreID: 6}
+        ]
+
+         */
+
+        return [
+            {
+                name: 'Max Mustermann',
+                profilePicture: 'https://www.w3schools.com/howto/img_avatar.png',
+                score:100
+            },
+            {
+                name: 'John Doe',
+                profilePicture: 'https://www.w3schools.com/howto/img_avatar2.png',
+                score:80
+            },
+            {
+                name: 'Jane Smith',
+                profilePicture: 'https://www.w3schools.com/howto/img_avatar3.png',
+                score:90
+            },
+            {
+                name: 'Emma Johnson',
+                profilePicture: 'https://www.w3schools.com/howto/img_avatar4.png',
+                score:95
+            },
+            {
+                name: 'Robert Brown',
+                profilePicture: 'https://www.w3schools.com/howto/img_avatar5.png',
+                score:85
+            }
+        ]
     }
 
-    async addFriend(friend: null){
+    public async addFriend(friend: null){
         const response = await fetch('http://localhost:5000/friends', {
             method: 'POST',
             headers: {
@@ -20,7 +59,7 @@ class FriendService{
         return newFriend;
     }
 
-    async deleteFriend(id: null){
+    public async deleteFriend(id: null){
         const response = await fetch(`http://localhost:5000/friends/${id}`, {
             method: 'DELETE'
         });
