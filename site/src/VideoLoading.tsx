@@ -1,5 +1,4 @@
-﻿import React from "react";
-import {FC} from "react";
+﻿import {FC} from "react";
 import {IVideoLoadingProps} from "./models/props";
 
 const VideoLoading: FC<IVideoLoadingProps> = ({loading,VideoRef}) => {
