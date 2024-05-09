@@ -1,11 +1,15 @@
 export interface IFriend{
-    friendID:number,
-    scoreID:number
+    id: number;
+    name: string;
+    age: number;
+    email: string;
+    phone: string;
+    isBestFriend: boolean;
 }
 
 export interface IUser{
-    userID:number,
-    username:string,
-    profilePicture: string,
-    scoreID: number
+    id: number;
+    name: string;
+    email: string;
+    password: string;
 }
