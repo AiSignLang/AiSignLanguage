@@ -1,12 +1,8 @@
-﻿import * as tf from '@tensorflow/tfjs';
-import Webcam, {WebcamProps} from "react-webcam";
-import React,{useEffect, useRef, useState} from "react";
+﻿import React,{useEffect, useRef, useState} from "react";
 
 import {drawConnectors, drawLandmarks} from "@mediapipe/drawing_utils";
 import {FACEMESH_TESSELATION, HAND_CONNECTIONS, Holistic, POSE_CONNECTIONS, Results} from "@mediapipe/holistic";
-import {Camera} from "@mediapipe/camera_utils";
-import VideoLoading from "../VideoLoading";
-import {time} from "@tensorflow/tfjs";
+
 
 const AIView: React.FC = () =>{
     //const [holistic,setHolistic] = useState<Holistic|null>(null);
