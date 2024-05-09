@@ -1,12 +1,20 @@
 ﻿import React from 'react';
 import './dist/tailwind.css';
-import AIView from "./AIView";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+} from "react-router-dom";
+import AIView from "./Components/AIView";
 
 function App() {
+    
   return (
-    <div className={"absolute -translate-x-1/2 left-1/2 "}>
-      <AIView/>
-    </div>
+      <Router>
+        <Routes>
+            <Route path="/" element={<AIView/>}/>
+        </Routes>
+      </Router>
   );
 }
 

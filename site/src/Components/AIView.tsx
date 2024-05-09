@@ -5,7 +5,7 @@ import React,{useEffect, useRef, useState} from "react";
 import {drawConnectors, drawLandmarks} from "@mediapipe/drawing_utils";
 import {FACEMESH_TESSELATION, HAND_CONNECTIONS, Holistic, POSE_CONNECTIONS, Results} from "@mediapipe/holistic";
 import {Camera} from "@mediapipe/camera_utils";
-import VideoLoading from "./VideoLoading";
+import VideoLoading from "../VideoLoading";
 import {time} from "@tensorflow/tfjs";
 
 const AIView: React.FC = () =>{
@@ -54,8 +54,8 @@ const AIView: React.FC = () =>{
             enableSegmentation: true,
             smoothSegmentation: true,
             refineFaceLandmarks: true,
-            minDetectionConfidence: 0.2,
-            minTrackingConfidence: 0.2
+            minDetectionConfidence: 0.4,
+            minTrackingConfidence: 0.4
         });
         holistic.onResults(onResults);
 
