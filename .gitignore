@@ -2,6 +2,7 @@
 .idea/
 *.h5
 *.keras
+*.npy
 
 
 # Byte-compiled / optimized / DLL files
