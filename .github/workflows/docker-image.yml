@@ -1,0 +1,19 @@
+name: Docker Image React
+
+on:
+  push:
+    branches: [ "main", "stable-*" ]
+  pull_request:
+    branches: [ "main", "stable-*" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      working-directory: site
