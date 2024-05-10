@@ -4,9 +4,7 @@ import UserProfile from "./components/userprofile/UserProfile.tsx";
 function App() {
 
   return (
-    <>
       <UserProfile/>
-    </>
   )
 }
 
