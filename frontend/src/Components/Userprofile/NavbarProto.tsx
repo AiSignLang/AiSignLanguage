@@ -80,7 +80,7 @@ export default function NavbarProto() {
                         edge="start"
                         onClick={handleDrawerToggle}
                         sx={{ mr: 2, display: { md: 'none' } }}
-                        style={{backgroundColor: 'white'}}
+                        style={{backgroundColor: 'grey'}}
                     >
                         <>
                             <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"

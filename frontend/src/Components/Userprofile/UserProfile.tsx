@@ -20,7 +20,7 @@ export default function UserProfile(){
                     <User/>
                 </div>
                 <div
-                    className="md:col-start-2 md:col-span-1
+                    className="md:col-start-1 md:col-span-4
                     sm:col-start-3 sm:col-span-3 text-center"
                 >
                     <Friends/>
