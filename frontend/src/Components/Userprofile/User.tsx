@@ -18,6 +18,8 @@ export default function User(){
                 */}
                 <div className="inline-block pt-5">
                     <h1 className="text-xl font-bold">John Doe de marcus the</h1>
+
+                    {/* TODO: Score needs to be put in here */}
                     <p className="p-4">100 ? 10! 3$</p>
                 </div>
             </div>
