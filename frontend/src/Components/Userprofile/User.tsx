@@ -16,8 +16,8 @@ export default function User(){
                 {/*
                     username/score
                 */}
-                <div className="inline-block">
-                    <h1 className="text-2xl font-bold">John Doe de marcus the</h1>
+                <div className="inline-block pt-5">
+                    <h1 className="text-xl font-bold">John Doe de marcus the</h1>
                     <p className="p-4">100 ? 10! 3$</p>
                 </div>
             </div>
