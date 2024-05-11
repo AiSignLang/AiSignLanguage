@@ -27,9 +27,8 @@ export default function UserProfile(){
 
                 <div
                     className="
-                    lg:col-start-1 md:col-span-4
-                    md:col-start-1 md:col-end-3
-                    sm:col-start-3 sm:col-span-3 text-center bg-green-600"
+                    md:col-start-1 md:col-span-4
+                    sm:col-start-3 sm:col-span-3"
                 >
                     <Friends/>
                 </div>

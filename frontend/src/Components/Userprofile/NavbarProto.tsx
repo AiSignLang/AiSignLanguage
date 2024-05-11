@@ -72,14 +72,13 @@ export default function NavbarProto() {
     return (
         <Box sx={{ display: 'flex'}}>
             <CssBaseline />
-
                 <Toolbar>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
                         edge="start"
                         onClick={handleDrawerToggle}
-                        sx={{ mr: 2, display: { md: 'none' } }}
+                        sx={{ xs: 2, display: { md: 'none' } }}
                         style={{backgroundColor: 'grey'}}
                     >
                         <>
