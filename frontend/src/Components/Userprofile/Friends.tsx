@@ -58,7 +58,7 @@ const people = [
 export default function Friends() {
     return (
 
-        <ul role="list" className="grid grid-cols-subgrid col-span-8">
+        <ul role="list" className="divide-y divide-gray-500 grid grid-cols-subgrid col-span-8">
 
             <div className="md:col-start-1 md:col-end-2
                     sm:col-start-1 sm:col-end-3 text-center m-6">
@@ -66,7 +66,7 @@ export default function Friends() {
 
             <h1 className="text-2xl font-bold
                   md:col-start-1 md:col-end-3
-                  sm:col-start-1 sm:col-end-3 text-center">Friends</h1>
+                  sm:col-start-1 sm:col-end-3 text-center pt-4">Friends</h1>
 
             <div className="md:col-start-1 md:col-end-3
                     sm:col-start-1 sm:col-end-3 m-6 md:text-left">
