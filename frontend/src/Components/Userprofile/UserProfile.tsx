@@ -19,7 +19,7 @@ export default function UserProfile(){
                 */}
 
                 <div className="sm:col-start-1 sm:col-end-4 sm:row-start-1">
-                    <NavbarProtoAlp></NavbarProtoAlp>
+                    <NavbarProtoAlp/>
                 </div>
 
                 <div
