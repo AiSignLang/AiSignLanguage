@@ -68,7 +68,7 @@ export default function Friends() {
                   md:col-start-1 md:col-end-3
                   sm:col-start-1 sm:col-end-3 text-center">Friends</h1>
 
-            <div className="md:col-start-2 md:col-end-3
+            <div className="md:col-start-1 md:col-end-3
                     sm:col-start-1 sm:col-end-3 m-6 md:text-left">
                 {people.map((person) => (
                     <li key={person.email} className="flex justify-between gap-x-6 py-5 text-gray-300">

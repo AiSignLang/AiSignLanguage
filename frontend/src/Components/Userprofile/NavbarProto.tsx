@@ -14,7 +14,7 @@ import Toolbar from '@mui/material/Toolbar';
 import {InboxIcon} from "@heroicons/react/16/solid";
 
 const drawerWidth = 240;
-
+// if here
 
 export default function NavbarProto() {
 
@@ -96,6 +96,8 @@ export default function NavbarProto() {
                 aria-label="mailbox folders"
             >
                 {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+
+
                 <Drawer
                     variant="temporary"
                     open={mobileOpen}
@@ -104,6 +106,8 @@ export default function NavbarProto() {
                     ModalProps={{
                         keepMounted: true, // Better open performance on mobile.
                     }}
+
+
                     sx={{
                         display: { xs: 'block', md: 'none' },
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
