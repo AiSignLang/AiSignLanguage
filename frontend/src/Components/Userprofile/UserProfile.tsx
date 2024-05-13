@@ -1,4 +1,3 @@
-import NavbarProto from "./NavbarProto.tsx";
 import User from "./User.tsx";
 import Friends from "./Friends.tsx";
 import NavbarProtoAlp from "./NavbarProtoAlp.tsx";
