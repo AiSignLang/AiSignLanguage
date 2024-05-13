@@ -8,6 +8,7 @@ const people = [
             'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
         lastSeen: '3h ago',
         lastSeenDateTime: '2023-01-23T13:23Z',
+        score:100
     },
     {
         name: 'Michael Foster',
@@ -17,6 +18,8 @@ const people = [
             'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
         lastSeen: '3h ago',
         lastSeenDateTime: '2023-01-23T13:23Z',
+        score:100
+
     },
     {
         name: 'Dries Vincent',
@@ -25,6 +28,8 @@ const people = [
         imageUrl:
             'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
         lastSeen: null,
+        score:100
+
     },
     {
         name: 'Lindsay Walton',
@@ -34,6 +39,8 @@ const people = [
             'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
         lastSeen: '3h ago',
         lastSeenDateTime: '2023-01-23T13:23Z',
+        score:100
+
     },
     {
         name: 'Courtney Henry',
@@ -43,6 +50,8 @@ const people = [
             'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
         lastSeen: '3h ago',
         lastSeenDateTime: '2023-01-23T13:23Z',
+        score:100
+
     },
     {
         name: 'Tom Cook',
@@ -51,6 +60,8 @@ const people = [
         imageUrl:
             'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
         lastSeen: null,
+        score:100
+
     },
 ]
 
@@ -78,7 +89,7 @@ export default function Friends() {
                                 <p className="text-sm font-semibold leading-6">{person.name}</p>
                             </div>
                         </div>
-                        <p className="hidden shrink-0 sm:flex sm:flex-col sm:items-end text-sm leading-6">{person.role}</p>
+                        <p className="hidden shrink-0 sm:flex sm:flex-col sm:items-end text-sm leading-6">{person.score}</p>
                     </li>
                 ))}
 

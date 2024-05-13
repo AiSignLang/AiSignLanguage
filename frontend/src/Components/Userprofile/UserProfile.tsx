@@ -23,20 +23,20 @@ export default function UserProfile(){
                 </div>
 
                 <div
-                    className="md:col-start-2 md:col-end-3 md:row-start-2
+                    className="md:col-start-1 md:col-end-4 md:row-start-2
                     sm:col-start-2 sm:col-end-4 sm:row-start-2 text-center m-6">
                     <User/>
                 </div>
 
-                <div className="md:col-start-2 md:col-end-3 md:row-start-3
-                    sm:col-start-2 sm:col-end-4 sm:row-start-3 text-center m-6">
+                <div className="md:col-start-1 md:col-end-4 md:row-start-3
+                    sm:col-start-1 sm:col-end-4 sm:row-start-3 text-center m-6 bg-red-500">
                     Component for system message, chatting, log out, etc.
                 </div>
 
                 <div
                     className="
                     md:col-start-1 md:col-span-4
-                    sm:col-start-1 sm:col-end-4"
+                    sm:col-start-1 sm:col-end-4 bg-yellow-500"
                 >
                     <Friends/>
                 </div>
