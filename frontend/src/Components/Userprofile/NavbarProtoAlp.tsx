@@ -3,16 +3,17 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 const navigation = [
-    { name: 'Dashboard', href: '#', current: true },
-    { name: 'Team', href: '#', current: false },
-    { name: 'Projects', href: '#', current: false },
-    { name: 'Calendar', href: '#', current: false },
+    { name: 'Lambourne', href: '#', current: true },
+    { name: 'Courses', href: '#', current: false },
+    { name: 'Training', href: '#', current: false },
+    { name: 'Read', href: '#', current: false },
 ]
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
+// TODO: Dropdown for training -> in there are read/sign
 export default function NavbarProtoAlp() {
     return (
         <Disclosure as="nav" className="bg-gray-800">
