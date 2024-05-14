@@ -4,7 +4,7 @@
 export default function User(){
     return(
         <>
-            <div className="grid grid-cols-3 grid-rows-2">
+            <div className="grid grid-cols-3">
                 {/*
                     profile picture
                 */}
@@ -22,7 +22,7 @@ export default function User(){
                 <div className="inline-block pt-5
                     md:col-start-2 md:row-start-1
                      sm:col-start-1 sm:col-end-4 sm:row-start-2
-                    xs:col-start-1 xs:col-end-4 xs:row-start-2 bg-green-600
+                    xs:col-start-1 xs:col-end-4 xs:row-start-2
                 ">
                     <h1 className="text-3xl">John Doe de marcus the</h1>
 
