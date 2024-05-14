@@ -13,6 +13,7 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
+
 // TODO: Dropdown for training -> in there are read/sign
 export default function NavbarProtoAlp() {
     return (
