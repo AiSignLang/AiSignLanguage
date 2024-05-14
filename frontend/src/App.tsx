@@ -1,5 +1,5 @@
 import './App.css'
-import UserProfile from "./components/userprofile/UserProfile.tsx";
+import UserProfile from "./Components/userprofile/UserProfile.tsx";
 
 function App() {
 
