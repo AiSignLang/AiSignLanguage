@@ -24,13 +24,13 @@ export default function User(){
                      sm:col-start-1 sm:col-end-4 sm:row-start-2
                     xs:col-start-1 xs:col-end-4 xs:row-start-2
                 ">
-                    <h1 className="text-3xl">John Doe de marcus the</h1>
+                    <h1 className="text-3xl p-16 px-15">John Doe de marcus the</h1>
 
                     {/* TODO: Score needs to be put in here */}
-                    <div>
-                        <span className="p-4 text-left">100 ? 10! 3$</span>
-                        <span className="p-4 ">100 ? 10! 3$</span>
-                        <span className="p-4">100 ? 10! 3$</span>
+                    <div className="flex justify-between">
+                        <span className="p-4">1000%</span>
+                        <span className="p-4">397$</span>
+                        <span className="p-4">97#</span>
                     </div>
 
                 </div>
