@@ -13,8 +13,9 @@ export default function UserProfile(){
                 </div>
 
                 <div
-                    className="md:col-start-1 md:col-end-4 md:row-start-2
-                    sm:col-start-1 sm:col-end-4 sm:row-start-2 text-center m-6">
+                    className="text-center m-6 mt-10
+                    md:col-start-1 md:col-end-4 md:row-start-2
+                    sm:col-start-1 sm:col-end-4 sm:row-start-2">
                     <User/>
                 </div>
 
