@@ -8,10 +8,14 @@ export default {
     flowbite.content(),
   ],
   theme: {
-    extend: {},
-  },
-  plugins: [
-    flowbite.plugin(),
+    extend: {
+      screens: {
+        'xs': {'max': '639px'}, // screens smaller than sm
+      },
+    },
+    plugins: [
+      flowbite.plugin(),
 
-  ],
+    ],
+  }
 }

@@ -23,7 +23,7 @@ export default function UserProfile(){
 
                 <div
                     className="md:col-start-1 md:col-end-4 md:row-start-2
-                    sm:col-start-2 sm:col-end-4 sm:row-start-2 text-center m-6">
+                    sm:col-start-3 sm:col-end-4 sm:row-start-2 text-center m-6">
                     <User/>
                 </div>
 
