@@ -1,10 +1,6 @@
 export interface IFriend{
-    id: number;
+    friendID: number;
     name: string;
-    age: number;
-    email: string;
-    phone: string;
-    isBestFriend: boolean;
 }
 
 export interface IUser{
@@ -13,3 +9,8 @@ export interface IUser{
     email: string;
     password: string;
 }
+
+export interface IScore{
+
+}
+

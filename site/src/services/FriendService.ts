@@ -7,27 +7,27 @@ class FriendService{
 
         return [
             {
-                id: 1,
+                friendID: 1,
                 name: 'John Doe',
                 score: 100,
             },
             {
-                id: 2,
+                friendID: 2,
                 name: 'Jane Smith',
                 score: 120,
             },
             {
-                id: 3,
+                friendID: 3,
                 name: 'Bob Johnson',
                 score: 80,
             },
             {
-                id: 4,
+                friendID: 4,
                 name: 'Alice Williams',
                 score: 150,
             },
             {
-                id: 5,
+                friendID: 5,
                 name: 'Charlie Brown',
                 score: 90,
             }
