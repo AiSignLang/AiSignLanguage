@@ -2,17 +2,19 @@
 /** @type {import('tailwindcss').Config} */
 import * as flowbite from "flowbite-react/tailwind";
 
+const colors = require('tailwindcss/colors')
+
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-    flowbite.content(),
-  ],
-  theme: {
-    extend: {
-          screens: {
-            'xs': {'max': '639px'}, // screens smaller than sm
-          },
+    content: [
+        "./index.html",
+        "./src/**/*.{ts,tsx,css,js,jsx}",
+        flowbite.content(),
+    ],
+    theme: {
+        extend: {
+            screens: {
+                'xs': {'max': '639px'}, // screens smaller than sm
+            },
             animation: {
                 'spin-slow': 'spin 3s linear infinite',
             },
@@ -23,13 +25,13 @@ export default {
                 amber: colors.amber,
                 emerald: colors.emerald,
             }
-    },
-    colors: {
+        },
+        colors: {
             'blue': '#243c5a',
             },
+    },
     plugins: [
-      flowbite.plugin(),
-
+        flowbite.plugin(),
     ],
-  }
 }
+
