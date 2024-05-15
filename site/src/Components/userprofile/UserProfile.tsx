@@ -1,6 +1,6 @@
 import User from "./User.tsx";
 import Friends from "./Friends.tsx";
-import NavbarProto from "../NavbarProto.tsx";
+import Navbar from "../navbar/Navbar.tsx";
 
 export default function UserProfile(){
 
@@ -9,7 +9,7 @@ export default function UserProfile(){
             <div className="bg-blue-950 text-gray-100 grid md:grid-cols-3 gap-2 p-8">
 
                 <div className="sm:col-start-1 sm:col-end-4 sm:row-start-1">
-                    <NavbarProto/>
+                    <Navbar/>
                 </div>
 
                 <div

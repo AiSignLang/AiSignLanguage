@@ -15,7 +15,7 @@ function classNames(...classes: string[]) {
 
 
 // TODO: Dropdown for training -> in there are read/sign
-export default function NavbarProto() {
+export default function Navbar() {
     return (
         <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
