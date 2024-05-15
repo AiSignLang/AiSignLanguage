@@ -1,4 +1,4 @@
-﻿import './dist/tailwind.css';
+import './dist/tailwind.css';
 import {
     BrowserRouter as Router,
     Routes,
