@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "asl",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -15,6 +15,11 @@
     "@headlessui/react": "^2.0.3",
     "@heroicons/react": "^2.1.3",
     "@material-tailwind/react": "^2.1.9",
+     "@mediapipe/camera_utils": "^0.3.1675466862",
+    "@mediapipe/control_utils": "^0.6.1675466023",
+    "@mediapipe/drawing_utils": "^0.3.1675466124",
+    "@mediapipe/holistic": "^0.5.1675471629",
+    "@tensorflow/tfjs": "^4.18.0",
     "@mui/material": "^5.15.17",
     "bootstrap-icons": "^1.11.3",
     "flowbite-react": "^0.9.0",
@@ -36,6 +41,32 @@
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "vite": "^5.2.0",
+     "vite-plugin-mediapipe": "^0.1.0"
+     },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "tailwind": "tailwindcss -i ./src/tailwind_input.css -o ./src/dist/tailwind.css --watch"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
