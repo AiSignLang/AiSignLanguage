@@ -1,6 +1,6 @@
 import User from "./User.tsx";
 import Friends from "./Friends.tsx";
-import NavbarProto from "./NavbarProto.tsx";
+import NavbarProto from "../NavbarProto.tsx";
 
 export default function UserProfile(){
 
