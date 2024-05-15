@@ -7,7 +7,7 @@ class UserService{
 
     // TODO: this method gets ID and returns user object + needs to be switched down below
     // TODO: change route as needed
-    public async getUser(){
+    public async getUser(username: string, id?: string): Promise<IUser | null>{
 
         //await fetchRestEndpoint(this.route, 'GET')
         const user: IUser = {

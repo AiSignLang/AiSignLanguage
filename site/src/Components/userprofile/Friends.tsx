@@ -23,7 +23,7 @@ export default function Friends() {
                     <li key={friends.friendID} className="flex justify-between gap-x-6 py-5 text-gray-300">
                         <div className="flex min-w-0 gap-x-4">
                             <img className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                                 src={friends.profilePath ? friends.profilePath : undefined} alt=""/> TODO: add alt text + change profile picture to default image
+                                 src={friends.profilePath ? friends.profilePath : undefined} alt=""/>  {/*TODO: add alt text + change profile picture to default image*/}
                             <div className="min-w-0 flex-auto">
                                 <p className="text-sm leading-6 font-bold">{friends.name}</p>
                             </div>

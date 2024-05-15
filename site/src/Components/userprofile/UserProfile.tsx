@@ -6,7 +6,7 @@ export default function UserProfile(){
     return(
         <>
             <div className="bg-bg-primary text-text-primary p-8 h-screen w-screen">
-                <User></User>
+                <User username="johndoe"></User>
                 <Friends></Friends>
             </div>
         </>
