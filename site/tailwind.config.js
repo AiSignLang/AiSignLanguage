@@ -1,11 +1,19 @@
 /** @type {DefaultColors} */
+/** @type {import('tailwindcss').Config} */
+import * as flowbite from "flowbite-react/tailwind";
 
 const colors = require('tailwindcss/colors')
 
-module.exports = {
-    content: ["./src/**/*.{ts,tsx,css,js,jsx}"],
+export default {
+    content: [
+        "./src/**/*.{ts,tsx,css,js,jsx}",
+        flowbite.content(),
+    ],
     theme: {
         extend: {
+            screens: {
+                'xs': {'max': '639px'}, // screens smaller than sm
+            },
             animation: {
                 'spin-slow': 'spin 3s linear infinite',
             },
@@ -21,6 +29,8 @@ module.exports = {
             'blue': '#243c5a',
             },
     },
-    plugins: [],
+    plugins: [
+        flowbite.plugin(),
+    ],
 }
 
