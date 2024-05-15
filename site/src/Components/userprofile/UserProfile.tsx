@@ -5,7 +5,7 @@ export default function UserProfile(){
 
     return(
         <>
-            <div className="bg-blue-950 text-gray-100 p-8">
+            <div className="bg-bg-primary text-text-primary p-8 h-screen w-screen">
                 <User></User>
                 <Friends></Friends>
             </div>

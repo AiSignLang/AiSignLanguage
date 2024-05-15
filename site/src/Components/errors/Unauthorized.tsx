@@ -6,13 +6,13 @@ interface IProps {
 
 export function Unauthorized(props: IProps) {
     return (
-        <div className="h-screen flex flex-col sm:flex-row bg-blue-950 text-gray-100 p-8">
-            <div className="w-full sm:w-1/2 flex items-center justify-center text-white">
+        <div className="h-screen flex flex-col sm:flex-row bg-bg-primary text-text-primary p-8">
+            <div className="w-full sm:w-1/2 flex items-center justify-center text-text-primary">
                 <div>
                     <h1 className="text-6xl font-bold">401</h1>
                     <p className="text-xl">Unauthorized</p>
                     <p className="text-md">You are not authorized to use this page!</p>
-                    <a href="/" className="mt-4 inline-block text-white py-2 hover:text-blue-400">
+                    <a href="/" className="mt-4 inline-block text-text-primary py-2 hover:text-primary">
                         ← Go back home
                     </a>
                 </div>

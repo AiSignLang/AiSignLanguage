@@ -5,13 +5,13 @@ interface IProps {
 
 export function XnotFound(props: IProps) {
     return (
-        <div className="h-screen flex flex-col sm:flex-row bg-blue-950 text-gray-100 p-8">
-            <div className="w-full sm:w-1/2 flex items-center justify-center text-white">
+        <div className="h-screen flex flex-col sm:flex-row bg-bg-primary text-text-primary p-8">
+            <div className="w-full sm:w-1/2 flex items-center justify-center text-text-primary">
                 <div>
                     <h1 className="text-6xl font-bold">404</h1>
                     <p className="text-xl">{props.subject} not found!</p>
                     <p className="text-md">{props.message ? `${props.message}` : 'The page you are looking for does not exist or another error occurred.'}</p>
-                    <a href="/" className="mt-4 inline-block text-white py-2 hover:text-blue-400">
+                    <a href="/" className="mt-4 inline-block text-text-primary py-2 hover:text-primary">
                         ← Go back home
                     </a>
                 </div>
