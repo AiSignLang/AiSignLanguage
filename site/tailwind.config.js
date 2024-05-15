@@ -19,6 +19,10 @@ module.exports = {
         },
         colors: {
             'blue': '#243c5a',
+            'bg-primary': '#0D141A',
+            'bg-secondary': '#1C2B36',
+            'primary': '#0084FF',
+            'text-primary': '#FFFFFF',
             },
     },
     plugins: [],
