@@ -8,13 +8,17 @@ import AIView from "./Components/AIView";
 
 import './App.css'
 import UserProfile from "./Components/userprofile/UserProfile.tsx";
+import {XnotFound} from "./Components/errors/XnotFound.tsx";
+import {Unauthorized} from "./Components/errors/Unauthorized.tsx";
 
 function App() {
     
   return (
       <Router>
         <Routes>
-            <Route path="/" element={<AIView/>}/>
+            {/*   <Route path="/" element={<XnotFound subject={"Profile"} message={"Please try again later."}/>}/> */}
+            {/*<Route path="/" element={<AIView/>}/> */}
+            <Route path="/" element={<Unauthorized/>}/>
             <Route path="/profile" element={<UserProfile/>}/>
         </Routes>
       </Router>
