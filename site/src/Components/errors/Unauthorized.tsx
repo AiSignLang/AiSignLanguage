@@ -1,10 +1,4 @@
-import React from 'react';
-
-interface IProps {
-    // TODO: Define your props here
-}
-
-export function Unauthorized(props: IProps) {
+export function Unauthorized() {
     return (
         <div className="h-screen flex flex-col sm:flex-row bg-bg-primary text-text-primary p-8">
             <div className="w-full sm:w-1/2 flex items-center justify-center text-text-primary">
