@@ -1,132 +1,155 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import { Fragment } from 'react'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
-import Toolbar from '@mui/material/Toolbar';
-import {InboxIcon} from "@heroicons/react/16/solid";
+const navigation = [
+    { name: 'Lambourne', href: '#', current: true },
+    { name: 'Courses', href: '#', current: false },
+    { name: 'Training', href: '#', current: false },
+    { name: 'Read', href: '#', current: false },
+]
 
-const drawerWidth = 240;
-// if here
+function classNames(...classes: string[]) {
+    return classes.filter(Boolean).join(' ')
+}
 
+
+// TODO: Dropdown for training -> in there are read/sign
 export default function NavbarProto() {
-
-    const [mobileOpen, setMobileOpen] = React.useState(false);
-    const [isClosing, setIsClosing] = React.useState(false);
-
-    const handleDrawerClose = () => {
-        setIsClosing(true);
-        setMobileOpen(false);
-    };
-
-    const handleDrawerTransitionEnd = () => {
-        setIsClosing(false);
-    };
-
-    const handleDrawerToggle = () => {
-        if (!isClosing) {
-            setMobileOpen(!mobileOpen);
-        }
-    };
-
-    const drawer = (
-        <div>
-            <Toolbar />
-            <List>
-                {['HC: Lambourne', 'Courses', 'Training'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon/> : <>z</>}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-            <Divider />
-            <List>
-                {['Mistakes'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <>z</>}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-        </div>
-    );
-
-    // Remove this const when copying and pasting into your project.
-
     return (
-        <Box sx={{ display: 'flex'}}>
-            <CssBaseline />
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ xs: 2, display: { md: 'none' } }}
-                        style={{backgroundColor: 'grey'}}
-                    >
-                        <>
-                            <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                      d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-                            </svg>
-                        </>
-                    </IconButton>
-                </Toolbar>
-            <Box
-                component="nav"
-                sx={{width: {md: drawerWidth}, flexShrink: {md: 0}}}
-                aria-label="mailbox folders"
-            >
-                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+        <Disclosure as="nav" className="bg-gray-800">
+            {({ open }) => (
+                <>
+                    <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+                        <div className="relative flex h-16 items-center justify-between">
+                            <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                                {/* Mobile menu button*/}
+                                <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                                    <span className="absolute -inset-0.5" />
+                                    <span className="sr-only">Open main menu</span>
+                                    {open ? (
+                                        <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                                    ) : (
+                                        <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                                    )}
+                                </Disclosure.Button>
+                            </div>
+                            <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                                <div className="flex flex-shrink-0 items-center">
+                                    <img
+                                        className="h-8 w-auto"
+                                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                        alt="Your Company"
+                                    />
+                                </div>
+                                <div className="hidden sm:ml-6 sm:block">
+                                    <div className="flex space-x-4">
+                                        {navigation.map((item) => (
+                                            <a
+                                                key={item.name}
+                                                href={item.href}
+                                                className={classNames(
+                                                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                                    'rounded-md px-3 py-2 text-sm font-medium'
+                                                )}
+                                                aria-current={item.current ? 'page' : undefined}
+                                            >
+                                                {item.name}
+                                            </a>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                                <button
+                                    type="button"
+                                    className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                >
+                                    <span className="absolute -inset-1.5" />
+                                    <span className="sr-only">View notifications</span>
+                                    <BellIcon className="h-6 w-6" aria-hidden="true" />
+                                </button>
 
+                                {/* Profile dropdown */}
+                                <Menu as="div" className="relative ml-3">
+                                    <div>
+                                        <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                                            <span className="absolute -inset-1.5" />
+                                            <span className="sr-only">Open user menu</span>
+                                            <img
+                                                className="h-8 w-8 rounded-full"
+                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                alt=""
+                                            />
+                                        </Menu.Button>
+                                    </div>
+                                    <Transition
+                                        as={Fragment}
+                                        enter="transition ease-out duration-100"
+                                        enterFrom="transform opacity-0 scale-95"
+                                        enterTo="transform opacity-100 scale-100"
+                                        leave="transition ease-in duration-75"
+                                        leaveFrom="transform opacity-100 scale-100"
+                                        leaveTo="transform opacity-0 scale-95"
+                                    >
+                                        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                            <Menu.Item>
+                                                {({ active }) => (
+                                                    <a
+                                                        href="#"
+                                                        className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                    >
+                                                        Your Profile
+                                                    </a>
+                                                )}
+                                            </Menu.Item>
+                                            <Menu.Item>
+                                                {({ active }) => (
+                                                    <a
+                                                        href="#"
+                                                        className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                    >
+                                                        Settings
+                                                    </a>
+                                                )}
+                                            </Menu.Item>
+                                            <Menu.Item>
+                                                {({ active }) => (
+                                                    <a
+                                                        href="#"
+                                                        className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                    >
+                                                        Sign out
+                                                    </a>
+                                                )}
+                                            </Menu.Item>
+                                        </Menu.Items>
+                                    </Transition>
+                                </Menu>
+                            </div>
+                        </div>
+                    </div>
 
-                <Drawer
-                    variant="temporary"
-                    open={mobileOpen}
-                    onTransitionEnd={handleDrawerTransitionEnd}
-                    onClose={handleDrawerClose}
-                    ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
-                    }}
-
-
-                    sx={{
-                        display: { xs: 'block', md: 'none' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                    }}
-                >
-                    {drawer}
-                </Drawer>
-                <Drawer
-                    variant="permanent"
-                    sx={{
-                        display: { xs: 'none', md: 'block' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                    }}
-                    open
-                >
-                    {drawer}
-                </Drawer>
-            </Box>
-
-        </Box>
-    );
+                    <Disclosure.Panel className="sm:hidden">
+                        <div className="space-y-1 px-2 pb-3 pt-2">
+                            {navigation.map((item) => (
+                                <Disclosure.Button
+                                    key={item.name}
+                                    as="a"
+                                    href={item.href}
+                                    className={classNames(
+                                        item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                        'block rounded-md px-3 py-2 text-base font-medium'
+                                    )}
+                                    aria-current={item.current ? 'page' : undefined}
+                                >
+                                    {item.name}
+                                </Disclosure.Button>
+                            ))}
+                        </div>
+                    </Disclosure.Panel>
+                </>
+            )}
+        </Disclosure>
+    )
 }
