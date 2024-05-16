@@ -1,5 +1,4 @@
 ﻿import express from "express";
-import { User  } from "./models/User";
 import {userRouter} from "./routes/user-router";
 export const app = express();
 

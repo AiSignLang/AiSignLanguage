@@ -10,6 +10,12 @@ export const userRouter = express.Router();
 userRouter.get("/:id", async (req, res) => {
 
     const id = parseInt(req.params.id, 10);
+
+    if(isNaN(id)){
+        res.sendStatus(StatusCodes.BAD_REQUEST);
+        return;
+    }
+
     const transaction = await sequelize.transaction();
 
     try{
