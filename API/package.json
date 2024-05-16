@@ -1,0 +1,25 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx ./src/app.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "http-status-codes": "^2.3.0",
+    "multer": "^1.4.5-lts.1",
+    "sequelize": "^6.37.3",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
+    "tsx": "^4.7.1",
+    "typescipt": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/sqlite3": "^3.1.11"
+  }
+}

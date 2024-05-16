@@ -18,7 +18,7 @@ export class Users extends Model
     declare userName: string;
     declare profilePic: CreationOptional<string>;
     declare userId: string;
-    
+    declare friends: Users[];
     
     declare score: NonAttribute<Scores>
     declare static associations: {
@@ -45,8 +45,8 @@ export class Users extends Model
 
 Users.hasOne(Scores,{
     sourceKey: 'scoreId',
-    
 })
+
 
 
 

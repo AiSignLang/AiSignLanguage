@@ -17,8 +17,23 @@ export class Scores extends Model {
                 primaryKey: true,
                 allowNull: false,
                 defaultValue: DataTypes.UUIDV4
+            },
+            perfectlyDone:{
+                type: DataTypes.NUMBER,
+                allowNull:false,
+                defaultValue:0
+            },
+            allTimeCorrect:{
+                type: DataTypes.NUMBER,
+                allowNull: false,
+                defaultValue: 0
+            },
+            dailyStreak:{
+                type: DataTypes.NUMBER,
+                allowNull: false,
+                defaultValue: 0
             }
-
+            
         }, {
             sequelize,
             modelName: 'Score'
