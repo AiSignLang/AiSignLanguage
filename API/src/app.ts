@@ -1,10 +1,12 @@
 ﻿import express from "express";
 import { User  } from "./models/User";
-const app = express();
+import {userRouter} from "./routes/user-router";
+export const app = express();
 
 app.use(express.static("public"));
 app.use(express.json());
 
+app.use("/api/user", userRouter)
 
 
 app.listen(3000, () => {

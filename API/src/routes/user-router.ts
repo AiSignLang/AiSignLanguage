@@ -4,7 +4,7 @@ import {Users} from "../models/User";
 import {StatusCodes} from "http-status-codes";
 
 
-const userRouter = express.Router();
+export const userRouter = express.Router();
 
 
 userRouter.get("/:id", async (req, res) => {
@@ -26,6 +26,4 @@ userRouter.get("/:id", async (req, res) => {
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
         await transaction.rollback();
     }
-
-
 });
