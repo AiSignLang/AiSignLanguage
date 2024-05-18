@@ -15,8 +15,8 @@ export function Recommendations(props: IProps) {
             <ul>
                 {sug.map((friends: IFriend) => (
                     <li key={friends.friendID}
-                        className="text-gray-300 flex justify-between items-center">
-                        <div className="flex items-center mb-7">
+                        className="text-gray-300 flex justify-between items-center mb-7">
+                        <div className="flex items-center">
                             <img className="h-12 w-12 flex-none rounded-full bg-gray-50 mr-7"
                                  src={friends.profilePath ? friends.profilePath : undefined}
                                  alt=""/> {/*TODO: add alt text + change profile picture to default image*/}
