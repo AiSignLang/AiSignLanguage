@@ -5,7 +5,7 @@ interface IProps {
 
 export function XnotFound(props: IProps) {
     return (
-        <div className="h-screen flex flex-col sm:flex-row bg-bg-primary text-text-primary p-8">
+        <div className="h-full min-h-screen flex flex-col sm:flex-row bg-bg-primary text-text-primary p-8">
             <div className="w-full sm:w-1/2 flex items-center justify-center text-text-primary">
                 <div>
                     <h1 className="text-6xl font-bold">404</h1>
@@ -22,4 +22,4 @@ export function XnotFound(props: IProps) {
             </div>
         </div>
     );
-};
+}

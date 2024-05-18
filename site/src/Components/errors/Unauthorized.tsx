@@ -1,6 +1,6 @@
 export function Unauthorized() {
     return (
-        <div className="h-screen flex flex-col sm:flex-row bg-bg-primary text-text-primary p-8">
+        <div className="min-h-screen h-full flex flex-col sm:flex-row bg-bg-primary text-text-primary p-8">
             <div className="w-full sm:w-1/2 flex items-center justify-center text-text-primary">
                 <div>
                     <h1 className="text-6xl font-bold">401</h1>
@@ -17,4 +17,4 @@ export function Unauthorized() {
             </div>
         </div>
     );
-};
+}

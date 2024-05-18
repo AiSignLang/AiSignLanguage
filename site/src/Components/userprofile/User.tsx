@@ -30,7 +30,7 @@ export default function User(props: IProps){
             {/*
                     profile picture
                 */}
-            <div className="flex items-center border-4">
+            <div className="flex items-center flex-wrap">
                 <img
                     className="inline-block h-fit w-fit min-h-[15rem] min-w-[15rem] rounded-full ring-2 ring-white
                     md:col-start-1 md:col-end-4 md:row-start-1
@@ -84,7 +84,7 @@ export default function User(props: IProps){
                 {/*
                     profile picture
                 */}
-                <div className="flex items-center border-4">
+                <div className="flex items-center flex-wrap justify-center">
                     <img
                         className="inline-block h-fit w-fit min-h-[15rem] min-w-[15rem] rounded-full ring-2 ring-white
                     md:col-start-1 md:col-end-4 md:row-start-1
@@ -96,7 +96,7 @@ export default function User(props: IProps){
                     {/*
                     username/score
                 */}
-                    <div className="px-5">
+                    <div className="px-5 xs:mt-5">
                         <h1 className="text-4xl px-15">{user.name}</h1>
 
                         <div className="flex justify-between gap-10">

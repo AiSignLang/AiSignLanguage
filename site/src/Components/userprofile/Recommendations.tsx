@@ -1,16 +1,19 @@
-import {friendService} from "../../services/FriendService.ts";
+import React from 'react';
 import {IFriend} from "../../model/props.ts";
+import {friendService} from "../../services/FriendService.ts";
 
-const people = await friendService.getFriends();
+interface IProps {
+    // TODO: Define your props here
+}
 
-// TODO: Service provides data to this constant
-export default function Friends() {
+const sug = await friendService.getSuggestions();
+
+export function Recommendations(props: IProps) {
     return (
-        <div className="w-full mt-10">
-            <h1 className="text-2xl font-bold text-center border-t border-b py-4">Friends</h1>
-
-            <ul className="">
-                {people.map((friends: IFriend) => (
+        <div className="flex flex-col border-1 w-full">
+            <h1>Friend suggestions</h1>
+            <ul>
+                {sug.map((friends: IFriend) => (
                     <li key={friends.friendID}
                         className="flex content-center justify-between gap-x-6 py-5 text-gray-300">
                         <div className="flex min-w-0 gap-x-4">
@@ -54,5 +57,5 @@ export default function Friends() {
                 ))}
             </ul>
         </div>
-    )
-}
+    );
+};
