@@ -17,8 +17,7 @@ function App() {
       <Router>
         <Routes>
             {/*   <Route path="/" element={<XnotFound subject={"Profile"} message={"Please try again later."}/>}/> */}
-            {/*<Route path="/" element={<AIView/>}/>*/}
-            <Route path="/" element={<Unauthorized/>}/>
+            <Route path="/" element={<AIView/>}/>
             <Route path="/ProfileNotFound" element={<XnotFound subject="Profile" />}/>
             <Route path="/profile" element={<UserProfile/>}/>
         </Routes>

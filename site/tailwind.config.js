@@ -14,6 +14,10 @@ export default {
         extend: {
             screens: {
                 'xs': {'max': '639px'}, // screens smaller than sm
+                'c-sm': {'min': '640px', 'max': '767px'}, // screens greater than or equal to sm
+                'c-md': {'min': '768px', 'max': '1023px'}, // screens greater than or equal to md
+                'c-lg': {'min': '1024px', 'max': '1279px'}, // screens greater than or equal to lg
+                'c-xl': {'min': '1280px', 'max': '1535px'}, // screens greater than or equal to xl
             },
             animation: {
                 'spin-slow': 'spin 3s linear infinite',
