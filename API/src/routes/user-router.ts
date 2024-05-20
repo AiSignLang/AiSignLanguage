@@ -1,6 +1,6 @@
 import express from "express";
-import {sequelize} from "../database";
-import {Users} from "../models/User";
+import sequelize from "../data/database";
+import Users from "../data/models/User";
 import {StatusCodes} from "http-status-codes";
 
 export const userRouter = express.Router();

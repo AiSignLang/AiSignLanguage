@@ -5,7 +5,7 @@
 import type {Config} from '@jest/types';
 
 const config: Config.InitialOptions = {
-  roots: ['<rootDir>/src'],
+  roots: ['<rootDir>/tests', '<rootDir>/src'],
   testMatch: [
     "**/__tests__/**/*.+(ts|tsx|js)",
     "**/?(*.)+(spec|test).+(ts|tsx|js)",
@@ -13,7 +13,7 @@ const config: Config.InitialOptions = {
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },
-  setupFilesAfterEnv: ["<rootDir>/src/data/test/setupTests.ts"],
+  setupFilesAfterEnv: ["<rootDir>/tests/database/setupTests.ts"],
   clearMocks: true,
   collectCoverage: true,
   coverageDirectory: "coverage",

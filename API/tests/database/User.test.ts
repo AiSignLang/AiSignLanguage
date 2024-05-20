@@ -1,5 +1,5 @@
-﻿import User from '../models/User';
-import Score from '../models/Score';
+﻿import User from '../../src/data/models/User';
+import Score from '../../src/data/models/Score';
 
 describe('User model', () => {
     

@@ -3,7 +3,7 @@
 const sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: ':memory:',
-    models: [  __dirname+"/../models/*.ts"],
+    models: [__dirname + "/../../src/data/models/*.ts"],
     logging: false
 });
 export default sequelize;
