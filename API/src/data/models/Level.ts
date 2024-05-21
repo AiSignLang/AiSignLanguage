@@ -1,5 +1,6 @@
 ﻿import {Column, DataType, HasMany, IsUUID, Model, PrimaryKey, Table} from "sequelize-typescript";
 import Task from "./Task";
+import {isString} from "../../Utils";
 
 @Table({
     timestamps: true,
@@ -7,8 +8,11 @@ import Task from "./Task";
     modelName: 'Level'
 })
 class Level extends Model{
-    
-    @Column
+    @Column({
+        validate: {
+            isString: isString
+        }
+    })
     declare levelName: string;
     
     @IsUUID(4)
@@ -23,3 +27,4 @@ class Level extends Model{
     declare tasks: Task[]
 }
 export default Level;
+

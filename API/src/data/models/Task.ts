@@ -1,6 +1,7 @@
 ﻿import {BelongsTo, Column, DataType, ForeignKey, HasMany, IsUUID, Model, PrimaryKey, Table} from "sequelize-typescript";
 import Level from "./Level";
 import Mistake from "./Mistake";
+import {isString} from "../../Utils";
 
 @Table({
     timestamps: true,
@@ -8,7 +9,11 @@ import Mistake from "./Mistake";
     modelName: 'Task'
 })
 class Task extends Model{
-    @Column
+    @Column({
+        validate: {
+            isString: isString
+        }
+    })
     declare taskName: string;
     
     @IsUUID(4)

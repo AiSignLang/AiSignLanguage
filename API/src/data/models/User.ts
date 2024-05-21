@@ -15,6 +15,7 @@ import Friendship from "./Friendship";
 import Level from "./Level";
 import UserLevel from "./UserLevel";
 import {ValidationFailed} from "sequelize-typescript/dist/browser";
+import {isString} from "../../Utils";
 
 @Table({
     timestamps: true,
@@ -30,6 +31,7 @@ class User extends Model {
             notEmpty: {
                 msg: "Username cannot be an empty string"
             },
+            isString: isString,
             isUnique: async function (value: string) {
                 const user = await User.findOne({where: {userName: value}});
                 if (user) {

@@ -10,7 +10,7 @@ import {
     Table,
     IsUUID,
     UpdatedAt,
-    CreatedAt, DataType
+    CreatedAt, DataType, IsInt
 } from "sequelize-typescript";
 
 @Table({
@@ -20,16 +20,19 @@ import {
 })
 class Score extends Model {
     
+    @IsInt
     @Column({
         type: DataType.INTEGER
     })
     declare dailyStreak: number;
     
+    @IsInt
     @Column({
         type: DataType.INTEGER
     })
     declare allTimeCorrect: number;
     
+    @IsInt
     @Column({
         type:DataType.INTEGER
     })
