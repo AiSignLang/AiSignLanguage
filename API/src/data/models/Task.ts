@@ -1,4 +1,15 @@
-﻿import {BelongsTo, Column, DataType, ForeignKey, HasMany, IsUUID, Model, PrimaryKey, Table} from "sequelize-typescript";
+﻿import {
+    BelongsTo,
+    Column,
+    CreatedAt,
+    DataType,
+    ForeignKey,
+    HasMany,
+    IsUUID,
+    Model,
+    PrimaryKey,
+    Table, UpdatedAt
+} from "sequelize-typescript";
 import Level from "./Level";
 import Mistake from "./Mistake";
 import {isString} from "../../Utils";
@@ -36,5 +47,11 @@ class Task extends Model{
     
     @HasMany(()=>Mistake,'taskId')
     declare mistakes: Mistake[]
+
+    @CreatedAt
+    declare created_at: Date
+
+    @UpdatedAt
+    declare updated_at: Date
 }
 export default Task;

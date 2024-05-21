@@ -1,4 +1,15 @@
-﻿import {Column, DataType, ForeignKey, Is, IsUUID, Model, PrimaryKey, Table} from "sequelize-typescript";
+﻿import {
+    Column,
+    CreatedAt,
+    DataType,
+    ForeignKey,
+    Is,
+    IsUUID,
+    Model,
+    PrimaryKey,
+    Table,
+    UpdatedAt
+} from "sequelize-typescript";
 import Task from "./Task";
 
 @Table({
@@ -21,5 +32,11 @@ class Mistake extends Model{
         defaultValue: DataType.UUIDV4
     })
     declare mistakeId: string;
+
+    @CreatedAt
+    declare created_at: Date
+
+    @UpdatedAt
+    declare updated_at: Date
 }
 export default Mistake;

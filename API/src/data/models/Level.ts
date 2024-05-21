@@ -25,6 +25,8 @@ class Level extends Model{
 
     @HasMany(()=>Task,'levelId')
     declare tasks: Task[]
+    
+    
 }
 export default Level;
 
