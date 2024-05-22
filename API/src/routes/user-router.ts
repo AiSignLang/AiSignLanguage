@@ -4,7 +4,7 @@ import {StatusCodes} from "http-status-codes";
 import sequelize from "../data/database";
 import multer from 'multer';
 import * as path from "node:path";
-import {deleteFile} from "../Utils";
+import {deleteFile, lengthValidation} from "../Utils";
 
 export const userRouter = express.Router();
 
@@ -29,7 +29,7 @@ userRouter.get("/", async (_, res) => {
 userRouter.get("/:username", async (req, res) => {
     const username = req.params.username;
 
-    if(!username || username.length > 20 || username.length <= 1){
+    if(!lengthValidation(username)){
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
