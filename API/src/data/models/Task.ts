@@ -21,6 +21,7 @@ import {isString} from "../../Utils";
 })
 class Task extends Model{
     @Column({
+        type: DataType.STRING,
         validate: {
             isString: isString
         }
