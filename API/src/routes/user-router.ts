@@ -71,7 +71,7 @@ const upload = multer(
             console.log("checkMimeType", checkMimeType);
             if (checkMimeType) {
                 // Convert the file to WebP format
-                convertToWebp(file.path, true).then((conversionResult) => {
+                convertToWebp(file.path, true,req.body.name).then((conversionResult) => {
                     if (!conversionResult) {
 
                         callback(new Error(": Failed to convert the image to WebP format."));
