@@ -57,7 +57,7 @@ export async function resizeImage(file:string, resolutions:number[], deleteOld:b
             .catch((err) => {
                 console.error(`Failed to resize image ${file} to ${resolution}: ${err}`);
             });
-        names.push(`${removeLast(file, ".")}_${resolution}.webp`);
+        names.push(outFile);
     }
     if (deleteOld) {
         await deleteFile(file);
