@@ -46,10 +46,14 @@ export async function resizeImage(file:string, resolutions:number[], deleteOld:b
     
     resolutions.filter(resolution => resolution > 0 && resolution <= minDimension);
     for (const resolution of resolutions) {
+        const outFile = `${removeLast(file, ".")}_${resolution}.webp`;
+        if(fsSync.existsSync(outFile)){
+            await deleteFile(outFile)
+        }
         sharp(file)
             .extract({left: left, top: top, width: minDimension, height: minDimension})
             .resize(resolution,resolution)
-            .toFile(`${removeLast(file, ".")}_${resolution}.webp`)
+            .toFile(outFile)
             .catch((err) => {
                 console.error(`Failed to resize image ${file} to ${resolution}: ${err}`);
             });
