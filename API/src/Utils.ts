@@ -17,6 +17,10 @@ export async function deleteFile(filename: string) {
     }
 }
 
-export function lengthValidation(line: string): boolean {
+export function isNameLengthValid(line: string): boolean {
     return line.length > 1 && line.length <= 20;
+}
+
+export function isIDValid(id: string): boolean {
+    return id.length === 36;
 }

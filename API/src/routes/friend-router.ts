@@ -1,7 +1,7 @@
 import express from "express";
 import {StatusCodes} from "http-status-codes";
 import User from "../data/models/User";
-import {lengthValidation} from "../Utils";
+import {isNameLengthValid} from "../Utils";
 
 
 export const friendRouter = express.Router();
@@ -42,8 +42,8 @@ friendRouter.post("/:username/friends/:friendUsername", async (req, res) => {
     const username = req.params.username;
     const friendUsername = req.params.friendUsername;
 
-    if(!lengthValidation(username)
-        || !lengthValidation(friendUsername)){
+    if(!isNameLengthValid(username)
+        || !isNameLengthValid(friendUsername)){
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
@@ -75,8 +75,8 @@ friendRouter.delete("/:username/friends/:friendUsername", async (req, res) => {
     const username = req.params.username;
     const friendUsername = req.params.friendUsername;
 
-    if(!lengthValidation(username)
-        || !lengthValidation(friendUsername)){
+    if(!isNameLengthValid(username)
+        || !isNameLengthValid(friendUsername)){
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
