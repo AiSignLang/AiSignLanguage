@@ -1,0 +1,13 @@
+﻿
+POST localhost:3000/users
+Content-Type: application/json
+
+{
+    "userName": "John Doe",
+    "profilePic":"https://www.google.com",
+  "score":{
+      "perfectlyDone":13,
+    "dailyStreak": 5,
+    "allTimeCorrect": 100
+  }
+}
