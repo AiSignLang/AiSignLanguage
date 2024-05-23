@@ -120,7 +120,7 @@ userRouter.put("/:username", async (req, res) => {
     const userName = req.params.username;
     const user = await Users.findOne({where: {username: userName}});
 
-    if(!userName || userName.length > 20 || userName.length <= 1){
+    if(!isNameLengthValid(userName)){
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
