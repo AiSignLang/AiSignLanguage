@@ -89,15 +89,18 @@ const upload = multer(
 
 userRouter.post("/", upload.single('avatar'), async (req,res)=>{
     const name = req.body.name;
-    const score = req.body.score;
-
+    let score = req.body.score;
+    
     const fileName = `${name.replace(/\s+/g, '_')}_pfp.jpg`;
     const userExists = await Users.findOne({where: {userName: name}});
-    if(!score||userExists){ 
+    if(userExists){ 
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
-
+    if (!score){
+        score = {dailyStreak: 0, perfectlyDone: 0, allTimeCorrect: 0};
+    }
+    
     const transaction = await sequelize.transaction();
     try{
         const user = await Users.create({userName: name, profilePic: `${name}_64.webp`}); // TODO: add User should be done correctly                alex: sollte correct sein
