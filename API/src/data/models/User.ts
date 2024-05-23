@@ -45,7 +45,7 @@ class User extends Model {
     @Column({
         allowNull: false,
         type:DataType.STRING,
-        defaultValue: '/avatars/Default_pfp.jpg'
+        defaultValue: 'Default_pfp.jpg'
     })
     declare profilePic: string;
     

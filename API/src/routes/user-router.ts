@@ -4,7 +4,9 @@ import {StatusCodes} from "http-status-codes";
 import sequelize from "../data/database";
 import multer from 'multer';
 import * as path from "node:path";
-import {deleteFile, isNameLengthValid} from "../Utils";
+import {convertToWebp, deleteFile, isNameLengthValid} from "../Utils";
+import e from "express";
+import Score from "../data/models/Score";
 
 export const userRouter = express.Router();
 
@@ -18,7 +20,7 @@ userRouter.get("/", async (_, res) => {
              return;
          }
 
-         res.json(users);
+         res.json(users)
 
    }catch (err) {
        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -60,27 +62,50 @@ const storage = multer.diskStorage({
 });
 
 // Create the multer instance
-const upload = multer({ storage: storage });
+const upload = multer(
+    {
+        storage: storage,
+        fileFilter(req: e.Request, file: Express.Multer.File, callback: multer.FileFilterCallback) {
+            console.log("check file", file);
+            const checkMimeType = file.mimetype .includes("image/")
+            console.log("checkMimeType", checkMimeType);
+            if (checkMimeType) {
+                // Convert the file to WebP format
+                convertToWebp(file.path, true).then((conversionResult) => {
+                    if (!conversionResult) {
+
+                        callback(new Error(": Failed to convert the image to WebP format."));
+                    } else {
+                        return callback(null, true)
+                    }    
+                });
+            } else {
+                callback(new Error(": Failed to convert the image to WebP format."));
+            }
+        }
+    });
+
+
 
 userRouter.post("/", upload.single('avatar'), async (req,res)=>{
     const name = req.body.name;
     const score = req.body.score;
 
     const fileName = `${name.replace(/\s+/g, '_')}_pfp.jpg`;
-    if(!name || name.length > 18  || name.length <= 1 || !score){ // TODO: picture validation, validating picture length ?
+    const userExists = await Users.findOne({where: {userName: name}});
+    if(!score||userExists){ 
         res.sendStatus(StatusCodes.BAD_REQUEST);
-        await deleteFile(fileName); // TODO: is converter used?
         return;
     }
 
     const transaction = await sequelize.transaction();
     try{
-        const user = await Users.create({userName: name, profilePic: fileName}); // TODO: add User should be done correctly
+        const user = await Users.create({userName: name, profilePic: `${name}_64.webp`}); // TODO: add User should be done correctly                alex: sollte correct sein
+        user.score = await Score.create({dailyStreak: score.dailyStreak, perfectlyDone:score.perfectlyDone,allTimeCorrect:score.allTimeCorrect ,ownerId: user.userId});
         res.json(user);
         await transaction.commit();
     }catch(err){
         await transaction.rollback();
-        // TODO: in database, if username exists already it throws, there this will displayed below. talk with resch. or write own exception
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
 })
