@@ -14,7 +14,7 @@ userRouter.get("/", async (_, res) => {
          const users = await Users.findAll();
 
          if(users.length === 0){
-             res.sendStatus(StatusCodes.NO_CONTENT); // TODO: or not found message ?
+             res.sendStatus(StatusCodes.NOT_FOUND);
              return;
          }
 
