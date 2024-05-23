@@ -56,7 +56,7 @@ const storage = multer.diskStorage({
         // Extract the name from the request body
         const name = req.body.name;
         // Replace spaces with underscores and append '_pfp'
-        const filename = `${name.replace(/\s+/g, '_')}_pfp_64.webp`;
+        const filename = `${name.replace(/\s+/g, '_')}_pfp.${path.extname(file.originalname)}`; // muss denk ich fürs konvertieren den extnamen haben
         cb(null, filename);
     }
 });
@@ -99,7 +99,7 @@ userRouter.post("/", upload.single('avatar'), async (req,res)=>{
 
     const transaction = await sequelize.transaction();
     try{
-        const user = await Users.create({userName: name, profilePic: `${fileName}_64.webp`}); // TODO: add User should be done correctly                alex: sollte correct sein
+        const user = await Users.create({userName: name, profilePic: `${fileName}_64.webp`});// profile pic _64 weil ich einfach mal die 64er auflösung genommen habe  // TODO: add User should be done correctly                alex: sollte correct sein
         user.score = await Score.create({dailyStreak: 0, perfectlyDone:0,allTimeCorrect:0 ,ownerId: user.userId});
         res.json(user);
         await transaction.commit();
