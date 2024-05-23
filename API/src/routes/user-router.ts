@@ -56,7 +56,7 @@ const storage = multer.diskStorage({
         // Extract the name from the request body
         const name = req.body.name;
         // Replace spaces with underscores and append '_pfp'
-        const filename = `${name.replace(/\s+/g, '_')}_pfp${path.extname(file.originalname)}`;
+        const filename = `${name.replace(/\s+/g, '_')}_pfp_64.webp`;
         cb(null, filename);
     }
 });
@@ -89,22 +89,18 @@ const upload = multer(
 
 userRouter.post("/", upload.single('avatar'), async (req,res)=>{
     const name = req.body.name;
-    let score = req.body.score;
-    
-    const fileName = `${name.replace(/\s+/g, '_')}_pfp.jpg`;
-    const userExists = await Users.findOne({where: {userName: name}});
-    if(userExists){ 
+
+    const fileName = `${name.replace(/\s+/g, '_')}_pfp`;
+    const user = await Users.findOne({where: {userName: name}});
+    if(!user){
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
-    if (!score){
-        score = {dailyStreak: 0, perfectlyDone: 0, allTimeCorrect: 0};
-    }
-    
+
     const transaction = await sequelize.transaction();
     try{
-        const user = await Users.create({userName: name, profilePic: `${name}_64.webp`}); // TODO: add User should be done correctly                alex: sollte correct sein
-        user.score = await Score.create({dailyStreak: score.dailyStreak, perfectlyDone:score.perfectlyDone,allTimeCorrect:score.allTimeCorrect ,ownerId: user.userId});
+        const user = await Users.create({userName: name, profilePic: `${fileName}_64.webp`}); // TODO: add User should be done correctly                alex: sollte correct sein
+        user.score = await Score.create({dailyStreak: 0, perfectlyDone:0,allTimeCorrect:0 ,ownerId: user.userId});
         res.json(user);
         await transaction.commit();
     }catch(err){

@@ -46,6 +46,7 @@ scoreRouter.get("/:scoreId", async (req, res) => {
     }
 })
 
+// TODO: this is score router, why is a level generated? is post even needed?
 scoreRouter.post("/", async (_, res) => {
 
     try{
