@@ -47,10 +47,9 @@ levelRouter.get("/:levelId", async (req, res) => {
     }
 
 });
-
+// TODO: raus hier, in Code auslagern
 levelRouter.post("/", async (req, res) => {
 
-    // TODO: hmm... what should be done here?
     try{
         const level = await Level.create();
         res.json(level);
@@ -81,6 +80,8 @@ levelRouter.delete(":levelId", async (req, res) => {
     }
 })
 
+
+// TODO: raus hier, in Code auslagern
 levelRouter.put("/:levelId", async (req, res) => {
     const levelId = req.params.levelId;
     const level = await Level.findByPk(levelId);
@@ -90,7 +91,6 @@ levelRouter.put("/:levelId", async (req, res) => {
         return;
     }
 
-    // TODO: what should be updated here???
     const levelName = req.body.levelName ? level!.levelName : 'Default Level';
 
     try {

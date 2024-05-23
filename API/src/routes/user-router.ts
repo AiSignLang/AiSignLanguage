@@ -47,7 +47,7 @@ userRouter.get("/:username", async (req, res) => {
 });
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: (_, file, cb) => {
         cb(null, path.join(__dirname, '../public/avatars'));
     },
     filename: (req, file, cb) => {
@@ -103,7 +103,7 @@ userRouter.delete("/:username", async (req, res) => {
             return;
         }
 
-        if(user.profilePic !== '../public/avatars/Default_pfp.jpg'){// TODO: what if user is named Default?
+        if(user.profilePic !== '../public/avatars/Default_pfp.jpg'){// TODO: what if user is named Default? / should not allow
             await deleteFile(user.profilePic);
         }
         await user.destroy();
@@ -132,12 +132,14 @@ userRouter.put("/:username", async (req, res) => {
             where: { username: userName }
         });
 
-        if (updated) {
-            const updatedUser = await Users.findOne({ where: { username: userName } });
-            res.json(updatedUser);
-        } else {
-            res.sendStatus(StatusCodes.NOT_FOUND);
+        if(!updated){
+            res.sendStatus(StatusCodes.BAD_REQUEST);
+            return;
         }
+
+        const updatedUser = await Users.findOne({ where: { username: userName } });
+        res.json(updatedUser);
+
     } catch (err) {
         console.error(err);
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);

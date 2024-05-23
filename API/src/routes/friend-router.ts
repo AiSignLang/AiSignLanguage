@@ -6,12 +6,11 @@ import {isNameLengthValid} from "../Utils";
 
 export const friendRouter = express.Router();
 
-// TODO: hmmm... is all flag necessary? why one wanted, maybe user searches for a friend and only ... probably query more wanted here
 friendRouter.get("/:username", async (req, res) => {
 
     const username = req.params.username;
 
-    if(!username || username.length > 20 || username.length <= 1){
+    if(!username || !isNameLengthValid(username)){
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
