@@ -82,3 +82,4 @@ mistakeRouter.delete("/:mistakeId", async (req, res) => {
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
 });
+
