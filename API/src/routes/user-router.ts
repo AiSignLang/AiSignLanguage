@@ -112,6 +112,8 @@ userRouter.put("/:username/avatar", upload.single('avatar'), async (req, res) =>
     const user = await Users.findOne({where: {username: username}});
     if(!user){
         res.sendStatus(StatusCodes.NOT_FOUND);
+        if (req.file)
+            await  deleteFile(req.file.path);
         return;
     }
     if (!req.file) {
