@@ -9,12 +9,16 @@ export function isString(value: any): void {
     }
 }
 
-export async function deleteFile(filename: string) {
+export async function deleteFile(filename: string):Promise<boolean> {
     const filePath = path.join(__dirname, '../public/avatars', filename); // TODO: delete file should not have catch
 
     try {
         await fs.unlink(filePath);
-    }catch (err){}
+        return true;
+    }catch (err){
+        console.error(`Failed to delete file ${filename}: ${err}`);
+        return false;
+    }
 }
 
 export function isNameLengthValid(line: string): boolean {
