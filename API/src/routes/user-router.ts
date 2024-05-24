@@ -190,3 +190,14 @@ userRouter.put("/:username", async (req, res) => {
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
 });
+
+userRouter.delete("/", async (req, res) => {
+
+    try{
+        await Users.destroy({where: {}});
+        res.sendStatus(StatusCodes.NO_CONTENT);
+    }catch (err){
+        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+
+});
