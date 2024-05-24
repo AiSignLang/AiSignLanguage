@@ -5,7 +5,6 @@ import sequelize from "../data/database";
 import multer from 'multer';
 import * as path from "node:path";
 import {convertToWebp, deleteFile, isNameLengthValid} from "../Utils";
-import e from "express";
 import Score from "../data/models/Score";
 import {v4 as uuidv4} from "uuid";
 
@@ -54,8 +53,8 @@ const storage = multer.diskStorage({
         cb(null, path.join(__dirname, '../../public/avatars'));
         console.log("in destination of multer: " + file.originalname);
     },
-    filename: (req, file, cb) => {
-        
+    filename: (_, file, cb) => {
+
         const filename = `${uuidv4()}.${path.extname(file.originalname)}`;//`${name.replace(/\s+/g, '_')}_pfp.${path.extname(file.originalname)}`; // muss denk ich fürs konvertieren den ext-namen haben
         cb(null, filename);
         console.log("in filename of multer: " + filename);
@@ -74,7 +73,7 @@ const upload = multer(
             console.log("checkMimeType", checkMimeType);
             if (checkMimeType) {
                 return callback(null, true)
-                
+
             } else {
                 callback(new Error(": Failed to convert the image to WebP format."));
             }
@@ -85,7 +84,7 @@ const upload = multer(
 
 userRouter.post("/",async (req,res)=>{
     const name = req.body.name;
-    const user = await Users.findOne({where: {userName: name}});
+    const user = await Users.findOne({where: {userName: name}}); // TODO: in html action is /api/user/ post, maybe put, but where to get username?
     console.log(name);
     if(user){
         console.log("crashes in here");
@@ -97,7 +96,7 @@ userRouter.post("/",async (req,res)=>{
 
     const transaction = await sequelize.transaction();
     try{
-        const user = await Users.create({userName: name});// profile pic _64 weil ich einfach mal die 64er auflösung genommen habe  // TODO: add User should be done correctly                alex: sollte correct sein
+        const user = await Users.create({userName: name});
         user.score = await Score.create({dailyStreak: 0, perfectlyDone:0,allTimeCorrect:0 ,ownerId: user.userId});
         res.status(StatusCodes.CREATED).json(user);
         await transaction.commit();
@@ -109,7 +108,7 @@ userRouter.post("/",async (req,res)=>{
 
 userRouter.put("/:username/avatar", upload.single('avatar'), async (req, res) => {
     const username = req.params.username;
-    
+
     const user = await Users.findOne({where: {username: username}});
     if(!user){
         res.sendStatus(StatusCodes.NOT_FOUND);
@@ -120,7 +119,7 @@ userRouter.put("/:username/avatar", upload.single('avatar'), async (req, res) =>
         return;
     }
     const images = await convertToWebp(req.file.path, true, username);
-    
+
     if (!images) {
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
@@ -135,7 +134,7 @@ userRouter.delete("/:username", async (req, res) => {
 
     const username = req.params.username;
 
-    if(!username || username.length > 20 || username.length <= 1){
+    if(!username || !isNameLengthValid(username)){
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }

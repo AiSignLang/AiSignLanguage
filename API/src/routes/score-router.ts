@@ -1,10 +1,7 @@
 import express from "express";
 import {StatusCodes} from "http-status-codes";
 import Score from "../data/models/Score";
-import {isIDValid, isNameLengthValid} from "../Utils";
-import Users from "../data/models/User";
-import Level from "../data/models/Level";
-
+import {isIDValid} from "../Utils";
 
 export const scoreRouter = express.Router();
 
@@ -42,17 +39,6 @@ scoreRouter.get("/:scoreId", async (req, res) => {
         }
         res.json(score);
     }catch (err){
-        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
-    }
-})
-
-// TODO: this is score router, why is a level generated? is post even needed?
-scoreRouter.post("/", async (_, res) => {
-
-    try{
-        const level = await Level.create();
-        res.json(level);
-    }catch(err){
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
 })
