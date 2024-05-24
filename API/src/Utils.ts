@@ -48,7 +48,7 @@ export async function resizeImage(file:string, resolutions:number[], deleteOld:b
         if(fsSync.existsSync(outFile)){
             await deleteFile(outFile)
         }
-        sharp(file)
+        await sharp(file)
             .extract({left: left, top: top, width: minDimension, height: minDimension})
             .resize(resolution,resolution)
             .toFile(outFile)
@@ -72,9 +72,9 @@ export async function convertToWebp(file: string, deleteOld: boolean,outName:str
     const webp = require('webp-converter');
     const newFile =  outName ? `${path.dirname(file)}/${outName}.webp` : `${removeLast(file, ".")}.webp`;
     
-    const result = await webp.cwebp(file, `${newFile}`, "-q 80"); // TODO: switched to webp.cwebp(), but result equals "".
-
-    if (result === '100') {
+    await webp.cwebp(file, `${newFile}`, "-q 80"); // TODO: switched to webp.cwebp(), but result equals "".
+    const result = fsSync.existsSync(newFile);
+    if(result){
         if (deleteOld) {
             await deleteFile(file)
         }
