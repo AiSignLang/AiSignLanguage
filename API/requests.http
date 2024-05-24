@@ -1,6 +1,6 @@
 ﻿
 ### Get user with specific username
-GET localhost:3000/api/user/John Doe
+GET localhost:3000/api/user/Batman
 
 ### Get all users
 GET localhost:3000/api/user
@@ -10,11 +10,6 @@ POST localhost:3000/api/user
 Content-Type: application/json
 
 {
-    "userName": "Batman",
-    "profilePic":"https://www.google.com",
-    "score":{
-      "perfectlyDone":13,
-      "dailyStreak": 5,
-      "allTimeCorrect": 100
-  }
+    "name": "tabnomlost"
 }
+

@@ -51,6 +51,7 @@ userRouter.get("/:username", async (req, res) => {
 const storage = multer.diskStorage({
     destination: (_, file, cb) => {
         cb(null, path.join(__dirname, '../public/avatars'));
+        console.log("in destination of multer: " + file.originalname);
     },
     filename: (req, file, cb) => {
         // Extract the name from the request body
@@ -58,6 +59,8 @@ const storage = multer.diskStorage({
         // Replace spaces with underscores and append '_pfp'
         const filename = `${name.replace(/\s+/g, '_')}_pfp.${path.extname(file.originalname)}`; // muss denk ich fürs konvertieren den extnamen haben
         cb(null, filename);
+        console.log("in filename of multer: " + filename);
+
     }
 });
 
@@ -65,9 +68,10 @@ const storage = multer.diskStorage({
 const upload = multer(
     {
         storage: storage,
-        fileFilter(req: e.Request, file: Express.Multer.File, callback: multer.FileFilterCallback) {
+        fileFilter(req, file: Express.Multer.File, callback: multer.FileFilterCallback) {
             console.log("check file", file);
-            const checkMimeType = file.mimetype .includes("image/")
+            console.log("checking request: " + req);
+            const checkMimeType = file.mimetype.includes("image/")
             console.log("checkMimeType", checkMimeType);
             if (checkMimeType) {
                 // Convert the file to WebP format
@@ -92,7 +96,11 @@ userRouter.post("/", upload.single('avatar'), async (req,res)=>{
 
     const fileName = `${name.replace(/\s+/g, '_')}_pfp`;
     const user = await Users.findOne({where: {userName: name}});
-    if(!user){
+    console.log(name);
+    if(user){
+        console.log("crashes in here");
+        console.log(user.userName);
+        console.log(typeof user);
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
