@@ -7,6 +7,7 @@ import * as path from "node:path";
 import {convertToWebp, deleteFile, isNameLengthValid} from "../Utils";
 import e from "express";
 import Score from "../data/models/Score";
+import {v4 as uuidv4} from "uuid";
 
 export const userRouter = express.Router();
 
@@ -50,14 +51,12 @@ userRouter.get("/:username", async (req, res) => {
 
 const storage = multer.diskStorage({
     destination: (_, file, cb) => {
-        cb(null, path.join(__dirname, '../public/avatars'));
+        cb(null, path.join(__dirname, '../../public/avatars'));
         console.log("in destination of multer: " + file.originalname);
     },
     filename: (req, file, cb) => {
-        // Extract the name from the request body
-        const name = req.body.name;
-        // Replace spaces with underscores and append '_pfp'
-        const filename = `${name.replace(/\s+/g, '_')}_pfp.${path.extname(file.originalname)}`; // muss denk ich fürs konvertieren den extnamen haben
+        
+        const filename = `${uuidv4()}.${path.extname(file.originalname)}`;//`${name.replace(/\s+/g, '_')}_pfp.${path.extname(file.originalname)}`; // muss denk ich fürs konvertieren den ext-namen haben
         cb(null, filename);
         console.log("in filename of multer: " + filename);
 
@@ -74,15 +73,8 @@ const upload = multer(
             const checkMimeType = file.mimetype.includes("image/")
             console.log("checkMimeType", checkMimeType);
             if (checkMimeType) {
-                // Convert the file to WebP format
-                convertToWebp(file.path, true,req.body.name.replace(/\s+/g, '_')).then((conversionResult) => {
-                    if (!conversionResult) {
-
-                        callback(new Error(": Failed to convert the image to WebP format."));
-                    } else {
-                        return callback(null, true)
-                    }    
-                });
+                return callback(null, true)
+                
             } else {
                 callback(new Error(": Failed to convert the image to WebP format."));
             }
@@ -91,10 +83,8 @@ const upload = multer(
 
 
 
-userRouter.post("/", upload.single('avatar'), async (req,res)=>{
+userRouter.post("/",async (req,res)=>{
     const name = req.body.name;
-
-    const fileName = `${name.replace(/\s+/g, '_')}_pfp`;
     const user = await Users.findOne({where: {userName: name}});
     console.log(name);
     if(user){
@@ -107,14 +97,38 @@ userRouter.post("/", upload.single('avatar'), async (req,res)=>{
 
     const transaction = await sequelize.transaction();
     try{
-        const user = await Users.create({userName: name, profilePic: `${fileName}_64.webp`});// profile pic _64 weil ich einfach mal die 64er auflösung genommen habe  // TODO: add User should be done correctly                alex: sollte correct sein
+        const user = await Users.create({userName: name});// profile pic _64 weil ich einfach mal die 64er auflösung genommen habe  // TODO: add User should be done correctly                alex: sollte correct sein
         user.score = await Score.create({dailyStreak: 0, perfectlyDone:0,allTimeCorrect:0 ,ownerId: user.userId});
-        res.json(user);
+        res.status(StatusCodes.CREATED).json(user);
         await transaction.commit();
     }catch(err){
         await transaction.rollback();
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
+})
+
+userRouter.put("/:username/avatar", upload.single('avatar'), async (req, res) => {
+    const username = req.params.username;
+    
+    const user = await Users.findOne({where: {username: username}});
+    if(!user){
+        res.sendStatus(StatusCodes.NOT_FOUND);
+        return;
+    }
+    if (!req.file) {
+        res.sendStatus(StatusCodes.BAD_REQUEST);
+        return;
+    }
+    const images = await convertToWebp(req.file.path, true, username);
+    
+    if (!images) {
+        res.sendStatus(StatusCodes.BAD_REQUEST);
+        return;
+    }
+    const t =await sequelize.transaction()
+    user.profilePic = images[4];
+    await t.commit();
+    res.json(user);
 })
 
 userRouter.delete("/:username", async (req, res) => {

@@ -7,20 +7,53 @@ import {StatusCodes} from "http-status-codes"; // Adjust the import path accordi
 const path = '/api/user';
 
 describe('POST /api/user', () => {
-    test('add simple user', async () => {
-        const response = await supertest(app)
+    test('should create a new user', async () => {
+        const response = await request(app)
             .post(path)
             .send({
-                name: 'John Doe',
-                score: {
-                    streak: 5,
-                    allTasks: 10,
-                    doneWell: 8
-                },
-                profilePath: 'picture.jpg'
+                name: 'John Doe'
             });
         expect(response.statusCode).toBe(200);
-    })
+        expect(response.body.userName).toBe('John Doe');
+    });
+
+    test('should not create a user with the same name', async () => {
+        const response = await request(app)
+            .post(path)
+            .send({
+                name: 'John Doe'
+            });
+        expect(response.statusCode).toBe(StatusCodes.BAD_REQUEST);
+    });
+});
+
+describe('PUT /api/user/:username/avatar', () => {
+    test('should update the avatar of a user', async () => {
+        const username = 'John Doe';
+        const response = await request(app)
+            .put(`${path}/${username}/avatar`)
+            .attach('avatar', '../Download.jpeg'); // Adjust the path to the avatar image file
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body.profilePic).toBeDefined();
+    });
+
+    test('should not update the avatar if the user does not exist', async () => {
+        const username = 'NonExistentUser';
+        const response = await request(app)
+            .put(`${path}/${username}/avatar`)
+            .attach('avatar', '../Download.jpeg'); // Adjust the path to the avatar image file
+
+        expect(response.statusCode).toBe(StatusCodes.NOT_FOUND);
+    });
+
+    test('should not update the avatar if no file is provided', async () => {
+        const username = 'John Doe';
+        const response = await request(app)
+            .put(`${path}/${username}/avatar`);
+
+        expect(response.statusCode).toBe(StatusCodes.BAD_REQUEST);
+    });
 });
 
 

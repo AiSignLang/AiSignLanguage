@@ -70,7 +70,7 @@ export async function resizeImage(file:string, resolutions:number[], deleteOld:b
 
 export async function convertToWebp(file: string, deleteOld: boolean,outName:string|null = null): Promise<string[] | null> {
     const webp = require('webp-converter');
-    const newFile =  outName ? `${outName}` : `${removeLast(file, ".")}.webp`;
+    const newFile =  outName ? `${path.dirname(file)}/${outName}.webp` : `${removeLast(file, ".")}.webp`;
     
     const result = webp.grant_permission(file, `${newFile}`, "-q 80");
 
