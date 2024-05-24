@@ -363,7 +363,8 @@ fabric.properties
 logs
 **/*.backup.*
 **/*.back.*
-
+/API/coverage/
+/API/node_modules/*
 node_modules
 bower_components
 
