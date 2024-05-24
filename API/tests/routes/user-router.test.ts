@@ -58,8 +58,8 @@ describe('user route', ()=>{
         });
 
         test('should not update the avatar if the user does not exist', async () => {
-            const username = 'NonExistentUser';
-            //const currentPath = path.join(__dirname, '../Download.jpeg');
+
+            const username = 'Van Gogh';
 
             const response = await request(app)
                 .put(`${routePath}/${username}/avatar`)
