@@ -9,14 +9,13 @@ export function isString(value: any): void {
     }
 }
 
-export async function deleteFile(filename: string):Promise<boolean> {
-    const filePath = path.join(__dirname, '../public/avatars', filename); // TODO: delete file should not have catch
-
+export async function deleteFile(filePath: string):Promise<boolean> {
+    
     try {
+        console.log(`Deleting file ${filePath}`);
         await fs.unlink(filePath);
         return true;
     }catch (err){
-        console.error(`Failed to delete file ${filename}: ${err}`);
         return false;
     }
 }
@@ -38,7 +37,7 @@ export function removeLast(str:string, substring:string) {
     return str.slice(0, index) + str.slice(index + substring.length);
 }
 
-export async function resizeImage(file:string, resolutions:number[], deleteOld:boolean = false){
+export async function resizeImage(file:string, resolutions:number[], deleteOld:boolean = false): Promise<string[]>{
     const names: string[] = [];
     const metadata = await sharp(file).metadata();
     if (!metadata || !metadata.height || !metadata.width) return [];
@@ -64,7 +63,14 @@ export async function resizeImage(file:string, resolutions:number[], deleteOld:b
     if (deleteOld) {
         await deleteFile(file);
     }else {
-        await fs.rename(file, `${removeLast(file, ".")}_original.webp`);
+        for (let i = 0; i < 15; i++) { //give it 15 try ro rename the file
+            try{
+                await fs.rename(file, `${removeLast(file, ".")}_original.webp`);
+                break;
+            }
+            catch (e){}
+        }
+        
         names.push(`${removeLast(file, ".")}_original.webp`);
     }
     return names;
@@ -87,4 +93,25 @@ export async function convertToWebp(file: string, deleteOld: boolean,outName:str
         console.error(`Failed to convert file ${file} to WebP: ${result}`);
         return null;
     }
+}
+
+import {exec} from 'child_process';
+
+export function findLockingProcess(file: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+        exec(`handle.exe -nobanner ${file}`, (error, stdout, stderr) => {
+            if (error) {
+                reject(`exec error: ${error}`);
+                return;
+            }
+
+            // Die Ausgabe von handle.exe analysieren
+            const match = stdout.match(/pid: (\d+)/i);
+            if (match) {
+                resolve(`Die Datei wird vom Prozess mit der ID ${match[1]} gesperrt.`);
+            } else {
+                resolve('Es konnte kein Prozess gefunden werden, der die Datei sperrt.');
+            }
+        });
+    });
 }
