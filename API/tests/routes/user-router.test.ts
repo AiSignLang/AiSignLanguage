@@ -1,40 +1,49 @@
 import request from 'supertest';
 import { app } from '../../src/app';
 import {StatusCodes} from "http-status-codes";
+import user from "../../src/data/models/User";
 
 
 const path = '/api/user';
 
 describe('POST /api/user', () => {
     test('should create a new user', async () => {
+        const username = 'John Doe';
         const response = await request(app)
             .post(path)
             .send({
-                name: 'John Doe'
+                name: username
             });
         expect(response.statusCode).toBe(201);
         expect(response.body.userName).toBe('John Doe');
+        await request(app).delete(`${path}/${username}`);
     });
 
     test('should not create a user with the same name', async () => {
+        const username = 'John Doe';
         const response = await request(app)
             .post(path)
             .send({
-                name: 'John Doe'
+                name: username
             });
         expect(response.statusCode).toBe(StatusCodes.BAD_REQUEST);
+        await request(app).delete(`${path}/${username}`);
     });
 });
 
 describe('PUT /api/user/:username/avatar', () => {
     test('should update the avatar of a user', async () => {
-        const username = 'John Doe';
+
+        const username = 'Van Gogh';
+
+        await request(app).post(path).send({name: username});
         const response = await request(app)
             .put(`${path}/${username}/avatar`)
             .attach('avatar', '../Download.jpeg'); // Adjust the path to the avatar image file
 
         expect(response.statusCode).toBe(200);
         expect(response.body.profilePic).toBeDefined();
+        await request(app).delete(`${path}/${username}`);
     });
 
     test('should not update the avatar if the user does not exist', async () => {
