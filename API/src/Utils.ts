@@ -10,13 +10,11 @@ export function isString(value: any): void {
 }
 
 export async function deleteFile(filename: string) {
-    const filePath = path.join(__dirname, '../public/avatars', filename);
+    const filePath = path.join(__dirname, '../public/avatars', filename); // TODO: delete file should not have catch
 
     try {
         await fs.unlink(filePath);
-    }catch (err){
-        console.error(`Failed to delete file ${filePath}`, err);
-    }
+    }catch (err){}
 }
 
 export function isNameLengthValid(line: string): boolean {

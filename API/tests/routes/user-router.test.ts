@@ -1,7 +1,6 @@
 import request from 'supertest';
 import { app } from '../../src/app';
-import supertest from "supertest";
-import {StatusCodes} from "http-status-codes"; // Adjust the import path according to your project structure
+import {StatusCodes} from "http-status-codes";
 
 
 const path = '/api/user';
@@ -13,7 +12,7 @@ describe('POST /api/user', () => {
             .send({
                 name: 'John Doe'
             });
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).toBe(201);
         expect(response.body.userName).toBe('John Doe');
     });
 
@@ -56,10 +55,7 @@ describe('PUT /api/user/:username/avatar', () => {
     });
 });
 
-
-// Mock the Users model findOne method
-
-describe('GET /api/user/:id', () => {
+describe('GET /api/user/', () => {
     test('should return 400 for a username that is too short', async () => {
 
         const username = 'x'; // Assuming this ID does not exist
@@ -73,34 +69,100 @@ describe('GET /api/user/:id', () => {
         expect(response.statusCode).toBe(400);
     });
 
-    test('should return 400 for a bad request, because user does not exist', async ()=>{
+    test('should return 400 for a bad request, because user does not exist', async () => {
         const username = 'userdoesnotexist';
         const response = await request(app).get(`${path}/${username}`);
         expect(response.statusCode).toBe(400);
     })
 
-    test('should return a user in json format for a known username', async () => { // TODO: mock does not work
-        const validUsername = 'validUsername';
+    test('should return a user in json format for an existing user', async () => {
+        const validUsername = 'Jeremy Meier';
+
+        await request(app).post(path).send({name: validUsername});
         const expectedUser = {
             id: 1,
             username: validUsername,
-            profilePic: 'path/to/pic.jpg'
+            profilePic: 'not relevant'
         };
 
+
         const response = await request(app).get(`/api/user/${validUsername}`);
+        console.log(response.body);
+
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual(expectedUser);
+        expect(response.body.userName).toEqual(expectedUser.username);
+
+        await request(app).delete(`${path}/${validUsername}`);
     });
+
+
+    test('should return two users', async () => {
+        const validUsername = 'Jeremy Meier';
+        const otherValidUsername = 'Franklin Saint';
+
+        await request(app).post(path).send({name: validUsername});
+        await request(app).post(path).send({name: otherValidUsername});
+        const expectedUser = {
+            username: validUsername,
+        };
+        const otherExpectedUser = {
+            username: otherValidUsername,
+        };
+
+
+        const response = await request(app).get(`/api/user/`);
+        console.log(response.body);
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body[1].userName).toEqual(expectedUser.username);
+        expect(response.body[2].userName).toEqual(otherExpectedUser.username);
+
+        await request(app).delete(`${path}/${validUsername}`);
+        await request(app).delete(`${path}/${otherExpectedUser}`);
+    });
+
+
+
 });
 
-describe('GET /api/user', ()=>{
 
-    // TODO: get all users
-    test('should return 204 and a user object', async () => {
-        const response = await request(app).get(path);
+
+describe('DELETE /api/user/:username', () => {
+
+    test('should return 400 for a username that is too short', async () => {
+        const username = 'x'; // Assuming this ID does not exist
+        const response = await request(app).delete(`${path}/${username}`);
+        expect(response.statusCode).toBe(400);
+    });
+
+    test('should return 400 for a bad request (username too long)', async () => {
+        const invalidUserName = 'invalid is way too long to be a username, validation should return bad requeset'; // Invalid ID format
+        const response = await request(app).delete(`${path}/${invalidUserName}`);
+        expect(response.statusCode).toBe(400);
+    });
+
+    test('should return 400 for a bad request, because user does not exist', async ()=>{
+        const username = 'userdoesnotexist';
+        const response = await request(app).delete(`${path}/${username}`);
+        expect(response.statusCode).toBe(400);
+    });
+
+    test('should return 400 for a bad request, because null was given', async ()=>{
+        const username = null;
+        const response = await request(app).delete(`${path}/${username}`);
+        expect(response.statusCode).toBe(400);
+    });
+    test('should return 400 for a bad request, because undefined was given', async ()=>{
+        const username = undefined;
+        const response = await request(app).delete(`${path}/${username}`);
+        expect(response.statusCode).toBe(400);
+    });
+
+    test('should return 204 for a known username, now deleted', async () => {
+        const username = 'testadmintodelete';
+
+        await request(app).post(path).send({name: username});
+        const response = await request(app).delete(`${path}/${username}`);
         expect(response.statusCode).toBe(204);
     })
-
-    // TODO: mock does not work, also one test for server crash needed
-})
-
+});

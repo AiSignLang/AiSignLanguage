@@ -13,3 +13,6 @@ Content-Type: application/json
     "name": "tabnomlost"
 }
 
+### Delete user with specific username
+DELETE localhost:3000/api/user/'John Doe'
+
