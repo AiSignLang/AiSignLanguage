@@ -3,6 +3,8 @@ import * as fs from "node:fs/promises";
 import * as fsSync from "node:fs";
 import sharp from 'sharp';
 
+sharp.cache(false);
+
 export function isString(value: any): void {
     if (typeof value !== 'string') {
         throw new Error('Value must be a string');
@@ -12,7 +14,6 @@ export function isString(value: any): void {
 export async function deleteFile(filePath: string):Promise<boolean> {
     
     try {
-        console.log(`Deleting file ${filePath}`);
         await fs.unlink(filePath);
         return true;
     }catch (err){
@@ -51,26 +52,23 @@ export async function resizeImage(file:string, resolutions:number[], deleteOld:b
         if(fsSync.existsSync(outFile)){
             await deleteFile(outFile)
         }
-        await sharp(file)
+        const s = sharp(file)
             .extract({left: left, top: top, width: minDimension, height: minDimension})
             .resize(resolution,resolution)
-            .toFile(outFile)
-            .catch((err) => {
-                console.error(`Failed to resize image ${file} to ${resolution}: ${err}`);
-            });
+        await s.toFile(outFile).catch((err) => {
+            console.error(`Error resizing image: ${err}`);
+        });
+        s.destroy();
+        s.end();
         names.push(outFile);
     }
+    
     if (deleteOld) {
         await deleteFile(file);
     }else {
-        for (let i = 0; i < 15; i++) { //give it 15 try ro rename the file
-            try{
-                await fs.rename(file, `${removeLast(file, ".")}_original.webp`);
-                break;
-            }
-            catch (e){}
-        }
-        
+       
+        await fs.rename(file, `${removeLast(file, ".")}_original.webp`);
+                
         names.push(`${removeLast(file, ".")}_original.webp`);
     }
     return names;
@@ -81,9 +79,9 @@ export async function convertToWebp(file: string, deleteOld: boolean,outName:str
     const bp = 10;
     const webp = require('webp-converter');
     const newFile =  outName ? `${path.dirname(file)}/${outName}.webp` : `${removeLast(file, ".")}.webp`;
-    
     await webp.cwebp(file, `${newFile}`, "-q 80"); // TODO: switched to webp.cwebp(), but result equals "".
     const result = fsSync.existsSync(newFile);
+    
     if(result){
         if (deleteOld) {
             await deleteFile(file)
@@ -93,25 +91,4 @@ export async function convertToWebp(file: string, deleteOld: boolean,outName:str
         console.error(`Failed to convert file ${file} to WebP: ${result}`);
         return null;
     }
-}
-
-import {exec} from 'child_process';
-
-export function findLockingProcess(file: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-        exec(`handle.exe -nobanner ${file}`, (error, stdout, stderr) => {
-            if (error) {
-                reject(`exec error: ${error}`);
-                return;
-            }
-
-            // Die Ausgabe von handle.exe analysieren
-            const match = stdout.match(/pid: (\d+)/i);
-            if (match) {
-                resolve(`Die Datei wird vom Prozess mit der ID ${match[1]} gesperrt.`);
-            } else {
-                resolve('Es konnte kein Prozess gefunden werden, der die Datei sperrt.');
-            }
-        });
-    });
 }
