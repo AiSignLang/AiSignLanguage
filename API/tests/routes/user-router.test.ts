@@ -63,13 +63,14 @@ describe('user route', ()=>{
 
             const response = await request(app)
                 .put(`${routePath}/${username}/avatar`)
-                .attach('avatar', '../Download.jpeg'); // Adjust the path to the avatar image file
+                .attach('avatar', path.join(__dirname, '../Download.jpeg')); // Adjust the path to the avatar image file
 
             expect(response.statusCode).toBe(StatusCodes.NOT_FOUND);
         });
 
         test('should not update the avatar if no file is provided', async () => {
             const username = 'John Doe';
+            await request(app).post(routePath).send({name: username});
             const response = await request(app)
                 .put(`${routePath}/${username}/avatar`);
 
