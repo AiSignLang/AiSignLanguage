@@ -67,10 +67,12 @@ export async function resizeImage(file:string, resolutions:number[], deleteOld:b
 }
 
 export async function convertToWebp(file: string, deleteOld: boolean,outName:string|null = null): Promise<string[] | null> {
+
+    const bp = 10;
     const webp = require('webp-converter');
     const newFile =  outName ? `${path.dirname(file)}/${outName}.webp` : `${removeLast(file, ".")}.webp`;
     
-    const result = webp.grant_permission(file, `${newFile}`, "-q 80");
+    const result = await webp.cwebp(file, `${newFile}`, "-q 80"); // TODO: switched to webp.cwebp(), but result equals "".
 
     if (result === '100') {
         if (deleteOld) {

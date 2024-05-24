@@ -5,6 +5,7 @@ import {userRouter} from "./routes/user-router";
 import user from "./data/models/User";
 import Task from "./data/models/Task";
 import Score from "./data/models/Score";
+import * as path from "node:path";
 export const app = express();
 
 app.use(express.static("public"));
@@ -27,6 +28,8 @@ sequelize.sync({force:true}).then(async () => {
     u.score = score;
     await u.save();
 });*/
+
+path.join()
 
 app.listen(3000, () => {
     console.log("Server is running at http://localhost:3000");
