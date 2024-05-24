@@ -35,7 +35,7 @@ export function removeLast(str:string, substring:string) {
         // The substring was not found in the string
         return str;
     }
-    return str.slice(0, index) + str.slice(index + substring.length);
+    return str.slice(0, index);
 }
 
 export async function resizeImage(file:string, resolutions:number[], deleteOld:boolean = false): Promise<string[]>{

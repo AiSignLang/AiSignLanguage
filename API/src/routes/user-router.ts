@@ -118,7 +118,7 @@ userRouter.put("/:username/avatar", upload.single('avatar'), async (req, res) =>
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
-    const images = await convertToWebp(req.file.path, true, username);
+    const images = await convertToWebp(req.file.path, true, username.replace(/ /g, '_'));
 
     if (!images) {
         res.sendStatus(StatusCodes.BAD_REQUEST);
