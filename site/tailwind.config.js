@@ -12,6 +12,13 @@ export default {
     ],
     theme: {
         extend: {
+            textColor: {
+                'gradient': 'transparent',
+            },
+            backgroundImage: theme => ({
+                'grey-gradient': 'linear-gradient(to right, #7f7f7f, #0e0e0e)',
+                'red-gradient': 'linear-gradient(to right, #ff0000, #8b0000)'
+            }),
             screens: {
                 'xs': {'max': '639px'}, // screens smaller than sm
                 'c-sm': {'min': '640px', 'max': '767px'}, // screens greater than or equal to sm

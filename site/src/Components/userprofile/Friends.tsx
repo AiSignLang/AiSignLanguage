@@ -1,10 +1,14 @@
 import {friendService} from "../../services/FriendService.ts";
 import {IFriend} from "../../model/props.ts";
 
-const people = await friendService.getFriends();
+let people: IFriend[] = [];
+(async () => {
+    people = await friendService.getFriends();
+})();
 
 // TODO: Service provides data to this constant
 export default function Friends() {
+
     return (
         <div className="w-full mt-10">
             <h1 className="text-2xl font-bold text-center border-t border-b py-4">Friends</h1>
