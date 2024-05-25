@@ -1,5 +1,5 @@
 import Navbar from "../navbar/Navbar.tsx";
-import { useLocation } from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import {NavService} from "../../services/NavigationService.ts";
 import {
     Chart as ChartJS,
@@ -127,23 +127,28 @@ export function Course(props: IProps) {
     return (
         <div className="bg-bg-primary text-text-primary h-full min-h-screen w-full">
             <Navbar></Navbar>
-            <div className="grid grid-cols-2 grid-rows-2 h-screen">
-                <div className="col-start-1 col-end-3 flex justify-center w-full h-1/2">
-                    <div className="mt-20">
-                        <h1 className="text-5xl font-bold text-gray-600">You <span
-                            className="text-gradient bg-clip-text bg-red-gradient">haven't</span> done your tasks today
-                            :(</h1>
-                        <p className="mt-10 text-2xl bg-primary w-fit p-3.5 rounded hover:accent">
-                            Do them now →
-                        </p>
+            <div className="flex justify-center w-full ">
+                <div className="mt-20">
+                    <h1 className="text-5xl font-bold text-gray-600">You <span
+                        className="text-gradient bg-clip-text bg-red-gradient">haven't</span> done your tasks today
+                        :(</h1>
+                    <div className="flex gap-10">
+                        <Link to="/task?=next" className="mt-10 text-2xl bg-primary w-fit p-3.5 rounded hover:bg-primary-hover">
+                            Do them now
+                        </Link>
+                        <Link to="/pause" className="mt-10 text-2xl w-fit p-3.5 rounded text-gray-600 hover:text-text-primary">
+                            I need time off →
+                        </Link>
                     </div>
                 </div>
-                <div className="row-start-2 col-start-1">
-                    <Radar data={radarData} options={radarOptions} />
+            </div>
+            <div className="flex w-full mt-10">
+                <div className="w-1/2">
+                    <Radar data={radarData} options={radarOptions}/>
                 </div>
-                <div className="row-start-2 col-start-2">
-                    <Bar data={data2} options={options}/>
-                </div>
+              <div className="w-1/2">
+                  <Bar data={data2} options={options}/>
+              </div>
             </div>
         </div>
     );
