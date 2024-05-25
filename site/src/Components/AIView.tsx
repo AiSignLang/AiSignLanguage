@@ -16,7 +16,9 @@ const AIView: React.FC = () =>{
     
     const [inputVideoReady, setInputVideoReady] = useState(false);
     const [loaded, setLoaded] = useState(false);
-    
+    const [stream, setStream] = useState<MediaStream| null>(null);
+
+
     useEffect(() => {
         /*setHolistic(new Holistic({
             locateFile: (file) => {
@@ -39,12 +41,13 @@ const AIView: React.FC = () =>{
             });
         }
 
+
         const holistic = new Holistic({
             locateFile: (file) => {
                 return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`;
             }
         });
-        
+
         holistic.setOptions({
             modelComplexity: 1,
             smoothLandmarks: true,
@@ -67,7 +70,7 @@ const AIView: React.FC = () =>{
                 }
             }
         };
-        
+
     },  [inputVideoReady]);
 
     
