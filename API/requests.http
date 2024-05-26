@@ -10,7 +10,7 @@ POST localhost:3000/api/user
 Content-Type: application/json
 
 {
-    "name": "tabnomlost"
+    "name": "batman"
 }
 
 ### Delete user with specific username

@@ -3,7 +3,17 @@ import * as fs from "node:fs/promises";
 import * as fsSync from "node:fs";
 import sharp from 'sharp';
 
+export const publicPath = path.join(__dirname, '../public/')
+
+export const getUserPath = (username: string) => {
+    return path.join(publicPath,`${username}/`);
+}
+export const getAvatarPath = (username: string) => {
+    return path.join(getUserPath(username),`/avatars/`);
+}
+
 sharp.cache(false);
+
 
 export function isString(value: any): void {
     if (typeof value !== 'string') {
@@ -45,6 +55,7 @@ export async function resizeImage(file:string, resolutions:number[], deleteOld:b
     const minDimension = Math.min(metadata.width, metadata.height);
     const left = (metadata.width - minDimension) / 2;
     const top = (metadata.height - minDimension) / 2;
+    
     
     resolutions.filter(resolution => resolution > 0 && resolution <= minDimension);
     for (const resolution of resolutions) {

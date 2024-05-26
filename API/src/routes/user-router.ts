@@ -4,11 +4,15 @@ import {StatusCodes} from "http-status-codes";
 import sequelize from "../data/database";
 import multer from 'multer';
 import * as path from "node:path";
-import {convertToWebp, deleteFile, isNameLengthValid} from "../Utils";
+import {convertToWebp, deleteFile, getAvatarPath, getUserPath, isNameLengthValid} from "../Utils";
 import Score from "../data/models/Score";
 import {v4 as uuidv4} from "uuid";
+import fsSync from "fs";
+import * as fs from "node:fs";
 
 export const userRouter = express.Router();
+
+
 
 userRouter.get("/", async (_, res) => {
 
@@ -50,7 +54,8 @@ userRouter.get("/:username", async (req, res) => {
 
 const storage = multer.diskStorage({
     destination: (_, file, cb) => {
-        cb(null, path.join(__dirname, '../../public/avatars'));
+        
+        cb(null, path.join(__dirname, '../../public/temp/'));
         console.log("in destination of multer: " + file.originalname);
     },
     filename: (_, file, cb) => {
@@ -120,7 +125,13 @@ userRouter.put("/:username/avatar", upload.single('avatar'), async (req, res) =>
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
-    const images = await convertToWebp(req.file.path, true, username.replace(/ /g, '_'));
+    if (fsSync.existsSync(getAvatarPath(username))) {
+        fs.rmdirSync(getAvatarPath(username),{recursive: true});
+    }
+    fs.mkdirSync(getAvatarPath(username), {recursive: true});
+    const avatarDir = getAvatarPath(username) + req.file.filename;
+    fs.renameSync(req.file.path, avatarDir );
+    const images = await convertToWebp(avatarDir, true, username.replace(/ /g, '_'));
 
     if (!images) {
         res.sendStatus(StatusCodes.BAD_REQUEST);
@@ -149,9 +160,9 @@ userRouter.delete("/:username", async (req, res) => {
             res.sendStatus(StatusCodes.BAD_REQUEST);
             return;
         }
-
-        if(user.profilePic !== '../public/avatars/Default_pfp.jpg'){// TODO: what if user is named Default? / should not allow
-            await deleteFile(user.profilePic);
+        
+        if(!user.profilePic.includes("Default_pfp.webp")){// TODO: what if user is named Default? / should not allow
+            fs.rmdirSync(getUserPath(username),{recursive: true});
         }
         await user.destroy();
 

@@ -4,6 +4,8 @@ import {StatusCodes} from "http-status-codes";
 
 import user from "../../src/data/models/User";
 import * as path from "node:path";
+import fsSync from "fs";
+import {getAvatarPath, getUserPath} from "../../src/Utils";
 
 
 const routePath = '/api/user';
@@ -177,9 +179,17 @@ describe('user route', ()=>{
         test('should return 204 for a known username, now deleted', async () => {
             const username = 'testadmintodelete';
 
-            await request(app).post(routePath).send({name: username});
-            const response = await request(app).delete(`${routePath}/${username}`);
+            let response = await request(app).post(routePath).send({name: username});
+            expect(response.statusCode).toBe(201);
+            response = await request(app)
+                .put(`${routePath}/${username}/avatar`)
+                .attach('avatar', path.join(__dirname, '../Download.jpeg')); // Adjust the path to the avatar image file
+            expect(response.statusCode).toBe(200);
+            expect(fsSync.existsSync(getAvatarPath(username))).toBe(true);
+            response = await request(app).delete(`${routePath}/${username}`);
             expect(response.statusCode).toBe(204);
+            expect(fsSync.existsSync(getAvatarPath(username))).toBe(false);
+            expect(fsSync.existsSync(getUserPath(username))).toBe(false);
         })
     });
 })

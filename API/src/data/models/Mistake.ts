@@ -11,6 +11,7 @@
     UpdatedAt
 } from "sequelize-typescript";
 import Task from "./Task";
+import User from "./User";
 
 @Table({
     timestamps: true,
@@ -33,6 +34,13 @@ class Mistake extends Model{
     })
     declare mistakeId: string;
 
+    @IsUUID(4)
+    @ForeignKey(()=>User)
+    @Column({
+        type: DataType.UUID
+    })
+    declare userId: string;
+    
     @CreatedAt
     declare created_at: Date
 
