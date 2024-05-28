@@ -54,7 +54,7 @@ userRouter.get("/:username", async (req, res) => {
 
 const storage = multer.diskStorage({
     destination: (_, file, cb) => {
-        
+
         cb(null, path.join(__dirname, '../../public/temp/'));
         console.log("in destination of multer: " + file.originalname);
     },
@@ -90,11 +90,7 @@ const upload = multer(
 userRouter.post("/",async (req,res)=>{
     const name = req.body.name;
     const user = await Users.findOne({where: {userName: name}}); // TODO: in html action is /api/user/ post, maybe put, but where to get username?
-    console.log(name);
     if(user){
-        console.log("crashes in here");
-        console.log(user.userName);
-        console.log(typeof user);
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
@@ -113,6 +109,8 @@ userRouter.post("/",async (req,res)=>{
 
 userRouter.put("/:username/avatar", upload.single('avatar'), async (req, res) => {
     const username = req.params.username;
+
+    //const profilePic = req.body.profilePic ? user!.profilePic : '../public/avatars/Default_pfp.jpg'; // TODO: im service pfp lösen
 
     const user = await Users.findOne({where: {username: username}});
     if(!user){
@@ -134,7 +132,7 @@ userRouter.put("/:username/avatar", upload.single('avatar'), async (req, res) =>
     const images = await convertToWebp(avatarDir, true, username.replace(/ /g, '_'));
 
     if (!images) {
-        res.sendStatus(StatusCodes.BAD_REQUEST);
+        res.sendStatus(StatusCodes.BAD_REQUEST); // TODO: should test this
         return;
     }
     const t =await sequelize.transaction()
@@ -152,7 +150,6 @@ userRouter.delete("/:username", async (req, res) => {
         return;
     }
 
-
     try{
         const user = await Users.findOne({where: {username: username}});
 
@@ -160,7 +157,7 @@ userRouter.delete("/:username", async (req, res) => {
             res.sendStatus(StatusCodes.BAD_REQUEST);
             return;
         }
-        
+
         if(!user.profilePic.includes("Default_pfp.webp")){// TODO: what if user is named Default? / should not allow
             fs.rmdirSync(getUserPath(username),{recursive: true});
         }
@@ -173,29 +170,29 @@ userRouter.delete("/:username", async (req, res) => {
     }
 })
 
-
 userRouter.put("/:username", async (req, res) => {
     const userName = req.params.username;
+    const newUserName = req.body.name;
     const user = await Users.findOne({where: {username: userName}});
 
-    if(!isNameLengthValid(userName)){
+    if(!userName || !newUserName
+        || !isNameLengthValid(userName) || !isNameLengthValid(newUserName)
+        || !user){
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
 
-    const profilePic = req.body.profilePic ? user!.profilePic : '../public/avatars/Default_pfp.jpg'; // TODO: im service pfp lösen
+    const userExists = await Users.findOne({where: {username: newUserName}});
+    if(userExists){
+        res.sendStatus(StatusCodes.BAD_REQUEST);
+        return;
+    }
 
     try {
-        const [updated] = await Users.update({ userName, profilePic }, {
-            where: { username: userName }
-        });
+        await user.update({userName: newUserName});
 
-        if(!updated){
-            res.sendStatus(StatusCodes.BAD_REQUEST);
-            return;
-        }
-
-        const updatedUser = await Users.findOne({ where: { username: userName } });
+        const updatedUser = await Users.findOne({ where: { username: newUserName } });
+        console.log("this the user we EXPECT!!! :"+updatedUser)
         res.json(updatedUser);
 
     } catch (err) {
@@ -204,13 +201,15 @@ userRouter.put("/:username", async (req, res) => {
     }
 });
 
-userRouter.delete("/", async (req, res) => {
+userRouter.delete("/", async (_, res) => {
 
+    const transaction = await sequelize.transaction();
     try{
         await Users.destroy({where: {}});
         res.sendStatus(StatusCodes.NO_CONTENT);
+        await transaction.commit();
     }catch (err){
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+        await transaction.rollback();
     }
-
 });

@@ -10,42 +10,45 @@ import {getAvatarPath, getUserPath} from "../../src/Utils";
 
 const routePath = '/api/user';
 
+beforeEach(async()=>{
+    await request(app).delete(routePath);
+})
+afterEach(async()=>{
+    await request(app).delete(routePath);
+})
 
-describe('user route', ()=>{
 
-    beforeEach(async ()=>{
-        await request(app).delete(routePath);
-    })
-
-    describe('POST /api/user', () => {
-        test('should create a new user', async () => {
-            const username = 'John Doe';
-            const response = await request(app)
-                .post(routePath)
-                .send({
-                    name: username
-                });
-            expect(response.statusCode).toBe(201);
-            expect(response.body.userName).toBe('John Doe');
-        });
-
-        test('should not create a user with the same name', async () => {
-            const username = 'John Doe';
-            const response = await request(app)
-                .post(routePath)
-                .send({
-                    name: username
-                });
-            const responseAgain = await request(app)
-                .post(routePath)
-                .send({
-                    name: username
-                });
-            expect(response.statusCode).toBe(StatusCodes.CREATED);
-            expect(responseAgain.statusCode).toBe(StatusCodes.BAD_REQUEST);
-        });
+describe('POST /api/user', () => {
+    test('should create a new user', async () => {
+        const username = 'John Doe';
+        const response = await request(app)
+            .post(routePath)
+            .send({
+                name: username
+            });
+        expect(response.statusCode).toBe(201);
+        expect(response.body.userName).toBe('John Doe');
     });
-    describe('PUT /api/user/:username/avatar', () => {
+
+    test('should not create a user with the same name', async () => {
+        const username = 'John Doe';
+        const response = await request(app)
+            .post(routePath)
+            .send({
+                name: username
+            });
+        const responseAgain = await request(app)
+            .post(routePath)
+            .send({
+                name: username
+            });
+        expect(response.statusCode).toBe(StatusCodes.CREATED);
+        expect(responseAgain.statusCode).toBe(StatusCodes.BAD_REQUEST);
+    });
+});
+describe('PUT /api/user', () => {
+
+    describe('/:username/avatar', ()=>{
         test('should update the avatar of a user', async () => {
 
             const username = 'Van Gogh';
@@ -78,8 +81,112 @@ describe('user route', ()=>{
 
             expect(response.statusCode).toBe(StatusCodes.BAD_REQUEST);
         });
-    });
-    describe('GET /api/user/', () => {
+    })
+
+    describe('/:username', ()=>{
+
+        test('should update name of an user', async () =>{
+            const expectedNewName = 'Mickey Mouse';
+
+            await request(app).post(routePath).send({name: 'John Doe'});
+            const getBefore = await request(app).get(`${routePath}/John Doe`);
+            console.log("THIS IS THE BODY WE LOOK FOR!: " + getBefore.body);
+            expect(getBefore.body.userName).toBe('John Doe');
+
+            await request(app).put(`${routePath}/John Doe`).send({name: expectedNewName})
+            const getAfterJohn = await request(app).get(`${routePath}/John Doe`); // TODO: john should not exist anymore, but user mouse should exist here
+            expect(getAfterJohn.statusCode).toBe(400);
+            const getAfterMickeyMouse = await request(app).get(`${routePath}/${expectedNewName}`);
+            expect(getAfterMickeyMouse.statusCode).toBe(200);
+            expect(getAfterMickeyMouse.body.userName).toBe(expectedNewName);
+        });
+
+        test('should not update name, name does not fit validation (too short + too long)', async()=>{
+            const nameOfUser = 'John Doe';
+            await request(app).post(routePath).send({name: nameOfUser});
+            const responseTooShort = await request(app).put(`${routePath}/${nameOfUser}`).send({name: 'x'});
+            expect(responseTooShort.statusCode).toBe(400);
+
+            const responseTooLong = await request(app).put(`${routePath}/${nameOfUser}`).send({name: 'invalid is way too long to be a username, validation should return bad requeset'});
+            expect(responseTooLong.statusCode).toBe(400);
+
+            const response = await request(app).get(`${routePath}/${nameOfUser}`);
+            expect(response.statusCode).toBe(200); // TODO: hmm..
+            expect(response.body.userName).toBe(nameOfUser);
+        })
+
+        test('should not update, name is null or undefined', async()=>{
+            const nameOfUser = 'John Doe';
+            await request(app).post(routePath).send({name: nameOfUser});
+            const nullValue = null;
+            const responseNull = await request(app).put(`${routePath}/${nameOfUser}`).send({name: nullValue});
+            expect(responseNull.statusCode).toBe(400);
+
+            const undefinedValue = undefined;
+            const responseUndefined = await request(app).put(`${routePath}/${nameOfUser}`).send({name: undefinedValue});
+            expect(responseUndefined.statusCode).toBe(400);
+
+            const response = await request(app).get(`${routePath}/${nameOfUser}`);
+            expect(response.statusCode).toBe(200);
+            expect(response.body.userName).toBe(nameOfUser);
+        });
+
+        test('should not update, user does not exist', async()=>{
+            const nameOfUser = 'John Doe';
+            const response = await request(app).put(`${routePath}/${nameOfUser}`).send({name: 'Mickey Mouse'});
+            expect(response.statusCode).toBe(400);
+        })
+
+        test('should not update, new name is already in use', async()=>{
+            const nameOfUser = 'John Doe';
+            const nameOfUser2 = 'Mickey';
+
+            await request(app).post(routePath).send({name: nameOfUser});
+            await request(app).post(routePath).send({name: nameOfUser2});
+            const response = await request(app).put(`${routePath}/${nameOfUser}`).send({name: nameOfUser2});
+
+            expect(response.statusCode).toBe(400);
+
+        })
+        // TODO: normal put operation tests needed here
+    })
+
+});
+describe('GET /api/user', () => {
+
+    describe('/', ()=>{
+        test('should return not found for no users', async () => {
+            const response = await request(app).get(`${routePath}`);
+            expect(response.statusCode).toBe(404);
+
+        });
+        test('should return two users', async () => {
+
+            const validUsername = 'Jeremy Meier';
+            const otherValidUsername = 'Franklin Saint';
+
+            await request(app).post(routePath).send({name: validUsername});
+            await request(app).post(routePath).send({name: otherValidUsername});
+            const expectedUser = {
+                username: validUsername,
+            };
+            const otherExpectedUser = {
+                username: otherValidUsername,
+            };
+
+
+            const response = await request(app).get(`/api/user/`);
+            console.log(response.body);
+
+            expect(response.statusCode).toBe(200);
+            expect(response.body[1].userName).toEqual(otherExpectedUser.username);
+            expect(response.body[0].userName).toEqual(expectedUser.username);
+
+        });
+
+    })
+
+    describe('/:username', ()=>{
         test('should return 400 for a username that is too short', async () => {
 
             const username = 'x'; // Assuming this ID does not exist
@@ -116,55 +223,27 @@ describe('user route', ()=>{
             expect(response.statusCode).toBe(200);
             expect(response.body.userName).toEqual(expectedUser.username);
         });
+    })
+});
 
+describe('DELETE /api/user', () => {
 
-        test('should return two users', async () => {
-
-            const validUsername = 'Jeremy Meier';
-            const otherValidUsername = 'Franklin Saint';
-
-            await request(app).post(routePath).send({name: validUsername});
-            await request(app).post(routePath).send({name: otherValidUsername});
-            const expectedUser = {
-                username: validUsername,
-            };
-            const otherExpectedUser = {
-                username: otherValidUsername,
-            };
-
-
-            const response = await request(app).get(`/api/user/`);
-            console.log(response.body);
-
-            expect(response.statusCode).toBe(200);
-            expect(response.body[1].userName).toEqual(otherExpectedUser.username);
-            expect(response.body[0].userName).toEqual(expectedUser.username);
-
-        });
-
-
-
-    });
-    describe('DELETE /api/user/:username', () => {
-
+    describe('/:username', ()=>{
         test('should return 400 for a username that is too short', async () => {
             const username = 'x'; // Assuming this ID does not exist
             const response = await request(app).delete(`${routePath}/${username}`);
             expect(response.statusCode).toBe(400);
         });
-
         test('should return 400 for a bad request (username too long)', async () => {
             const invalidUserName = 'invalid is way too long to be a username, validation should return bad requeset'; // Invalid ID format
             const response = await request(app).delete(`${routePath}/${invalidUserName}`);
             expect(response.statusCode).toBe(400);
         });
-
         test('should return 400 for a bad request, because user does not exist', async ()=>{
             const username = 'userdoesnotexist';
             const response = await request(app).delete(`${routePath}/${username}`);
             expect(response.statusCode).toBe(400);
         });
-
         test('should return 400 for a bad request, because null was given', async ()=>{
             const username = null;
             const response = await request(app).delete(`${routePath}/${username}`);
@@ -175,7 +254,6 @@ describe('user route', ()=>{
             const response = await request(app).delete(`${routePath}/${username}`);
             expect(response.statusCode).toBe(400);
         });
-
         test('should return 204 for a known username, now deleted', async () => {
             const username = 'testadmintodelete';
 
@@ -191,5 +269,5 @@ describe('user route', ()=>{
             expect(fsSync.existsSync(getAvatarPath(username))).toBe(false);
             expect(fsSync.existsSync(getUserPath(username))).toBe(false);
         })
-    });
-})
+    })
+});
