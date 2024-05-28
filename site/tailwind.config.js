@@ -8,6 +8,8 @@ export default {
     content: [
         "./index.html",
         "./src/**/*.{ts,tsx,css,js,jsx}",
+        //"./node_modules/flowbite/**/*.js",
+        'node_modules/flowbite-react/lib/esm/**/*.js',
         flowbite.content(),
     ],
     theme: {
@@ -48,6 +50,7 @@ export default {
     },
     plugins: [
         flowbite.plugin(),
+   // require('flowbite/plugin')
     ],
 }
 
