@@ -130,10 +130,10 @@ export function Course(props: IProps) {
             <div className="flex justify-center w-full ">
                 <div className="mt-20">
                     <h1 className="text-5xl font-bold text-gray-600">You <span
-                        className="text-gradient bg-clip-text bg-red-gradient">haven't</span> done your tasks today
+                        className="text-gradient bg-clip-text bg-red-gradient">haven't</span> done your exercises today
                         :(</h1>
                     <div className="flex gap-10">
-                        <Link to="/task?=next" className="mt-10 text-2xl bg-primary w-fit p-3.5 rounded hover:bg-primary-hover">
+                        <Link to="/exercise?type=next" className="mt-10 text-2xl bg-primary w-fit p-3.5 rounded hover:bg-primary-hover">
                             Do them now
                         </Link>
                         <Link to="/pause" className="mt-10 text-2xl w-fit p-3.5 rounded text-gray-600 hover:text-text-primary">
@@ -142,8 +142,8 @@ export function Course(props: IProps) {
                     </div>
                 </div>
             </div>
-            <div className="flex w-full mt-10">
-                <div className="w-1/2">
+            <div className="flex w-full mt-20 gap-20">
+                <div className="w-1/4">
                     <Radar data={radarData} options={radarOptions}/>
                 </div>
               <div className="w-1/2">
