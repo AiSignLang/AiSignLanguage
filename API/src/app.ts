@@ -6,12 +6,14 @@ import user from "./data/models/User";
 import Task from "./data/models/Task";
 import Score from "./data/models/Score";
 import * as path from "node:path";
+import {friendRouter} from "./routes/friend-router";
 export const app = express();
 
 app.use(express.static("public"));
 app.use(express.json());
 
-app.use("/api/user", userRouter)
+app.use("/api/user", userRouter);
+app.use("/api/friends", friendRouter);
 /* just testing
 sequelize.sync({force:true}).then(async () => {
     const u =await user.create({

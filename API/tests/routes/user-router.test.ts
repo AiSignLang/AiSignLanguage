@@ -2,21 +2,19 @@ import request from 'supertest';
 import { app } from '../../src/app';
 import {StatusCodes} from "http-status-codes";
 
-import user from "../../src/data/models/User";
 import * as path from "node:path";
 import fsSync from "fs";
 import {getAvatarPath, getUserPath} from "../../src/Utils";
-
 
 const routePath = '/api/user';
 
 beforeEach(async()=>{
     await request(app).delete(routePath);
+
 })
 afterEach(async()=>{
     await request(app).delete(routePath);
 })
-
 
 describe('POST /api/user', () => {
     test('should create a new user', async () => {
@@ -90,7 +88,6 @@ describe('PUT /api/user', () => {
 
             await request(app).post(routePath).send({name: 'John Doe'});
             const getBefore = await request(app).get(`${routePath}/John Doe`);
-            console.log("THIS IS THE BODY WE LOOK FOR!: " + getBefore.body);
             expect(getBefore.body.userName).toBe('John Doe');
 
             await request(app).put(`${routePath}/John Doe`).send({name: expectedNewName})
@@ -148,7 +145,6 @@ describe('PUT /api/user', () => {
             expect(response.statusCode).toBe(400);
 
         })
-        // TODO: normal put operation tests needed here
     })
 
 });

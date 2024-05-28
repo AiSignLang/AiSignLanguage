@@ -31,7 +31,6 @@ userRouter.get("/", async (_, res) => {
    }
 });
 
-
 userRouter.get("/:username", async (req, res) => {
     const username = req.params.username;
 
@@ -135,7 +134,7 @@ userRouter.put("/:username/avatar", upload.single('avatar'), async (req, res) =>
         res.sendStatus(StatusCodes.BAD_REQUEST); // TODO: should test this
         return;
     }
-    const t =await sequelize.transaction()
+    const t =await sequelize.transaction(); // TODO: transaction should be used, when updating db, but no db found ???
     user.profilePic = images[4];
     await t.commit();
     res.json(user);
@@ -150,6 +149,7 @@ userRouter.delete("/:username", async (req, res) => {
         return;
     }
 
+    const transaction = await sequelize.transaction();
     try{
         const user = await Users.findOne({where: {username: username}});
 
@@ -162,10 +162,12 @@ userRouter.delete("/:username", async (req, res) => {
             fs.rmdirSync(getUserPath(username),{recursive: true});
         }
         await user.destroy();
+        await transaction.commit();
 
         res.sendStatus(StatusCodes.NO_CONTENT);
 
     }catch (err){
+        await transaction.rollback();
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
 })
@@ -188,15 +190,17 @@ userRouter.put("/:username", async (req, res) => {
         return;
     }
 
+    const transaction = await sequelize.transaction();
     try {
         await user.update({userName: newUserName});
 
         const updatedUser = await Users.findOne({ where: { username: newUserName } });
-        console.log("this the user we EXPECT!!! :"+updatedUser)
+        await transaction.commit();
         res.json(updatedUser);
 
     } catch (err) {
         console.error(err);
+        await transaction.rollback();
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
 });

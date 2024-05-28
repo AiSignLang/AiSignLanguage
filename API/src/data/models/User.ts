@@ -10,6 +10,7 @@
     CreatedAt,
     UpdatedAt, DataType, BelongsToMany
 } from "sequelize-typescript";
+import { BelongsToManyAddAssociationMixin } from 'sequelize';
 import Score from "./Score";
 import Friendship from "./Friendship";
 import Level from "./Level";
@@ -63,7 +64,8 @@ class User extends Model {
     
     @BelongsToMany(()=>User,()=>Friendship,'userId','friendId')
      declare friends: User[];
-    
+
+
     @HasOne(()=>Score,'ownerId')
     declare score:Score
     
