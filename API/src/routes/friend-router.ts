@@ -63,8 +63,6 @@ friendRouter.post("/:username/friends/:friendUsername", async (req, res) => {
             return;
         }
 
-        const t = user.friends;
-
         if(user.friends === undefined){
             user.friends = [];
         }
@@ -73,7 +71,6 @@ friendRouter.post("/:username/friends/:friendUsername", async (req, res) => {
             const friendship = await Friendship.create({userId: user.userId, friendId: friend.userId});
             await friendship.save();
             await user.save();
-
         }
 
         res.json(user.friends);
