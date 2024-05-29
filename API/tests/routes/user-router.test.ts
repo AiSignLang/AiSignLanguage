@@ -5,7 +5,6 @@ import {StatusCodes} from "http-status-codes";
 import * as path from "node:path";
 import fsSync from "fs";
 import {getAvatarPath, getUserPath} from "../../src/Utils";
-import sequelize from "../database/database.mock";
 
 const routePath = '/api/user';
 beforeEach(async()=>{
