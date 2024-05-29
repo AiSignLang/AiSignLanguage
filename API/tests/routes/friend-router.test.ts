@@ -160,5 +160,111 @@ describe('GET', ()=>{
 
 
 describe('Delete', ()=>{
-    // TODO: you got the delete in router as well, think about that
+
+    test('should return 400, because length of the user name is bad (too short + too long)', async ()=>{
+
+        const responseShort = await request(app).delete(`${friendRoute}/${usernameShort}/friends/${validUser}`);
+        const responseLong = await request(app).delete(`${friendRoute}/${userNameLong}/friends/${validUser}`);
+
+        expect(responseShort.statusCode).toBe(400);
+        expect(responseLong.statusCode).toBe(400);
+    })
+
+    test('should return 400, because length of the friend name is bad (too short + too long', async()=>{
+        const responseShort = await request(app).delete(`${friendRoute}/${validUser}/friends/${usernameShort}`);
+        const responseLong = await request(app).delete(`${friendRoute}/${validUser}/friends/${userNameLong}`);
+
+        expect(responseShort.statusCode).toBe(400);
+        expect(responseLong.statusCode).toBe(400);
+    })
+
+    test('should return 400, because user name is null or undefined', async()=>{
+        const responseNull = await request(app).delete(`${friendRoute}/${nullValue}/friends/${validUser}`);
+        const responseUndefined = await request(app).delete(`${friendRoute}/${undefinedValue}/friends/${validUser}`);
+
+        expect(responseNull.statusCode).toBe(400);
+        expect(responseUndefined.statusCode).toBe(400);
+    })
+
+    test('should return 400, because friend name is null or undefined', async()=>{
+        const responseNull = await request(app).delete(`${friendRoute}/${validUser}/friends/${nullValue}`);
+        const responseUndefined = await request(app).delete(`${friendRoute}/${validUser}/friends/${undefinedValue}`);
+
+        expect(responseNull.statusCode).toBe(400);
+        expect(responseUndefined.statusCode).toBe(400);
+    })
+
+    test('should return 400, because user does not exist', async()=>{
+        const randomUser = 'Batman';
+        const responseNotExists = await request(app).delete(`${friendRoute}/${validUser}/friends/${randomUser}`);
+        expect(responseNotExists.statusCode).toBe(400);
+    })
+    test('should return 400, because friend does not exist', async()=>{
+        const randomUser = 'Batman';
+        const responseNotExists = await request(app).delete(`${friendRoute}/${randomUser}/friends/${validUser}`);
+        expect(responseNotExists.statusCode).toBe(400);
+    })
+
+    test('should return 400, because user and friend are the same', async()=>{
+        const responseSameUser = await request(app).delete(`${friendRoute}/${validUser}/friends/${validUser}`);
+        expect(responseSameUser.statusCode).toBe(400);
+
+    })
+
+    test('should return 404, because user has no friends, therefore they cannot be deleted', async()=> {
+        const friendUser = 'Mater'
+        await request(app) // create user test is done in the user-router.test.ts
+            .post('/api/user')
+            .send({
+                name: validUser
+            });
+
+        await request(app) // create user test is done in the user-router.test.ts
+            .post('/api/user')
+            .send({
+                name: friendUser
+            });
+
+
+        const response = await request(app).delete(`${friendRoute}/${validUser}/friends/${friendUser}`);
+        expect(response.statusCode).toBe(404);
+    })
+
+
+    test('should return 200, because user has friends, and one can be removed', async()=> {
+        const friendUser = 'Mater'
+        const otherFriendUser = 'McQueen'
+        await request(app) // create user test is done in the user-router.test.ts
+            .post('/api/user')
+            .send({
+                name: validUser
+            });
+
+        await request(app) // create user test is done in the user-router.test.ts
+            .post('/api/user')
+            .send({
+                name: friendUser
+            });
+
+        await request(app) // create user test is done in the user-router.test.ts
+            .post('/api/user')
+            .send({
+                name: otherFriendUser
+            });
+
+        await request(app).post(`${friendRoute}/${validUser}/friends/${friendUser}`);
+        await request(app).post(`${friendRoute}/${validUser}/friends/${otherFriendUser}`);
+
+        const responseBefore = await request(app).get(`${friendRoute}/${validUser}`);
+        expect(responseBefore.body.length).toBe(2);
+        expect(responseBefore.body[0].userName).toBe(friendUser);
+        expect(responseBefore.body[1].userName).toBe(otherFriendUser);
+
+        const responseAfter = await request(app).delete(`${friendRoute}/${validUser}/friends/${friendUser}`);
+        console.log(responseAfter.body);
+
+        expect(responseAfter.statusCode).toBe(200);
+        expect(responseAfter.body.length).toBe(1);
+        expect(responseAfter.body[0].userName).toBe(otherFriendUser);
+    })
 })
