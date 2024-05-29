@@ -31,6 +31,6 @@ sequelize.sync({force:true}).then(async () => {
     await u.save();
 });*/
 
-app.listen(3000, () => {
+export const server = app.listen(3000, () => {
     console.log("Server is running at http://localhost:3000");
 });

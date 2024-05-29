@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from '../../src/app';
+import {app, server} from '../../src/app';
 import {StatusCodes} from "http-status-codes";
 
 import * as path from "node:path";
@@ -15,7 +15,9 @@ beforeEach(async()=>{
 afterEach(async()=>{
     await request(app).delete(routePath);
 })
-
+afterAll(done => {
+    server.close(done);
+});
 
 describe('POST /api/user', () => {
     test('should create a new user', async () => {
