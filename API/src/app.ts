@@ -31,8 +31,6 @@ sequelize.sync({force:true}).then(async () => {
     await u.save();
 });*/
 
-path.join()
-
 app.listen(3000, () => {
     console.log("Server is running at http://localhost:3000");
 });

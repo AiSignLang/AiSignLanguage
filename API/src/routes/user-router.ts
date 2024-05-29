@@ -12,8 +12,6 @@ import * as fs from "node:fs";
 
 export const userRouter = express.Router();
 
-
-
 userRouter.get("/", async (_, res) => {
 
     try{
@@ -27,7 +25,8 @@ userRouter.get("/", async (_, res) => {
          res.json(users)
 
    }catch (err) {
-       res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+        console.error(err);
+        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
    }
 });
 
@@ -47,6 +46,7 @@ userRouter.get("/:username", async (req, res) => {
         }
         res.json(user);
     }catch (err){
+        console.error(err);
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
 });
@@ -55,14 +55,11 @@ const storage = multer.diskStorage({
     destination: (_, file, cb) => {
 
         cb(null, path.join(__dirname, '../../public/temp/'));
-        console.log("in destination of multer: " + file.originalname);
     },
     filename: (_, file, cb) => {
 
         const filename = `${uuidv4()}.${path.extname(file.originalname)}`;//`${name.replace(/\s+/g, '_')}_pfp.${path.extname(file.originalname)}`; // muss denk ich fürs konvertieren den ext-namen haben
         cb(null, filename);
-        console.log("in filename of multer: " + filename);
-
     }
 });
 
@@ -71,10 +68,7 @@ const upload = multer(
     {
         storage: storage,
         fileFilter(req, file: Express.Multer.File, callback: multer.FileFilterCallback) {
-            console.log("check file", file);
-            console.log("checking request: " + req);
             const checkMimeType = file.mimetype.includes("image/")
-            console.log("checkMimeType", checkMimeType);
             if (checkMimeType) {
                 return callback(null, true)
 
@@ -97,11 +91,13 @@ userRouter.post("/",async (req,res)=>{
     const transaction = await sequelize.transaction();
     try{
         const user = await Users.create({userName: name});
+        await user.save();
         user.score = await Score.create({dailyStreak: 0, perfectlyDone:0,allTimeCorrect:0 ,ownerId: user.userId});
         res.status(StatusCodes.CREATED).json(user);
         await transaction.commit();
     }catch(err){
         await transaction.rollback();
+        console.error(err);
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
 })
@@ -167,6 +163,7 @@ userRouter.delete("/:username", async (req, res) => {
         res.sendStatus(StatusCodes.NO_CONTENT);
 
     }catch (err){
+        console.error(err);
         await transaction.rollback();
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
@@ -213,6 +210,7 @@ userRouter.delete("/", async (_, res) => {
         res.sendStatus(StatusCodes.NO_CONTENT);
         await transaction.commit();
     }catch (err){
+        console.error(err);
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
         await transaction.rollback();
     }

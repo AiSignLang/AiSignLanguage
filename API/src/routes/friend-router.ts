@@ -3,6 +3,8 @@ import {StatusCodes} from "http-status-codes";
 import User from "../data/models/User";
 import {isNameLengthValid} from "../Utils";
 import Friendship from "../data/models/Friendship";
+import sequelize from "../data/database";
+import Users from "../data/models/User";
 
 
 export const friendRouter = express.Router();
@@ -28,7 +30,7 @@ friendRouter.get("/:username", async (req, res) => {
              return;
          }
          const friends = user.friends;
-
+// Could crash, bc friends might be undefined
          if(friends.length === 0){
              res.sendStatus(StatusCodes.NOT_FOUND);
              return;
@@ -37,7 +39,8 @@ friendRouter.get("/:username", async (req, res) => {
          res.json(friends);
 
    }catch (err) {
-       res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+        console.error(err);
+        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
    }
 })
 
@@ -112,6 +115,7 @@ friendRouter.delete("/:username/friends/:friendUsername", async (req, res) => {
         res.json(user.friends.splice(idx,1));
 
     }catch (err){
+        console.error(err);
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
 })
