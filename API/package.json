@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "tsx ./src/app.ts",
-    "test": "jest --coverage"
+    "test": "bash ./tests/run-tests.sh"
   },
   "author": "",
   "license": "ISC",

@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from '../../src/app';
+import {app, server} from '../../src/app';
 import {StatusCodes} from "http-status-codes";
 
 import * as path from "node:path";
@@ -7,7 +7,6 @@ import fsSync from "fs";
 import {getAvatarPath, getUserPath} from "../../src/Utils";
 
 const routePath = '/api/user';
-
 beforeEach(async()=>{
     await request(app).delete(routePath);
 
@@ -15,6 +14,9 @@ beforeEach(async()=>{
 afterEach(async()=>{
     await request(app).delete(routePath);
 })
+afterAll(done => {
+    server.close(done);
+});
 
 describe('POST /api/user', () => {
     test('should create a new user', async () => {
@@ -172,7 +174,6 @@ describe('GET /api/user', () => {
 
 
             const response = await request(app).get(`/api/user/`);
-            console.log(response.body);
 
             expect(response.statusCode).toBe(200);
             expect(response.body[1].userName).toEqual(otherExpectedUser.username);
@@ -214,7 +215,6 @@ describe('GET /api/user', () => {
 
 
             const response = await request(app).get(`/api/user/${validUsername}`);
-            console.log(response.body);
 
             expect(response.statusCode).toBe(200);
             expect(response.body.userName).toEqual(expectedUser.username);
