@@ -22,6 +22,12 @@ export function isString(value: any): void {
     }
 }
 
+export function isEnum(value: any, enumType: any): void {
+    if (!Object.values(enumType).includes(value)) {
+        throw new Error(`Value must be one of ${Object.values(enumType).join(", ")}`);
+    }
+}
+
 export async function deleteFile(filePath: string):Promise<boolean> {
     
     try {

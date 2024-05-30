@@ -9,6 +9,7 @@ import Score from "../data/models/Score";
 import {v4 as uuidv4} from "uuid";
 import fsSync from "fs";
 import * as fs from "node:fs";
+import {ADDRESS} from "../app";
 
 export const userRouter = express.Router();
 
@@ -135,7 +136,7 @@ userRouter.put("/:username/avatar", upload.single('avatar'), async (req, res) =>
         return;
     }
     const t =await sequelize.transaction(); // TODO: transaction should be used, when updating db, but no db found ???
-    user.profilePic = images[4];
+    user.profilePic = `${ADDRESS}/${username}/avatars/${images[4]}`;
     await t.commit();
     res.json(user);
 })

@@ -7,13 +7,19 @@ import Task from "./data/models/Task";
 import Score from "./data/models/Score";
 import * as path from "node:path";
 import {friendRouter} from "./routes/friend-router";
+import googleAuthRouter from "./routes/auth/google-auth-router";
 export const app = express();
+
+export const PORT:number = 3000;
+export const DOMAIN:string = "http://localhost";
+export const ADDRESS:string = `${DOMAIN}:${PORT}`;
 
 app.use(express.static("public"));
 app.use(express.json());
 
 app.use("/api/user", userRouter);
 app.use("/api/friends", friendRouter);
+app.use("/auth/google-auth/", googleAuthRouter);
 /* just testing
 sequelize.sync({force:true}).then(async () => {
     const u =await user.create({
@@ -31,8 +37,7 @@ sequelize.sync({force:true}).then(async () => {
     await u.save();
 });*/
 
-path.join()
 
-app.listen(3000, () => {
-    console.log("Server is running at http://localhost:3000");
+app.listen(PORT, () => {
+    console.log(`Server is running at ${ADDRESS}`);
 });
