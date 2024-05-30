@@ -1,6 +1,5 @@
 export enum TaskType {
-    SPELLING = "spelling",
-    RECOGNITION = "recognition",
-    LISTENING = "listening",
-    TRANSLATION = "translation",
+    SPELLING = "spell",
+    RECOGNITION = "recognize",
+    TRANSLATION = "translate",
 }

@@ -1,16 +1,12 @@
-/** @type {DefaultColors} */
 /** @type {import('tailwindcss').Config} */
 import * as flowbite from "flowbite-react/tailwind";
-
 const colors = require('tailwindcss/colors')
 
 export default {
     content: [
         "./index.html",
         "./src/**/*.{ts,tsx,css,js,jsx}",
-        //"./node_modules/flowbite/**/*.js",
-        'node_modules/flowbite-react/lib/esm/**/*.js',
-        flowbite.content(),
+        './node_modules/flowbite-react/lib/esm/**/*.js',
     ],
     theme: {
         extend: {
@@ -37,20 +33,32 @@ export default {
                 // or add them one by one and name whatever you want
                 amber: colors.amber,
                 emerald: colors.emerald,
+                // Custom colors for dark mode theme
+                'bg-primary': '#0D141A',
+                'bg-secondary': '#1C2B36',
+                'primary': '#1D4ED8', // Changed to a more standard blue
+                'primary-hover': '#1E40AF', // Darker blue for hover
+                'primary-greyed': '#374151', // Cool gray for disabled state
+                'primary-greyed-hover': '#334155', // Slightly darker gray for hover
+                'text-primary': '#E5E7EB', // Light gray for primary text
+                'btn-text-disable': '#9CA3AF', // Muted gray for disabled button text
+                'btn-bg-disable': '#4B5563', // Darker gray for disabled button background
             }
         },
         colors: {
             'blue': '#243c5a',
             'bg-primary': '#0D141A',
             'bg-secondary': '#1C2B36',
-            'primary': '#0084FF',
-            'primary-hover': '#0072E3',
-            'text-primary': '#FFFFFF',
-            },
+            'primary': '#1D4ED8', // Changed to a more standard blue
+            'primary-hover': '#1E40AF', // Darker blue for hover
+            'primary-greyed': '#374151', // Cool gray for disabled state
+            'primary-greyed-hover': '#334155', // Slightly darker gray for hover
+            'text-primary': '#E5E7EB', // Light gray for primary text
+            'btn-text-disable': '#9CA3AF', // Muted gray for disabled button text
+            'btn-bg-disable': '#4B5563', // Darker gray for disabled button background
+        },
     },
     plugins: [
-        flowbite.plugin(),
-   // require('flowbite/plugin')
+        require('flowbite/plugin')
     ],
 }
-

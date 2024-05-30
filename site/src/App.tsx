@@ -12,6 +12,7 @@ import {XnotFound} from "./Components/errors/XnotFound.tsx";
 import {Course} from "./Components/course/Course.tsx";
 import {Sandbox} from "./Components/sandbox/Sandbox.tsx";
 import {Exercise} from "./Components/exercise/Exercise.tsx";
+import {SignIn} from "./Components/welcome/SignIn.tsx";
 
 function App() {
     
@@ -19,8 +20,8 @@ function App() {
       <Router>
         <Routes>
             {/*   <Route path="/" element={<XnotFound subject={"Profile"} message={"Please try again later."}/>}/> */}
-            <Route path="/" element={<AIView/>}/>
-            <Route path="/course" element={<Course/>}/>
+            <Route path="/" element={<SignIn/>}/>
+            <Route path="/course" element={<Course courseID="next"/>}/>
             <Route path="/sandbox" element={<Sandbox/>}/>
             <Route path="/exercise" element={<Exercise/>}/>
             <Route path="*" element={<XnotFound subject="Page"/>}/>
