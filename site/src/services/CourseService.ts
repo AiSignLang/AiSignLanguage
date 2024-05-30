@@ -1,4 +1,3 @@
-import {IFriend} from "../model/props.ts";
 import {ILevel} from "../model/ILevel.ts";
 import {TaskType} from "../model/TaskType.ts";
 
@@ -14,27 +13,40 @@ class CourseService {
                     taskID: 1,
                     levelID: 1,
                     type: TaskType.SPELLING,
-                    solution: ['https://www.google.com'],
-                    taskData: ['A', 'l', 'e', 'x']
+                    hints: ['https://www.google.com'],
+                    taskData: ['A', 'l', 'e', 'x'],
+                    mistakes: null
                 },
                 {
                     taskID: 2,
                     levelID: 1,
                     type: TaskType.TRANSLATION,
-                    solution: ['https://www.google.com'],
-                    taskData: ['World']
+                    hints: ['https://www.google.com'],
+                    taskData: ['World'],
+                    mistakes: null
                 },
                 {
                     taskID: 3,
                     levelID: 1,
                     type: TaskType.TRANSLATION,
-                    solution: ['https://www.google.com', 'https://www.google.com', 'https://www.google.com', 'https://www.google.com'],
-                    taskData: ['Sie', 'sind', 'ein', 'Mensch']
+                    hints: ['https://www.google.com', 'https://www.google.com', 'https://www.google.com', 'https://www.google.com'],
+                    taskData: ['Sie', 'sind', 'ein', 'Mensch'],
+                    mistakes: null
                 }
             ]
         };
 
         return level
+    }
+
+    public isVisualTask(taskType: TaskType) {
+        const visualTasks = {
+            [TaskType.SPELLING]: true,
+            [TaskType.RECOGNITION]: false,
+            [TaskType.TRANSLATION]: true,
+        };
+
+        return visualTasks[taskType];
     }
 
 }
