@@ -5,6 +5,7 @@ import {
     Route,
 } from "react-router-dom";
 import AIView from "./Components/AIView";
+import LoginForm from "./Components/LoginForm.tsx";
 
 import './App.css'
 import UserProfile from "./Components/userprofile/UserProfile.tsx";
@@ -27,6 +28,7 @@ function App() {
             <Route path="*" element={<XnotFound subject="Page"/>}/>
             <Route path="/ProfileNotFound" element={<XnotFound subject="Profile" />}/>
             <Route path="/profile" element={<UserProfile/>}/>
+            <Route path="/login" element={<LoginForm/>}/>
         </Routes>
       </Router>
   );
