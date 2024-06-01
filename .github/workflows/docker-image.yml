@@ -25,7 +25,7 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         working-directory: site
-        context: ./Dockerfile
+        context: .
         push: true
         tags: alex8734/my-react-app:1.0.0
       
