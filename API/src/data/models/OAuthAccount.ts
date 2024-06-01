@@ -27,6 +27,7 @@ import {OAuthProvider} from "../../routes/auth/model";
     modelName: 'OAuthAccount'
 })
 class OAuthAccount extends Model {
+    @IsUUID(4)
     @PrimaryKey
     @ForeignKey(() => User)
     @Column({
@@ -53,6 +54,7 @@ class OAuthAccount extends Model {
     })
     declare oAuthId: string;
     
-    
+    @BelongsTo(() => User, 'userId')
+    declare user: User;
 }
 export default OAuthAccount;

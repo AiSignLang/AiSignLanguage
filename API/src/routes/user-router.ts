@@ -10,6 +10,7 @@ import {v4 as uuidv4} from "uuid";
 import fsSync from "fs";
 import * as fs from "node:fs";
 import {ADDRESS} from "../app";
+import {createUser} from "../services/user-service";
 
 export const userRouter = express.Router();
 
@@ -82,24 +83,11 @@ const upload = multer(
 
 
 userRouter.post("/",async (req,res)=>{
-    const name = req.body.name;
-    const user = await Users.findOne({where: {userName: name}}); // TODO: in html action is /api/user/ post, maybe put, but where to get username?
-    if(user){
-        res.sendStatus(StatusCodes.BAD_REQUEST);
-        return;
-    }
-
-    const transaction = await sequelize.transaction();
-    try{
-        const user = await Users.create({userName: name});
-        await user.save();
-        user.score = await Score.create({dailyStreak: 0, perfectlyDone:0,allTimeCorrect:0 ,ownerId: user.userId});
-        res.status(StatusCodes.CREATED).json(user);
-        await transaction.commit();
-    }catch(err){
-        await transaction.rollback();
-        console.error(err);
-        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    const newUser = await createUser(req.body.username)
+    if(newUser.status === StatusCodes.CREATED){
+        res.status(newUser.status).json(newUser.data);
+    }else {
+        res.sendStatus(newUser.status);
     }
 })
 

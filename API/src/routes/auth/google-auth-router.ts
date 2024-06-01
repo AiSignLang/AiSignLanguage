@@ -1,17 +1,20 @@
 ﻿import express from "express";
-import {StatusCodes} from "http-status-codes";
+import {CREATED, StatusCodes} from "http-status-codes";
 import {OAuth2Client} from "google-auth-library";
 import {configDotenv} from "dotenv";
+import {registerOAuthUser} from "../../services/auth-service";
+import {OAuthGoogleUserData, OAuthProvider} from "./model";
 
 const googleAuthRouter = express.Router();
 configDotenv()
 
-async function getUserData(access_token: string): Promise<any> {
+export async function getUserData(access_token: string): Promise<OAuthGoogleUserData> {
     const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`);
     const data = await response.json();
     console.log('response: ', data);
     return data;
 }
+
 
 googleAuthRouter.get("/", async (req, res) => {
     const code = req.query.code as string;
@@ -33,7 +36,12 @@ googleAuthRouter.get("/", async (req, res) => {
         
         const userData = await getUserData(user.access_token!)
         
-        res.json(userData);
+        const regResponse = await registerOAuthUser(null, userData, OAuthProvider.GOOGLE);
+        if (regResponse.status !== StatusCodes.CREATED) {
+            res.sendStatus(regResponse.status);
+            return;
+        }
+        res.status(StatusCodes.CREATED).json(userData);
     }
     catch (e) {
         console.log(e);
