@@ -26,5 +26,5 @@ jobs:
       with:
         context: ./site
         push: true
-        tags: alex8734/my-react-app:1.0.0
+        tags: ital3x/ai-sign-language:1.0.0
       
