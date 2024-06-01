@@ -6,4 +6,5 @@ const sequelize = new Sequelize({
     models: [__dirname + "/../../src/data/models/*.ts"],
     logging: false
 });
+sequelize.sync({force: true})
 export default sequelize;

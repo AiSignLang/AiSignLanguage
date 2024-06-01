@@ -9,6 +9,7 @@ import {isString} from "../../Utils";
 })
 class Level extends Model{
     @Column({
+        type: DataType.STRING,
         validate: {
             isString: isString
         }

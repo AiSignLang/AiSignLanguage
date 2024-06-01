@@ -1,13 +1,18 @@
 ﻿
-POST localhost:3000/users
+### Get user with specific username
+GET localhost:3000/api/user/Batman
+
+### Get all users
+GET localhost:3000/api/user
+
+### Create new user
+POST localhost:3000/api/user
 Content-Type: application/json
 
 {
-    "userName": "John Doe",
-    "profilePic":"https://www.google.com",
-  "score":{
-      "perfectlyDone":13,
-    "dailyStreak": 5,
-    "allTimeCorrect": 100
-  }
+    "name": "batman"
 }
+
+### Delete user with specific username
+DELETE localhost:3000/api/user/'John Doe'
+

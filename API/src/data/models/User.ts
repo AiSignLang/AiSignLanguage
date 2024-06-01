@@ -10,12 +10,14 @@
     CreatedAt,
     UpdatedAt, DataType, BelongsToMany
 } from "sequelize-typescript";
+import { BelongsToManyAddAssociationMixin } from 'sequelize';
 import Score from "./Score";
 import Friendship from "./Friendship";
 import Level from "./Level";
 import UserLevel from "./UserLevel";
 import {ValidationFailed} from "sequelize-typescript/dist/browser";
 import {isString} from "../../Utils";
+import Mistake from "./Mistake";
 
 @Table({
     timestamps: true,
@@ -45,7 +47,7 @@ class User extends Model {
     @Column({
         allowNull: false,
         type:DataType.STRING,
-        defaultValue: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'
+        defaultValue: 'Default_pfp.jpg'
     })
     declare profilePic: string;
     
@@ -57,9 +59,13 @@ class User extends Model {
     })
     declare userId: string;
     
+    @HasMany(()=>Mistake,'userId')
+    declare mistakes: Mistake[];
+    
     @BelongsToMany(()=>User,()=>Friendship,'userId','friendId')
      declare friends: User[];
-    
+
+
     @HasOne(()=>Score,'ownerId')
     declare score:Score
     
