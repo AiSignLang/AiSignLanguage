@@ -1,0 +1,36 @@
+=== Verantwortungsmatrix
+
+[cols="1,1,1,1"]
+|===
+|Backend |Tsolmonbat Batbold| Elija Lambourne | Alexander Resch
+
+|Design Backend API |M|V|M
+|Router Express|V|M|M
+|Modell Klassen|I|M|V
+|Express Setup|I|I|V
+|===
+
+
+[cols="1,1,1,1"]
+|===
+|Frontend |Tsolmonbat Batbold| Elija Lambourne | Alexander Resch
+
+|Mockups|VM|M|I
+
+|Daten werden mit TS an die KI weitergegeben|M|M|V
+
+|TFJS funktioniert -> in React App nutzbar|M|V|I
+|===
+
+
+[cols="1,1,1,1"]
+|===
+|AI Model |Tsolmonbat Batbold| Elija Lambourne | Alexander Resch
+
+|Daten sammeln |M|M|V
+|KI aufsetzen|I|V|M
+|Bilder Labels setzen -> ready für AI|V|M|M
+
+|===
+
+
