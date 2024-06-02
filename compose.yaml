@@ -3,9 +3,11 @@
     build: "./site/"
     ports:
       - "8080:8080"
+    links:
+      - api
   api:
     build: "./API/"
     env_file:
       - ./API/.env
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
