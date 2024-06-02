@@ -4,6 +4,7 @@ import {OAuth2Client} from "google-auth-library";
 import {configDotenv} from "dotenv";
 import {registerOAuthUser} from "../../services/auth-service";
 import {OAuthGoogleUserData, OAuthProvider} from "./model";
+import {ADDRESS} from "../../app";
 
 const googleAuthRouter = express.Router();
 configDotenv()
@@ -19,7 +20,7 @@ export async function getUserData(access_token: string): Promise<OAuthGoogleUser
 googleAuthRouter.get("/", async (req, res) => {
     const code = req.query.code as string;
     try{
-        const redirect = "http://localhost:3000/auth/google-auth";
+        const redirect = `${ADDRESS}/auth/google-auth`;
         const client = new OAuth2Client(
             process.env.GOOGLE_CLIENT_ID,
             process.env.GOOGLE_CLIENT_SECRET,
@@ -53,7 +54,7 @@ googleAuthRouter.post("/request", async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Referrer-Policy", "no-referrer-when-downgrade");
     
-    const redirect = "http://localhost:3000/auth/google-auth";
+    const redirect = `${ADDRESS}/auth/google-auth`;
     const client = new OAuth2Client(
         process.env.GOOGLE_CLIENT_ID,
         process.env.GOOGLE_CLIENT_SECRET,

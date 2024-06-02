@@ -8,6 +8,7 @@ import Score from "./data/models/Score";
 import * as path from "node:path";
 import {friendRouter} from "./routes/friend-router";
 import googleAuthRouter from "./routes/auth/google-auth-router";
+import * as fs from "node:fs";
 export const app = express();
 
 export const PORT:number = 3000;
@@ -20,6 +21,12 @@ app.use(express.json());
 app.use("/api/user", userRouter);
 app.use("/api/friends", friendRouter);
 app.use("/auth/google-auth/", googleAuthRouter);
+
+if (!fs.existsSync(path.join(__dirname, '../data/db.sqlite3'))) {
+    sequelize.sync({force: true}).then(async () => {
+        console.log('Database created');
+    });
+}
 /* just testing
 sequelize.sync({force:true}).then(async () => {
     const u =await user.create({
