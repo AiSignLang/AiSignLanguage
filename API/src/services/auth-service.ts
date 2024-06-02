@@ -44,7 +44,7 @@ export async function registerOAuthUser(dbUser:User | null, oauthUser: OAuthGoog
     const user = await OAuthAccount.create({
         oAuthId: id,
         oAuthProvider: provider,
-        userId: dbUser!.id
+        userId: dbUser!.userId
     });
     await user.save()
     console.log(`User ${dbUser!.userName} registered with ${provider} account.`);
