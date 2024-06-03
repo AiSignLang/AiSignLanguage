@@ -20,7 +20,7 @@ userRouter.get("/", async (_, res) => {
          const users = await Users.findAll();
 
          if(users.length === 0){
-             res.sendStatus(StatusCodes.NOT_FOUND);
+             res.sendStatus(StatusCodes.NO_CONTENT);
              return;
          }
 
