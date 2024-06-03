@@ -3,9 +3,24 @@
     build: "./site/"
     ports:
       - "8080:8080"
+    links:
+        - api
+    networks:
+      - back-tier
+      - front-tier
+      
   api:
     build: "./API/"
     env_file:
       - ./API/.env
+    networks:
+      - back-tier
+    expose:
+        - "5000"
     ports:
-      - "3000:3000"
+      - "5000:5000"
+
+
+networks:
+  back-tier: {}
+  front-tier: {}

@@ -1,6 +1,6 @@
 import request from 'supertest';
-import {app, server} from '../../src/app';
-import {StatusCodes} from "http-status-codes";
+import {app} from '../../src/app';
+import {CREATED, NO_CONTENT, StatusCodes} from "http-status-codes";
 
 import * as path from "node:path";
 import fsSync from "fs";
@@ -14,9 +14,6 @@ beforeEach(async()=>{
 afterEach(async()=>{
     await request(app).delete(routePath);
 })
-afterAll(done => {
-    server.close(done);
-});
 
 describe('POST /api/user', () => {
     test('should create a new user', async () => {
@@ -53,7 +50,7 @@ describe('PUT /api/user', () => {
 
             const username = 'Van Gogh';
 
-            await request(app).post(routePath).send({name: username});
+            await request(app).post(routePath).send({username: username});
             const response = await request(app)
                 .put(`${routePath}/${username}/avatar`)
                 .attach('avatar', path.join(__dirname, '../Download.jpeg')); // Adjust the path to the avatar image file
@@ -75,7 +72,7 @@ describe('PUT /api/user', () => {
 
         test('should not update the avatar if no file is provided', async () => {
             const username = 'John Doe';
-            await request(app).post(routePath).send({name: username});
+            await request(app).post(routePath).send({username: username});
             const response = await request(app)
                 .put(`${routePath}/${username}/avatar`);
 
@@ -88,11 +85,11 @@ describe('PUT /api/user', () => {
         test('should update name of an user', async () =>{
             const expectedNewName = 'Mickey Mouse';
 
-            await request(app).post(routePath).send({name: 'John Doe'});
+            await request(app).post(routePath).send({username: 'John Doe'});
             const getBefore = await request(app).get(`${routePath}/John Doe`);
             expect(getBefore.body.userName).toBe('John Doe');
 
-            await request(app).put(`${routePath}/John Doe`).send({name: expectedNewName})
+            await request(app).put(`${routePath}/John Doe`).send({username: expectedNewName})
             const getAfterJohn = await request(app).get(`${routePath}/John Doe`); // TODO: john should not exist anymore, but user mouse should exist here
             expect(getAfterJohn.statusCode).toBe(400);
             const getAfterMickeyMouse = await request(app).get(`${routePath}/${expectedNewName}`);
@@ -102,7 +99,7 @@ describe('PUT /api/user', () => {
 
         test('should not update name, name does not fit validation (too short + too long)', async()=>{
             const nameOfUser = 'John Doe';
-            await request(app).post(routePath).send({name: nameOfUser});
+            await request(app).post(routePath).send({username: nameOfUser});
             const responseTooShort = await request(app).put(`${routePath}/${nameOfUser}`).send({name: 'x'});
             expect(responseTooShort.statusCode).toBe(400);
 
@@ -116,7 +113,7 @@ describe('PUT /api/user', () => {
 
         test('should not update, name is null or undefined', async()=>{
             const nameOfUser = 'John Doe';
-            await request(app).post(routePath).send({name: nameOfUser});
+            await request(app).post(routePath).send({username: nameOfUser});
             const nullValue = null;
             const responseNull = await request(app).put(`${routePath}/${nameOfUser}`).send({name: nullValue});
             expect(responseNull.statusCode).toBe(400);
@@ -140,8 +137,8 @@ describe('PUT /api/user', () => {
             const nameOfUser = 'John Doe';
             const nameOfUser2 = 'Mickey';
 
-            await request(app).post(routePath).send({name: nameOfUser});
-            await request(app).post(routePath).send({name: nameOfUser2});
+            await request(app).post(routePath).send({username: nameOfUser});
+            await request(app).post(routePath).send({username: nameOfUser2});
             const response = await request(app).put(`${routePath}/${nameOfUser}`).send({name: nameOfUser2});
 
             expect(response.statusCode).toBe(400);
@@ -155,7 +152,7 @@ describe('GET /api/user', () => {
     describe('/', ()=>{
         test('should return not found for no users', async () => {
             const response = await request(app).get(`${routePath}`);
-            expect(response.statusCode).toBe(404);
+            expect(response.statusCode).toBe(StatusCodes.NO_CONTENT);
 
         });
         test('should return two users', async () => {
@@ -163,8 +160,8 @@ describe('GET /api/user', () => {
             const validUsername = 'Jeremy Meier';
             const otherValidUsername = 'Franklin Saint';
 
-            await request(app).post(routePath).send({name: validUsername});
-            await request(app).post(routePath).send({name: otherValidUsername});
+            expect(await request(app).post(routePath).send({username: validUsername})).toBeTruthy();
+            expect(await request(app).post(routePath).send({username: otherValidUsername})).toBeTruthy();
             const expectedUser = {
                 username: validUsername,
             };
@@ -175,7 +172,7 @@ describe('GET /api/user', () => {
 
             const response = await request(app).get(`/api/user/`);
 
-            expect(response.statusCode).toBe(200);
+            expect(response.statusCode).toBe(StatusCodes.OK);
             expect(response.body[1].userName).toEqual(otherExpectedUser.username);
             expect(response.body[0].userName).toEqual(expectedUser.username);
 
@@ -206,7 +203,7 @@ describe('GET /api/user', () => {
         test('should return a user in json format for an existing user', async () => {
             const validUsername = 'Jeremy Meier';
 
-            await request(app).post(routePath).send({name: validUsername});
+            await request(app).post(routePath).send({username: validUsername});
             const expectedUser = {
                 id: 1,
                 username: validUsername,
@@ -253,7 +250,7 @@ describe('DELETE /api/user', () => {
         test('should return 204 for a known username, now deleted', async () => {
             const username = 'testadmintodelete';
 
-            let response = await request(app).post(routePath).send({name: username});
+            let response = await request(app).post(routePath).send({username: username});
             expect(response.statusCode).toBe(201);
             response = await request(app)
                 .put(`${routePath}/${username}/avatar`)

@@ -11,7 +11,7 @@ import googleAuthRouter from "./routes/auth/google-auth-router";
 import * as fs from "node:fs";
 export const app = express();
 
-export const PORT:number = 3000;
+export const PORT:number = 5000;
 export const DOMAIN:string = "http://localhost";
 export const ADDRESS:string = `${DOMAIN}:${PORT}`;
 
