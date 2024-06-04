@@ -9,6 +9,7 @@ class UserService{
     // TODO: change route as needed
     public async getUser(username: string, id?: string): Promise<IUser | null>{
 
+        console.log(`getUser called${username} ${id}`);
         //await fetchRestEndpoint(this.route, 'GET')
         const user: IUser = {
             id: 1,

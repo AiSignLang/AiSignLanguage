@@ -12,6 +12,7 @@ interface IProps {
 }
 
 export function Exercise(props: IProps) {
+    console.log("Exerciseprops", props);
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const type = queryParams.get('type');  // replace 'myParam' with the name of your parameter
@@ -20,6 +21,7 @@ export function Exercise(props: IProps) {
     const [userInput, setUserInput] = useState<string[]>([]);
 
     const handleNextTask = (skipped: boolean, userSolution: string[] | null) => {
+        console.log('userSolution', userSolution);
         if (skipped && level && level.tasks[currentTaskIndex]) {
             level.tasks[currentTaskIndex].skipped = true;
             level.tasks[currentTaskIndex].mistakes = null;

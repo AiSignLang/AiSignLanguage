@@ -16,9 +16,7 @@ const AIView: React.FC = () =>{
     
     const [inputVideoReady, setInputVideoReady] = useState(false);
     const [loaded, setLoaded] = useState(false);
-    const [stream, setStream] = useState<MediaStream| null>(null);
-
-
+    
     useEffect(() => {
         /*setHolistic(new Holistic({
             locateFile: (file) => {

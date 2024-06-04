@@ -1,14 +1,16 @@
-import React from 'react';
 import {IFriend} from "../../model/props.ts";
 import {friendService} from "../../services/FriendService.ts";
 
 interface IProps {
     // TODO: Define your props here
 }
-
-const sug = await friendService.getSuggestions();
-
+let sug:IFriend[];
+(async () => {
+    sug = await friendService.getSuggestions();
+})();
 export function Recommendations(props: IProps) {
+    console.log("Recommendations props", props);
+    
     return (
         <div className="flex flex-col w-full  bg-bg-secondary rounded-3xl p-7">
             <h1 className="text-2xl font-bold mb-5">Friend suggestions</h1>

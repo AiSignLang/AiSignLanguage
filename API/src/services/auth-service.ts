@@ -6,7 +6,10 @@ import {createUser} from "./user-service";
 import {StatusCodes} from "http-status-codes";
 import {ServiceReturn} from "../model";
 
-export async function registerOAuthUser(dbUser:User | null, oauthUser: OAuthGoogleUserData,  provider: OAuthProvider) : Promise<ServiceReturn<OAuthAccount>>
+
+
+
+export async function registerOAuthUser(oauthUser: OAuthGoogleUserData,  provider: OAuthProvider, dbUser: User | null = null) : Promise<ServiceReturn<OAuthAccount>>
 {
     let id: string;
     let name: string;
@@ -41,16 +44,26 @@ export async function registerOAuthUser(dbUser:User | null, oauthUser: OAuthGoog
         dbUser = newUser.data;
     }
     const transaction = await sequelize.transaction();
-    const user = await OAuthAccount.create({
-        oAuthId: id,
-        oAuthProvider: provider,
-        userId: dbUser!.userId
-    });
-    await user.save()
-    console.log(`User ${dbUser!.userName} registered with ${provider} account.`);
-    await transaction.commit();
-    return {
-        status: StatusCodes.CREATED,
-        data: user
-    };
+    try {
+        const user = await OAuthAccount.create({
+            oAuthId: id,
+            oAuthProvider: provider,
+            userId: dbUser!.userId
+        });
+        await user.save()
+        console.log(`User ${dbUser!.userName} registered with ${provider} account.`);
+        await transaction.commit();
+        return {
+            status: StatusCodes.CREATED,
+            data: user
+        };
+    }
+   catch (e) {
+        await transaction.rollback();
+        return {
+            status: StatusCodes.INTERNAL_SERVER_ERROR,
+            data: null
+        };
+   }
+    
 }
