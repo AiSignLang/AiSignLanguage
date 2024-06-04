@@ -26,6 +26,7 @@
     "faker": "^5.5.3",
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.9.0",
+    "google-auth-library": "^9.10.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
@@ -51,10 +52,10 @@
     "vite-plugin-mediapipe": "^0.1.0"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 8080",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
+    "preview": "vite preview --port 8080",
     "tailwind": "tailwindcss -i ./src/tailwind_input.css -o ./src/dist/tailwind.css --watch"
   },
   "eslintConfig": {

@@ -11,9 +11,20 @@ import googleAuthRouter from "./routes/auth/google-auth-router";
 import * as fs from "node:fs";
 export const app = express();
 
-export const PORT:number = 5000;
-export const DOMAIN:string = "http://localhost";
-export const ADDRESS:string = `${DOMAIN}:${PORT}`;
+
+export const PORT: number = 5000;
+export const EXTERNAL_PORT: number = 8080;
+
+export const DOMAIN: string = "http://localhost";
+export let EXTERNAL_DOMAIN: string = "http://localhost";
+
+if (process.env.NODE_ENV === "publish") {
+    EXTERNAL_DOMAIN = "http://asl.lambourne.at";
+}
+
+export const ADDRESS: string = `${DOMAIN}:${PORT}`;
+export const EXTERNAL_ADDRESS: string = `${EXTERNAL_DOMAIN}:${EXTERNAL_PORT}`;
+
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -47,4 +58,5 @@ sequelize.sync({force:true}).then(async () => {
 
 app.listen(PORT, () => {
     console.log(`Server is running at ${ADDRESS}`);
+    console.log(`External Server is running at ${EXTERNAL_ADDRESS}`);
 });

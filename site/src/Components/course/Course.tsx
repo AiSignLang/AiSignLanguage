@@ -45,6 +45,7 @@ interface IProps {
 
 export function Course(props: IProps) {
     NavService.changeNavHighlight(useLocation().pathname);
+    console.log("Courseprops", props);
     const data2 = {
         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
         datasets: [
