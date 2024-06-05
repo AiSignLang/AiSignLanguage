@@ -3,6 +3,9 @@
 SavedModels/*.h5
 SavedModels/*.keras
 SavedModels/*.npy
+./CollectionBase/*.npy
+./CollectionBase/*.jpg
+
 
 
 # Byte-compiled / optimized / DLL files
