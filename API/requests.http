@@ -1,12 +1,12 @@
 ﻿
 ### Get user with specific username
-GET localhost:3000/api/user/Batman
+GET localhost:8080/api/user/Batman
 
 ### Get all users
-GET localhost:5000/api/user
+GET {{url}}/api/user
 
 ### Create new user
-POST localhost:5000/api/user
+POST localhost:8080/api/user
 Content-Type: application/json
 
 {
@@ -14,5 +14,5 @@ Content-Type: application/json
 }
 
 ### Delete user with specific username
-DELETE localhost:3000/api/user/'John Doe'
+DELETE localhost:8080/api/user/'batman'
 
