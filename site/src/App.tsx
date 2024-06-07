@@ -4,7 +4,6 @@ import {
     Routes,
     Route,
 } from "react-router-dom";
-import AIView from "./Components/AIView";
 import LoginForm from "./Components/LoginForm.tsx";
 
 import './App.css'
@@ -14,7 +13,8 @@ import {Course} from "./Components/course/Course.tsx";
 import {Sandbox} from "./Components/sandbox/Sandbox.tsx";
 import {Exercise} from "./Components/exercise/Exercise.tsx";
 import {SignIn} from "./Components/welcome/SignIn.tsx";
-
+import TrainingRead from "./Components/training/TrainingRead.tsx";
+import TrainingSign from "./Components/training/TrainingSign.tsx";
 function App() {
     
   return (
@@ -25,6 +25,8 @@ function App() {
             <Route path="/course" element={<Course courseID="next"/>}/>
             <Route path="/sandbox" element={<Sandbox/>}/>
             <Route path="/exercise" element={<Exercise/>}/>
+            <Route path="/training-read" element={<TrainingRead/>}/>
+            <Route path="/training-sign" element={<TrainingSign/>}/>
             <Route path="*" element={<XnotFound subject="Page"/>}/>
             <Route path="/ProfileNotFound" element={<XnotFound subject="Profile" />}/>
             <Route path="/profile" element={<UserProfile/>}/>
