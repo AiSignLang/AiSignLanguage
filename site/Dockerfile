@@ -9,6 +9,10 @@ RUN npm install
 
 COPY . .
 
+RUN npm cache clean --force
+RUN rm -rf node_modules
+RUN npm install
+
 RUN npm run build
 
 FROM nginx:latest as production

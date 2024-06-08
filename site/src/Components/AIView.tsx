@@ -39,12 +39,13 @@ const AIView: React.FC = () =>{
             });
         }
 
+
         const holistic = new Holistic({
             locateFile: (file) => {
                 return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`;
             }
         });
-        
+
         holistic.setOptions({
             modelComplexity: 1,
             smoothLandmarks: true,
@@ -67,7 +68,7 @@ const AIView: React.FC = () =>{
                 }
             }
         };
-        
+
     },  [inputVideoReady]);
 
     
