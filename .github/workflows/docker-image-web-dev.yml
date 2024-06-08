@@ -1,4 +1,4 @@
-name: Docker Image DEV React
+name: Docker Image React DEV
 
 on:
   push:
