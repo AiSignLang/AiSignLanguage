@@ -2,9 +2,8 @@ name: Docker Image React
 
 on:
   push:
-    branches: [ "main", "stable-site" ]
-  pull_request:
     branches: [ "main" ]
+ 
 
 jobs:
 
