@@ -2,15 +2,10 @@
 import  "./data/database";
 import sequelize from "./data/database";
 import {userRouter} from "./routes/user-router";
-import user from "./data/models/User";
-import Task from "./data/models/Task";
-import Score from "./data/models/Score";
 import * as path from "node:path";
 import {friendRouter} from "./routes/friend-router";
 import googleAuthRouter from "./routes/auth/google-auth-router";
 import * as fs from "node:fs";
-import {Authorize} from "./middleware/authorization-middleware";
-import Config from "./config";
 import config from "./config";
 
 export const app = express();

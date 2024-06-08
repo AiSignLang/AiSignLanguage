@@ -5,7 +5,6 @@ import sequelize from "../data/database";
 import multer from 'multer';
 import * as path from "node:path";
 import {convertToWebp, deleteFile, getAvatarPath, getUserPath, isNameLengthValid} from "../Utils";
-import Score from "../data/models/Score";
 import {v4 as uuidv4} from "uuid";
 import fsSync from "fs";
 import * as fs from "node:fs";

@@ -4,7 +4,6 @@ import {OAuth2Client} from "google-auth-library";
 import {configDotenv} from "dotenv";
 import {registerOAuthUser} from "../../services/auth-service";
 import {OAuthGoogleUserData, OAuthProvider} from "./model";
-import User from "../../data/models/User";
 import OAuthAccount from "../../data/models/OAuthAccount";
 import config from "../../config";
 
