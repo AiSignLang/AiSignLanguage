@@ -3,11 +3,41 @@
     build: "./site/"
     ports:
       - "8080:8080"
-    links:
-      - api
+    image: ital3x/ai-sign-language_web:1.0.0
+    env_file:
+      - ./site/.env
+    external_links:
+        - asl-api
+    networks:
+      - back-tier
+      - front-tier
+    pull_policy: always
+      
   api:
     build: "./API/"
     env_file:
       - ./API/.env
+    image: ital3x/ai-sign-language_api:1.0.0
+    volumes:
+      - db-data:/app/data/
+    networks:
+      - back-tier
     expose:
-      - "3000"
+        - "5000"
+    depends_on:
+      - sqlite
+    pull_policy: always
+  
+  sqlite:
+    container_name: sqlite-container
+    image: nouchka/sqlite3:latest
+    volumes:
+      - db-data:/app/data/
+    restart: always
+
+volumes:
+    db-data:
+
+networks:
+  back-tier: {}
+  front-tier: {}
