@@ -18,6 +18,7 @@ import UserLevel from "./UserLevel";
 import {ValidationFailed} from "sequelize-typescript/dist/browser";
 import {isString} from "../../Utils";
 import Mistake from "./Mistake";
+import config from "../../config";
 
 @Table({
     timestamps: true,
@@ -47,7 +48,7 @@ class User extends Model {
     @Column({
         allowNull: false,
         type:DataType.STRING,
-        defaultValue: 'Default_pfp.jpg'
+        defaultValue: `${config.externalAddress}/${config.staticEndpoint}/default_pfp.webp`
     })
     declare profilePic: string;
     

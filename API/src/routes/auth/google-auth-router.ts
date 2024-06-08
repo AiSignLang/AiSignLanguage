@@ -4,12 +4,19 @@ import {OAuth2Client} from "google-auth-library";
 import {configDotenv} from "dotenv";
 import {registerOAuthUser} from "../../services/auth-service";
 import {OAuthGoogleUserData, OAuthProvider} from "./model";
-import {ADDRESS, EXTERNAL_ADDRESS,} from "../../app";
 import User from "../../data/models/User";
 import OAuthAccount from "../../data/models/OAuthAccount";
+import config from "../../config";
 
 const googleAuthRouter = express.Router();
 configDotenv()
+
+const redirect = `${config.externalAddress}/oauth-google-redirect`;
+console.log('redirect: ', redirect);
+const client = new OAuth2Client(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    redirect);
 
 export async function getUserData(access_token: string): Promise<OAuthGoogleUserData> {
     const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`);
@@ -21,11 +28,6 @@ export async function getUserData(access_token: string): Promise<OAuthGoogleUser
 const dataScope = 'https://www.googleapis.com/auth/userinfo.profile openid';
 
 googleAuthRouter.get( "/verify", async (req, res) => {
-    const redirect = `${EXTERNAL_ADDRESS}/oauth-google-redirect`;
-    const client = new OAuth2Client(
-        process.env.GOOGLE_CLIENT_ID,
-        process.env.GOOGLE_CLIENT_SECRET,
-        redirect);
     const token = req.body.access_token;
     if (!token) {
         res.sendStatus(StatusCodes.BAD_REQUEST);
@@ -54,11 +56,7 @@ try {
 });
 
 googleAuthRouter.get( "/token", async (req, res) => {
-    const redirect = `${EXTERNAL_ADDRESS}/oauth-google-redirect`;
-    const client = new OAuth2Client(
-        process.env.GOOGLE_CLIENT_ID,
-        process.env.GOOGLE_CLIENT_SECRET,
-        redirect);
+    
     const code = req.query.code as string;
     if (!code) {
         res.sendStatus(StatusCodes.BAD_REQUEST);
@@ -97,16 +95,11 @@ googleAuthRouter.get( "/token", async (req, res) => {
 
 googleAuthRouter.post("/refresh", async (req, res) => {
     const refresh = req.body.refresh_token;
-    const redirect = `${EXTERNAL_ADDRESS}/oauth-google-redirect`;
     if (!refresh) {
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
     try {
-        const client = new OAuth2Client(
-            process.env.GOOGLE_CLIENT_ID,
-            process.env.GOOGLE_CLIENT_SECRET,
-            redirect);
         await client.setCredentials(
         {
             refresh_token: refresh,
@@ -126,11 +119,6 @@ googleAuthRouter.post("/request", async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Referrer-Policy", "no-referrer-when-downgrade");
     
-    const redirect = `${EXTERNAL_ADDRESS}/oauth-google-redirect`;
-    const client = new OAuth2Client(
-        process.env.GOOGLE_CLIENT_ID,
-        process.env.GOOGLE_CLIENT_SECRET,
-        redirect);
     const authorizeUrl = client.generateAuthUrl({
         access_type: "offline",
         scope: dataScope,

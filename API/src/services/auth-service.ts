@@ -67,3 +67,19 @@ export async function registerOAuthUser(oauthUser: OAuthGoogleUserData,  provide
    }
     
 }
+export async function getOAuthUser(oauthId: string, provider: OAuthProvider): Promise<User | null> {
+    const account = await OAuthAccount.findOne({
+        where: {
+            oAuthId: oauthId,
+            oAuthProvider: provider
+        }
+    });
+    if (!account) {
+        return null;
+    }
+    return User.findOne({
+        where: {
+            userId: account.userId
+        }
+    });
+}

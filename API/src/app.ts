@@ -9,24 +9,13 @@ import * as path from "node:path";
 import {friendRouter} from "./routes/friend-router";
 import googleAuthRouter from "./routes/auth/google-auth-router";
 import * as fs from "node:fs";
+import {Authorize} from "./middleware/authorization-middleware";
+import Config from "./config";
+import config from "./config";
+
 export const app = express();
 
-
-export const PORT: number = 5000;
-export const EXTERNAL_PORT: number = 8080;
-
-export const DOMAIN: string = "http://localhost";
-export let EXTERNAL_DOMAIN: string = "http://localhost";
-
-if (process.env.NODE_ENV === "publish") {
-    EXTERNAL_DOMAIN = "http://asl.lambourne.at";
-}
-
-export const ADDRESS: string = `${DOMAIN}:${PORT}`;
-export const EXTERNAL_ADDRESS: string = `${EXTERNAL_DOMAIN}:${EXTERNAL_PORT}`;
-
-
-app.use(express.static("public"));
+app.use(config.staticEndpoint,express.static("public"));
 app.use(express.json());
 
 app.use("/api/user", userRouter);
@@ -35,7 +24,7 @@ app.use("/auth/google-auth/", googleAuthRouter);
 
 if (!fs.existsSync(path.join(__dirname, '../data/db.sqlite3'))) {
     sequelize.sync({force: true}).then(async () => {
-        console.log('Database created');
+        console.log('Database synchronized');
     });
 }
 /* just testing
@@ -56,7 +45,7 @@ sequelize.sync({force:true}).then(async () => {
 });*/
 
 
-app.listen(PORT, () => {
-    console.log(`Server is running at ${ADDRESS}`);
-    console.log(`External Server is running at ${EXTERNAL_ADDRESS}`);
+app.listen(config.port, () => {
+    console.log(`Server is running at ${config.address}`);
+    console.log(`External Server is running at ${config.externalAddress}`);
 });
