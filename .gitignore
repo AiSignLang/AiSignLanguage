@@ -4,7 +4,8 @@ SavedModels/*.h5
 SavedModels/*.keras
 SavedModels/*.npy
 MP_Data/
-!requirements.txt
+!tf_env/requirements.txt
+tf_env/
 
 
 # Byte-compiled / optimized / DLL files
