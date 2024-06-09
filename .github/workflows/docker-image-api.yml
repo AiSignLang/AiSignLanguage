@@ -29,7 +29,7 @@ jobs:
       with:
         context: ./API
         push: true
-        tags: ital3x/ai-sign-language_api:1.0.${{ env.NEW_VERSION }}
+        tags: ital3x/ai-sign-language_api:1.0.${{ env.NEW_VERSION }}, ital3x/ai-sign-language_api:latest
 
   
       
