@@ -4,10 +4,17 @@ import {Recommendations} from "./Recommendations.tsx";
 import Navbar from "../navbar/Navbar.tsx";
 import {useLocation} from "react-router-dom";
 import {NavService} from "../../services/NavigationService.ts";
+import {useEffect} from "react";
+import {navigate} from "../../model/Utils.ts";
 
 export default function UserProfile(){
     NavService.changeNavHighlight(useLocation().pathname);
-
+   
+    useEffect(() => {
+        if (sessionStorage.getItem('access_token') === null 
+            || sessionStorage.getItem("username") === null) navigate('/login');
+        
+    }, []);
     return(
         <>
             <Navbar></Navbar>
@@ -19,13 +26,13 @@ export default function UserProfile(){
 
                 <div className="w-3/6 flex c-md:w-4/6 xs:w-full h-fit mr-10">
                     <div className="w-full bg-bg-secondary rounded-3xl p-10">
-                        <User username="johndoe"></User>
-                        <Friends></Friends>
+                        <User username={sessionStorage.getItem("username")}/>
+                        <Friends/>
                     </div>
                 </div>
 
                 <div className="w-1/6 xs:w-0">
-                    <Recommendations></Recommendations>
+                    <Recommendations/>
                 </div>
             </div>
         </>
