@@ -6,8 +6,8 @@
     image: ital3x/ai-sign-language_web:1.0.0
     env_file:
       - ./site/.env
-    links:
-        - api
+    external_links:
+        - asl-api
     networks:
       - back-tier
       - front-tier
