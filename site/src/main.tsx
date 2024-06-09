@@ -5,6 +5,7 @@ import config from "./config.ts";
 
 console.log('server running on: ', config.address);
 console.log('server running external on: ', config.externalAddress);
+console.log('proxy runnting on: ', import.meta.env.VITE_API_BASE_URL);
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement

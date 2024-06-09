@@ -1,4 +1,6 @@
 import {IUser} from "../model/props.ts";
+import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
+import config from "../config.ts";
 //import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
 
 
@@ -7,23 +9,13 @@ class UserService{
 
     // TODO: this method gets ID and returns user object + needs to be switched down below
     // TODO: change route as needed
-    public async getUser(username: string, id?: string): Promise<IUser | null>{
-
-        console.log(`getUser called${username} ${id}`);
-        //await fetchRestEndpoint(this.route, 'GET')
-        const user: IUser = {
-            id: 1,
-            name: 'John Doe',
-            score: {
-                scoreID: 1,
-                streak: 5,
-                allTasks: 10,
-                doneWell: 8
-            },
-            profilePath:"https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-
+    public async getUser(username: string): Promise<IUser | null>{
+        const user = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/${username}`, "GET");
+        console.log(user);
+        if (user) {
+            return user;
         }
-        return user;
+        return null;
     }
 }
 

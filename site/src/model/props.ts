@@ -9,7 +9,11 @@ export interface IUser{
     id: number;
     name: string;
     score: IScore;
-    profilePath: string | null;
+    profilePic: string;
+}
+
+export interface IProfile{
+    
 }
 
 export interface IScore{
