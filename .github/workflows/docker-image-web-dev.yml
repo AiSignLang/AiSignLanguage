@@ -2,7 +2,7 @@ name: Docker Image React DEV
 
 on:
   push:
-    branches: [ "stable-site" ]
+    branches: [ "stable-react" ]
  
 
 jobs:
