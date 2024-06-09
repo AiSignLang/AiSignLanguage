@@ -4,6 +4,7 @@ SavedModels/*.h5
 SavedModels/*.keras
 SavedModels/*.npy
 MP_Data/
+!requirements.txt
 
 
 # Byte-compiled / optimized / DLL files
