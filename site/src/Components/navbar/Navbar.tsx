@@ -2,6 +2,7 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {Link} from "react-router-dom";
+import {Logout} from "../../services/auth/auth-service.ts";
 import Dropdown from "./Dropdown.tsx";
 
 export const navigation = [
@@ -121,6 +122,7 @@ export default function Navbar() {
                                                     <a
                                                         href="#"
                                                         className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                        onClick={()=>Logout()}
                                                     >
                                                         Sign out
                                                     </a>

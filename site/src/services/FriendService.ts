@@ -10,10 +10,10 @@ class FriendService{
                 friendID: 1,
                 name: 'John Doe',
                 score: {
-                    scoreID: 1,
-                    streak: 5,
-                    allTasks: 10,
-                    doneWell: 8
+                    scoreId: 1,
+                    dailyStreak: 5,
+                    allTimeCorrect: 10,
+                    perfectlyDone: 8
                 },
                 profilePath: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 
@@ -22,10 +22,10 @@ class FriendService{
                 friendID: 2,
                 name: 'Jane Smith',
                 score: {
-                    scoreID: 2,
-                    streak: 2,
-                    allTasks: 5,
-                    doneWell: 4
+                    scoreId: 2,
+                    dailyStreak: 2,
+                    allTimeCorrect: 5,
+                    perfectlyDone: 4
                 },
                 profilePath:'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 
@@ -34,10 +34,10 @@ class FriendService{
                 friendID: 3,
                 name: 'Bob Johnson',
                 score: {
-                    scoreID: 3,
-                    streak: 3,
-                    allTasks: 7,
-                    doneWell: 6
+                    scoreId: 3,
+                    dailyStreak: 3,
+                    allTimeCorrect: 7,
+                    perfectlyDone: 6
                 },
                 profilePath:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 
@@ -46,10 +46,10 @@ class FriendService{
                 friendID: 4,
                 name: 'Alice Williams',
                 score: {
-                    scoreID: 4,
-                    streak: 1,
-                    allTasks: 3,
-                    doneWell: 2
+                    scoreId: 4,
+                    dailyStreak: 1,
+                    allTimeCorrect: 3,
+                    perfectlyDone: 2
 
                 },
                 profilePath:'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
@@ -59,10 +59,10 @@ class FriendService{
                 friendID: 5,
                 name: 'Charlie Brown',
                 score: {
-                    scoreID: 5,
-                    streak: 4,
-                    allTasks: 9,
-                    doneWell: 7
+                    scoreId: 5,
+                    dailyStreak: 4,
+                    allTimeCorrect: 9,
+                    perfectlyDone: 7
                 },
                 profilePath:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
             },
@@ -70,10 +70,10 @@ class FriendService{
                 friendID: 6,
                 name: 'Charlie Brown',
                 score: {
-                    scoreID: 5,
-                    streak: 4,
-                    allTasks: 9,
-                    doneWell: 7
+                    scoreId: 5,
+                    dailyStreak: 4,
+                    allTimeCorrect: 9,
+                    perfectlyDone: 7
                 },
                 profilePath: null
             }
@@ -91,10 +91,10 @@ class FriendService{
                 friendID: 1,
                 name: 'John Doe',
                 score: {
-                    scoreID: 1,
-                    streak: 5,
-                    allTasks: 10,
-                    doneWell: 8
+                    scoreId: 1,
+                    dailyStreak: 5,
+                    allTimeCorrect: 10,
+                    perfectlyDone: 8
                 },
                 profilePath: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 
@@ -103,10 +103,10 @@ class FriendService{
                 friendID: 2,
                 name: 'Jane Smith',
                 score: {
-                    scoreID: 2,
-                    streak: 2,
-                    allTasks: 5,
-                    doneWell: 4
+                    scoreId: 2,
+                    dailyStreak: 2,
+                    allTimeCorrect: 5,
+                    perfectlyDone: 4
                 },
                 profilePath:'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 
@@ -115,10 +115,10 @@ class FriendService{
                 friendID: 3,
                 name: 'Bob Johnson',
                 score: {
-                    scoreID: 3,
-                    streak: 3,
-                    allTasks: 7,
-                    doneWell: 6
+                    scoreId: 3,
+                    dailyStreak: 3,
+                    allTimeCorrect: 7,
+                    perfectlyDone: 6
                 },
                 profilePath:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 
@@ -127,10 +127,10 @@ class FriendService{
                 friendID: 4,
                 name: 'Alice Williams',
                 score: {
-                    scoreID: 4,
-                    streak: 1,
-                    allTasks: 3,
-                    doneWell: 2
+                    scoreId: 4,
+                    dailyStreak: 1,
+                    allTimeCorrect: 3,
+                    perfectlyDone: 2
 
                 },
                 profilePath:'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
@@ -140,10 +140,10 @@ class FriendService{
                 friendID: 5,
                 name: 'Charlie Brown',
                 score: {
-                    scoreID: 5,
-                    streak: 4,
-                    allTasks: 9,
-                    doneWell: 7
+                    scoreId: 5,
+                    dailyStreak: 4,
+                    allTimeCorrect: 9,
+                    perfectlyDone: 7
                 },
                 profilePath:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
             },
@@ -151,10 +151,10 @@ class FriendService{
                 friendID: 6,
                 name: 'Charlie Brown',
                 score: {
-                    scoreID: 5,
-                    streak: 4,
-                    allTasks: 9,
-                    doneWell: 7
+                    scoreId: 5,
+                    dailyStreak: 4,
+                    allTimeCorrect: 9,
+                    perfectlyDone: 7
                 },
                 profilePath: null
             }

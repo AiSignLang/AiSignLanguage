@@ -1,5 +1,5 @@
-import { useSearchParams} from "react-router-dom";
-import {navigate} from "../../model/Utils.ts";
+import {useNavigate, useSearchParams} from "react-router-dom";
+
 import {fetchRestEndpoint} from "../../support/FetchEndpoint.ts";
 import {Credentials} from "google-auth-library";
 import {getUserData} from "../../services/auth/google-auth-service.ts";
@@ -13,7 +13,7 @@ const OAuthRedirect = () => {
   useEffect(() => {
     setCode(queryParameters.get('code'));
   }, [queryParameters]);
-  
+  const navigate=useNavigate()
   async function redirect () {
     console.log('code in redirect', code);
     if (code) {
@@ -28,6 +28,7 @@ const OAuthRedirect = () => {
       sessionStorage.setItem('id_token', tokens!.id_token!);
       localStorage.setItem('refresh_token', tokens!.refresh_token!);
       const userData = await getUserData(tokens!.access_token!);
+      sessionStorage.setItem('username', userData!.name!)
       console.log('userData in redirect', userData)
       if (!userData) {
 

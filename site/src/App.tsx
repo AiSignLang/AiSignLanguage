@@ -5,7 +5,7 @@ import {
     Route,
 } from "react-router-dom";
 
-import './App.css'
+import './dist/tailwind.css'
 import UserProfile from "./Components/userprofile/UserProfile.tsx";
 import {XnotFound} from "./Components/errors/XnotFound.tsx";
 import {Course} from "./Components/course/Course.tsx";

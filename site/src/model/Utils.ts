@@ -1,3 +1,3 @@
-export function navigate(url: string) {
-    window.location.href = url;
+export function navigate(location: string){
+    window.location.href = location;
 }
