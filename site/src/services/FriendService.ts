@@ -82,7 +82,7 @@ class FriendService{
     }
 
     public async getFriends(){
-        const response = await fetchRestEndpoint('http://localhost:3000/friends',"GET");
+        //const response = await fetchRestEndpoint('http://localhost:3000/friends',"GET");
         //
         // return response.json();
 
