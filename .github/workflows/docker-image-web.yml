@@ -29,7 +29,7 @@ jobs:
       with:
         context: ./site
         push: true
-        tags: ital3x/ai-sign-language_web:1.0.${{ env.NEW_VERSION }},  ital3x/ai-sign-language_web:latest
+        tags: ital3x/ai-sign-language_web:${{ env.NEW_VERSION }},  ital3x/ai-sign-language_web:latest
 
   
       
