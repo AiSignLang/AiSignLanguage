@@ -28,7 +28,7 @@ describe('User model', () => {
     
     it('should have a default profile picture', async () => {
         const user = await User.create({userName: 'TestUser2'});
-        expect(user.profilePic).toBe('Default_pfp.jpg');
+        expect(user.profilePic).toContain('default_pfp.webp');
     });
     it('should not exist an user with the same name', () => {
             try {

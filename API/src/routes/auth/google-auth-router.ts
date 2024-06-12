@@ -1,11 +1,11 @@
 ﻿import express from "express";
 import { StatusCodes} from "http-status-codes";
-import {OAuth2Client} from "google-auth-library";
-import {configDotenv} from "dotenv";
+import {OAuth2Client, UserRefreshClient} from "google-auth-library";
 import {registerOAuthUser} from "../../services/auth-service";
 import {OAuthGoogleUserData, OAuthProvider} from "./model";
 import OAuthAccount from "../../data/models/OAuthAccount";
 import config from "../../config";
+import {configDotenv} from "dotenv";
 
 const googleAuthRouter = express.Router();
 configDotenv()
@@ -63,6 +63,7 @@ googleAuthRouter.get( "/token", async (req, res) => {
     }
     try {
         const tokenRes = await client.getToken(code);
+            
         await client.setCredentials(tokenRes.tokens);
         console.log('Token: ', tokenRes.tokens);
         const user = client.credentials;
@@ -70,6 +71,7 @@ googleAuthRouter.get( "/token", async (req, res) => {
         if (!user || !user.access_token) {
             res.sendStatus(StatusCodes.BAD_REQUEST);
         }
+        
         const userData = await getUserData(user.access_token!);
         const existingUser = await OAuthAccount.findOne({
             where: {
@@ -87,6 +89,9 @@ googleAuthRouter.get( "/token", async (req, res) => {
         res.status(StatusCodes.OK).json(user);
     }
     catch (e) {
+        console.log("errroorrr");
+        console.log("   ")
+        console.log("   ")
         console.log(e);
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
@@ -106,6 +111,22 @@ googleAuthRouter.post("/refresh", async (req, res) => {
         });
         const tokenRes = await client.refreshAccessToken();
         await client.setCredentials(tokenRes.credentials);
+        
+        const userData = await getUserData(tokenRes.credentials.access_token!);
+        const existingUser = await OAuthAccount.findOne({
+            where: {
+                oAuthId: userData.sub,
+                oAuthProvider: OAuthProvider.GOOGLE
+            }
+        });
+        if (existingUser === null) {
+            const resi = await registerOAuthUser(userData, OAuthProvider.GOOGLE);
+            if (resi.status !== StatusCodes.CREATED) {
+                res.sendStatus(resi.status);
+                return;
+            }
+        }
+        
         res.status(StatusCodes.OK).json(tokenRes.credentials);
     }
     catch (e) {

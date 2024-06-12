@@ -8,6 +8,10 @@ export interface  ServiceReturn<t extends Model>{
     status: StatusCodes;
 }
 
-export interface AuthRequest extends express.Request {
+export interface AuthRequest<P, ResBody, ReqBody, ReqQuery, Locals extends Record<string, any>> extends express.Request<P, ResBody, ReqBody, ReqQuery, Locals> {
     user:  User;
+}
+export interface AvatarFile {
+    path: string;
+    filename: string;
 }

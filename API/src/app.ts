@@ -21,6 +21,9 @@ if (!fs.existsSync(path.join(__dirname, '../data/db.sqlite3'))) {
     sequelize.sync({force: true}).then(async () => {
         console.log('Database synchronized');
     });
+    sequelize.createSchema('test',{logging: true}).then(() => {
+        console.log('Schema created');
+    });
 }
 /* just testing
 sequelize.sync({force:true}).then(async () => {

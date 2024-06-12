@@ -2,6 +2,11 @@
 import * as fs from "node:fs/promises";
 import * as fsSync from "node:fs";
 import sharp from 'sharp';
+import * as https from "node:https";
+import config from "./config";
+import axios from 'axios';
+import {v4 as uuidv4} from 'uuid';
+import {writeFile} from "node:fs";
 
 export const publicPath = path.join(__dirname, '../public/')
 
@@ -11,7 +16,24 @@ export const getUserPath = (username: string) => {
 export const getAvatarPath = (username: string) => {
     return path.join(getUserPath(username),`/avatars/`);
 }
+export const getStaticUrl = (urlPath:string) =>{
+    return path.join(config.externalAddress,config.staticEndpoint, urlPath);
+}
 
+export async function downloadImage(url: string, dest: string):Promise<string> {
+    const response = await axios.get(url, {responseType: 'arraybuffer'});
+    const resp = await axios.get(url, {responseType: 'stream'});
+    const contentType = response.headers['content-type'];
+    const extension = contentType.split('/')[1];
+    const outFile = `${dest}/${uuidv4()}.${extension}`
+
+    const buffer = Buffer.from(response.data, 'binary');
+    writeFile(outFile, buffer, (err) => {
+        if (err) throw err;
+        console.log('Image saved!');
+    });
+    return outFile;
+}
 
 sharp.cache(false);
 
@@ -71,7 +93,7 @@ export async function resizeImage(file:string, resolutions:number[], deleteOld:b
             await deleteFile(outFile)
         }
         const s = sharp(file)
-            .extract({left: left, top: top, width: minDimension, height: minDimension})
+            .extract({left: Math.round(left), top: Math.round(top), width: Math.round(minDimension), height: Math.round(minDimension)})
             .resize(resolution,resolution)
         await s.toFile(outFile).catch((err) => {
             console.error(`Error resizing image: ${err}`);
@@ -104,7 +126,8 @@ export async function convertToWebp(file: string, deleteOld: boolean,outName:str
         if (deleteOld) {
             await deleteFile(file)
         }
-        return await resizeImage(newFile, [32, 64, 128,256, 512, 1024, 2048]);
+        return (await resizeImage(newFile, [32, 64, 128,256, 512, 1024, 2048])).map((name) => 
+            name.split("public").at(-1)?.slice(1) ?? name);
     } else {
         console.error(`Failed to convert file ${file} to WebP: ${result}`);
         return null;

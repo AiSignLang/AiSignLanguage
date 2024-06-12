@@ -1,12 +1,15 @@
 import request from 'supertest';
 import {app} from '../../src/app';
-import {CREATED, NO_CONTENT, StatusCodes} from "http-status-codes";
+import { StatusCodes} from "http-status-codes";
 
 import * as path from "node:path";
 import fsSync from "fs";
 import {getAvatarPath, getUserPath} from "../../src/Utils";
 
 const routePath = '/api/user';
+
+
+
 beforeEach(async()=>{
     await request(app).delete(routePath);
 
@@ -14,6 +17,7 @@ beforeEach(async()=>{
 afterEach(async()=>{
     await request(app).delete(routePath);
 })
+
 
 describe('POST /api/user', () => {
     test('should create a new user', async () => {
