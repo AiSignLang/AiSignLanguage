@@ -21,6 +21,7 @@ import Mistake from "./Mistake";
 import config from "../../config";
 import fsSync from "fs";
 
+
 @Table({
     timestamps: true,
     tableName: 'users',
