@@ -1,5 +1,5 @@
 import {IFriend} from "../model/props.ts";
-import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
+//import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
 
 class FriendService{
 

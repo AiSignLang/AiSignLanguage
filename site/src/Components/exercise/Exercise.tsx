@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Navbar from "../navbar/Navbar.tsx";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import {courseService} from "../../services/CourseService.ts";
 import {ILevel} from "../../model/ILevel.ts";
 import {TaskType} from "../../model/TaskType.ts";
@@ -18,7 +18,7 @@ export function Exercise(props: IProps) {
     const [level, setLevel] = useState<ILevel | null>(null);
     const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
     const [userInput, setUserInput] = useState<string[]>([]);
-    const navigate = useNavigate();
+    //const navigate = useNavigate(); not used
 
     const handleNextTask = (skipped: boolean, userSolution: string[] | null) => {
         console.log('userSolution', userSolution);
