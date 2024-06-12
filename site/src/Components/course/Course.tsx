@@ -130,14 +130,14 @@ export function Course(props: IProps) {
             <Navbar></Navbar>
             <div className="flex justify-center w-full ">
                 <div className="mt-20">
-                    <h1 className="text-5xl font-bold text-gray-600">You <span
+                    <h1 className="text-4xl font-bold text-gray-600">You <span
                         className="text-gradient bg-clip-text bg-red-gradient">haven't</span> done your exercises today
                         :(</h1>
-                    <div className="flex gap-10">
-                        <Link to="/exercise?type=next" className="mt-10 text-2xl bg-primary w-fit p-3.5 rounded hover:bg-primary-hover">
+                    <div className="flex justify-center gap-10">
+                        <Link to="/exercise?type=next" className="mt-10 text-xl bg-primary w-fit p-3.5 rounded hover:bg-primary-hover">
                             Do them now
                         </Link>
-                        <Link to="/pause" className="mt-10 text-2xl w-fit p-3.5 rounded text-gray-600 hover:text-text-primary">
+                        <Link to="/pause" className="mt-10 text-xl w-fit p-3.5 rounded text-gray-600 hover:text-text-primary">
                             I need time off →
                         </Link>
                     </div>

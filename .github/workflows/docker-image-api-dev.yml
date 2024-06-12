@@ -1,9 +1,9 @@
-name: Docker Image API
+name: Docker Image API DEV 
 
 on:
   push:
-    branches: [ "main" ]
-  
+    branches: [ "stable-api" ]
+ 
 
 jobs:
 
@@ -15,8 +15,8 @@ jobs:
       uses: docker/setup-buildx-action@v2
       
     - name: Get latest API version from Docker Hub
-      run: bash .github/workflows/get-latest-version.sh ai-sign-language_api
-      
+      run: bash .github/workflows/get-latest-version.sh ai-sign-language_api_dev
+    
     - name: Login to DockerHub
       uses: docker/login-action@v2
       with:
@@ -24,12 +24,12 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
           
-    - name: Build the Docker image API
+    - name: Build the Docker image API dev
       uses: docker/build-push-action@v4
       with:
         context: ./API
         push: true
-        tags: ital3x/ai-sign-language_api:1.0.${{ env.NEW_VERSION }}, ital3x/ai-sign-language_api:latest
+        tags: ital3x/ai-sign-language_api_dev:1.0.${{ env.NEW_VERSION }},  ital3x/ai-sign-language_api_dev:latest
 
   
       

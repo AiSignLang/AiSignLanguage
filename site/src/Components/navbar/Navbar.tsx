@@ -3,11 +3,11 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {Link} from "react-router-dom";
 import {Logout} from "../../services/auth/auth-service.ts";
+import Dropdown from "./Dropdown.tsx";
 
 export const navigation = [
     { name: 'Profile', href: '/profile', current: true },
     { name: 'Courses', href: '/course', current: false },
-    { name: 'Training', href: '/training', current: false },
     { name: 'Ai Sandbox', href: '/sandbox', current: false },
 ]
 
@@ -16,7 +16,6 @@ function classNames(...classes: string[]) {
 }
 
 
-// TODO: Dropdown for training -> in there are read/sign
 export default function Navbar() {
     return (
         <Disclosure as="nav" className="bg-bg-secondary">
@@ -59,6 +58,9 @@ export default function Navbar() {
                                                 {item.name}
                                             </Link>
                                         ))}
+
+                                        <Dropdown/>
+
                                     </div>
                                 </div>
                             </div>
@@ -149,6 +151,7 @@ export default function Navbar() {
                                     {item.name}
                                 </Disclosure.Button>
                             ))}
+                            <Dropdown></Dropdown>
                         </div>
                     </Disclosure.Panel>
                 </>

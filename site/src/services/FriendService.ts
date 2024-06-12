@@ -1,4 +1,5 @@
 import {IFriend} from "../model/props.ts";
+//import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
 
 class FriendService{
 
@@ -81,7 +82,7 @@ class FriendService{
     }
 
     public async getFriends(){
-        //const response = await fetch('http://localhost:3000/friends');
+        //const response = await fetchRestEndpoint('http://localhost:3000/friends',"GET");
         //
         // return response.json();
 
