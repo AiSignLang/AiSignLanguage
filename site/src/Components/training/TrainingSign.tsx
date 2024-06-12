@@ -1,5 +1,5 @@
 import {Exercise} from "../exercise/Exercise.tsx";
-import {IMistake} from "../../model/IMistake.ts";
+//import {IMistake} from "../../model/IMistake.ts";
 import {NavService} from "../../services/NavigationService.ts";
 import {useLocation} from "react-router-dom";
 
@@ -7,7 +7,7 @@ function TrainingSign(){
 
     NavService.changeNavHighlight(useLocation().pathname);
 
-    const mistakes: IMistake[] = [
+    /*const mistakes: IMistake[] = [
         {
             mistakeID: 1,
             taskID: 1,
@@ -26,7 +26,7 @@ function TrainingSign(){
             mistake: "mistake3",
             solution: "correct3"
         }
-    ]
+    ]*/
     return (
         <div className="bg-bg-primary text-text-primary h-full min-h-screen w-full items-center">
 
