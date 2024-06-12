@@ -3,7 +3,7 @@ import config from "../config";
 
 
 
-const redirect = `${config.externalDomain}/oauth-google-redirect`;
+const redirect = `${config.externalAddress}/oauth-google-redirect`;
 const client = new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,

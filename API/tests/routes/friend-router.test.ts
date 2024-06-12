@@ -1,7 +1,7 @@
 
 
 import request from "supertest";
-import {app, server} from "../../src/app";
+import {app} from "../../src/app";
 
 
 const friendRoute = '/api/friends';
@@ -20,9 +20,6 @@ beforeEach(async()=>{
 afterEach(async()=>{
     await request(app).delete(userRoute);
 })
-afterAll(done => {
-    server.close(done);
-});
 
 
 describe('POST', ()=>{

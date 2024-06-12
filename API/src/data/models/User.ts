@@ -16,9 +16,10 @@ import Friendship from "./Friendship";
 import Level from "./Level";
 import UserLevel from "./UserLevel";
 import {ValidationFailed} from "sequelize-typescript/dist/browser";
-import {isString} from "../../Utils";
+import {getAvatarPath, isString} from "../../Utils";
 import Mistake from "./Mistake";
 import config from "../../config";
+import fsSync from "fs";
 
 @Table({
     timestamps: true,
@@ -26,6 +27,10 @@ import config from "../../config";
     modelName: 'User'
 })
 class User extends Model {
+    
+    hasProfilePic(): boolean {
+        return fsSync.existsSync(getAvatarPath(this.userName));
+    }
     
     @Column({
         allowNull: false,
@@ -48,7 +53,7 @@ class User extends Model {
     @Column({
         allowNull: false,
         type:DataType.STRING,
-        defaultValue: `${config.externalAddress}/${config.staticEndpoint}/default_pfp.webp`
+        defaultValue: `${config.externalAddress}${config.staticEndpoint}/default_pfp.webp`
     })
     declare profilePic: string;
     

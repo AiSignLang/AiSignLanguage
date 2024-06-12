@@ -5,7 +5,7 @@
       - "8080:8080"
     image: ital3x/ai-sign-language_web:1.0.0
     env_file:
-      - ./site/.env
+      - ./site/.env.production
     links:
         - api
     networks:

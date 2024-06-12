@@ -5,7 +5,7 @@ import {OAuthProvider} from "../routes/auth/model";
 import {AuthRequest} from "../model";
 
 
-export async function Authorize(req:  AuthRequest, res: express.Response, next: express.NextFunction) {
+export async function Authorize(req:  any, res: express.Response, next: express.NextFunction) {
     const token = req.headers.authorization?.split(' ')[1];
     
     if (!token) {
@@ -28,7 +28,6 @@ export async function Authorize(req:  AuthRequest, res: express.Response, next: 
         
         next();
     } catch (error) {
-        console.error(error);
         res.status(401).send('Unauthorized');
     }
 }

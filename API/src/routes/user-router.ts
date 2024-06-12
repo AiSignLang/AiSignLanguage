@@ -11,9 +11,11 @@ import * as fs from "node:fs";
 import {createUser} from "../services/user-service";
 import {Authorize} from "../middleware/authorization-middleware";
 import config from "../config";
+import {setAvatar} from "../services/avatar-service";
+import user from "../data/models/User";
+import {AuthRequest} from "../model";
 
 export const userRouter = express.Router();
-// @ts-ignore
 userRouter.use(Authorize);
 userRouter.get("/", async (_, res) => {
 
@@ -33,16 +35,31 @@ userRouter.get("/", async (_, res) => {
    }
 });
 
-userRouter.get("/:username", async (req, res) => {
+userRouter.get("/me", async (req: any, res) => {
+    if (!req.user){
+        return res.status(StatusCodes.NOT_FOUND).send('Unauthorized');
+    }
+    
+    return res.json(req.user);
+});
+
+userRouter.get("/:username", async (req: any, res) => {
+    if (!req.user){
+        return res.status(StatusCodes.UNAUTHORIZED).send('Unauthorized');
+    }
+    if (req.user.userName !== req.params.username){
+        return res.status(StatusCodes.UNAUTHORIZED).send('Unauthorized');
+    }
     const username = req.params.username;
 
-    if(!isNameLengthValid(username)){
-        res.sendStatus(StatusCodes.BAD_REQUEST);
-        return;
-    }
-
     try{
-        const user = await Users.findOne({where: {username: username}});
+        const user = await Users.findOne({
+            where: 
+                {
+                    username: username
+                },
+            include: {all: true, nested: true}
+        });
         if(user === null) {
             res.sendStatus(StatusCodes.BAD_REQUEST);
             return;
@@ -94,36 +111,17 @@ userRouter.post("/",async (req,res)=>{
 
 userRouter.put("/:username/avatar", upload.single('avatar'), async (req, res) => {
     const username = req.params.username;
-
-    //const profilePic = req.body.profilePic ? user!.profilePic : '../public/avatars/Default_pfp.jpg'; // TODO: im service pfp lösen
-
-    const user = await Users.findOne({where: {username: username}});
-    if(!user){
-        res.sendStatus(StatusCodes.NOT_FOUND);
-        if (req.file)
-            await  deleteFile(req.file.path);
-        return;
-    }
     if (!req.file) {
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
-    if (fsSync.existsSync(getAvatarPath(username))) {
-        fs.rmdirSync(getAvatarPath(username),{recursive: true});
+    const result  = await setAvatar(username, req.file);
+    if(result.status === StatusCodes.OK){
+        res.json(result.data);
     }
-    fs.mkdirSync(getAvatarPath(username), {recursive: true});
-    const avatarDir = getAvatarPath(username) + req.file.filename;
-    fs.renameSync(req.file.path, avatarDir );
-    const images = await convertToWebp(avatarDir, true, username.replace(/ /g, '_'));
-
-    if (!images) {
-        res.sendStatus(StatusCodes.BAD_REQUEST); // TODO: should test this
-        return;
+    else {
+        res.sendStatus(result.status);
     }
-    const t =await sequelize.transaction(); // TODO: transaction should be used, when updating db, but no db found ???
-    user.profilePic = `${config.externalDomain}/${username}/avatars/${images[4]}`;
-    await t.commit();
-    res.json(user);
 })
 
 userRouter.delete("/:username", async (req, res) => {
@@ -144,7 +142,7 @@ userRouter.delete("/:username", async (req, res) => {
             return;
         }
 
-        if(!user.profilePic.includes("Default_pfp.webp")){// TODO: what if user is named Default? / should not allow
+        if(!user.hasProfilePic()){// TODO: what if user is named Default? / should not allow
             fs.rmdirSync(getUserPath(username),{recursive: true});
         }
         await user.destroy();

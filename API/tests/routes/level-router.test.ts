@@ -1,11 +1,8 @@
 ﻿import request from 'supertest';
-import {app, server} from '../../src/app';
+import {app} from '../../src/app';
 import {StatusCodes} from "http-status-codes";
 import Level from "../../src/data/models/Level";
 
-afterAll(done => {
-    server.close(done);
-});
 
 describe('Level Router', () => {
     it('GET / - returns all levels', async () => {
