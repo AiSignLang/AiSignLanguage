@@ -28,7 +28,7 @@ export default function Friends() {
                         <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end text-sm leading-6">
                             <span className="flex items-center text-lg">
                                 <span className="flex items-center mr-7 c-md:mr-2 c-sm:mr-2">
-                                    {friends.score.streak}
+                                    {friends.score.dailyStreak}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="orange"
                                          className="bi bi-fire ml-1"
                                          viewBox="0 0 16 16">
@@ -37,7 +37,7 @@ export default function Friends() {
                                 </svg>
                               </span>
                                 <span className="flex items-center mr-7 c-md:mr-2 c-sm:mr-2">
-                                    10
+                                    {friends.score.perfectlyDone}
                                  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="green"
                                       className="bi bi-check-all" viewBox="0 0 16 16">
                                     <path
@@ -45,7 +45,7 @@ export default function Friends() {
                                     </svg>
                                 </span>
                                <span className="flex items-center">
-                                    20
+                                    {friends.score.allTimeCorrect}
                                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="yellow"
                                       className="bi bi-star-fill ml-1" viewBox="0 0 16 16">
                                         <path

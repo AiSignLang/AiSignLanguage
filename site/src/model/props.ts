@@ -6,8 +6,8 @@ export interface IFriend{
 }
 
 export interface IUser{
-    id: number;
-    name: string;
+    userId: number;
+    userName: string;
     score: IScore;
     profilePic: string;
 }
@@ -17,9 +17,9 @@ export interface IProfile{
 }
 
 export interface IScore{
-    scoreID: number;
-    streak: number;
-    allTasks: number;
-    doneWell: number;
+    scoreId: number;
+    dailyStreak: number;
+    allTimeCorrect: number;
+    perfectlyDone: number;
 }
 

@@ -1,7 +1,8 @@
-import {navigate} from "../../model/Utils.ts";
+import { navigate } from "../../model/Utils";
 
 export function Logout(){
     sessionStorage.removeItem('access_token');
     sessionStorage.removeItem('id_token');
-    navigate('/')
+    sessionStorage.removeItem('username');
+    navigate("/")
 }
