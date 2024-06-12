@@ -8,18 +8,31 @@ DOCKER_IMAGE_NAME=$1
 JSON_RESPONSE=$(curl -s "https://hub.docker.com/v2/namespaces/${DOCKER_HUB_USERNAME}/repositories/${DOCKER_IMAGE_NAME}/tags")
 
 apt update
-apt install jq
-apt install awk
+apt install jq -y
+apt install awk -y
 
 # Parse the JSON response to get the "name" field
-VERSION=$(echo "$JSON_RESPONSE" | jq -r '.results[0].name')
+VERSIONS=$(echo "$JSON_RESPONSE" | jq -r '.results[].name')
 
-# Split the "name" field by the "." character and get the last number
-LAST_NUMBER=$(echo "$VERSION" | awk -F. '{print $NF}')
+# Filter out versions that don't match the semantic versioning format
+SEMVER_REGEX="^[0-9]+\.[0-9]+\.[0-9]+$"
+SEMVER_VERSIONS=()
+for VERSION in $VERSIONS; do
+    if [[ $VERSION =~ $SEMVER_REGEX ]]; then
+        SEMVER_VERSIONS+=($VERSION)
+    fi
+done
 
-# Increment the last number
-NEW_VERSION=$((LAST_NUMBER + 1))
+# Sort the versions and select the highest one
+HIGHEST_VERSION=$(printf '%s\n' "${SEMVER_VERSIONS[@]}" | sort -V | tail -n1)
+
+# Extract the major, minor, and patch versions
+MAJOR_VERSION=$(echo "$HIGHEST_VERSION" | awk -F. '{print $1}')
+MINOR_VERSION=$(echo "$HIGHEST_VERSION" | awk -F. '{print $2}')
+PATCH_VERSION=$(echo "$HIGHEST_VERSION" | awk -F. '{print $3}')
+
+# Increment the patch version
+NEW_VERSION="$MAJOR_VERSION.$MINOR_VERSION.$((PATCH_VERSION + 1))"
 
 echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 echo "NEW_VERSION=$NEW_VERSION"
-
