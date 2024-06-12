@@ -27,6 +27,7 @@ class CourseService {
                     skipped: false,
                     mistakes: null
                 },
+
                 {
                     taskID: 3,
                     levelID: 1,
@@ -38,7 +39,7 @@ class CourseService {
                 }
             ]
         };
-
+        console.log(level);
         return level
     }
 

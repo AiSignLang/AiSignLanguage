@@ -11,18 +11,18 @@ export default function Friends() {
 
     return (
         <div className="w-full mt-10">
-            <h1 className="text-2xl font-bold text-center border-t border-b py-4">Friends</h1>
+            <h1 className="text-xl font-bold text-center border-t border-b py-4">Friends</h1>
 
-            <ul className="">
+            <ul>
                 {people.map((friends: IFriend) => (
                     <li key={friends.friendID}
                         className="flex content-center justify-between gap-x-6 py-5 text-gray-300">
                         <div className="flex min-w-0 gap-x-4">
                             <img className="h-12 w-12 flex-none rounded-full bg-gray-50"
                                  src={friends.profilePath ? friends.profilePath : undefined}
-                                 alt=""/> {/*TODO: add alt text + change profile picture to default image*/}
+                                 alt="user profile"/> {/*TODO: add alt text + change profile picture to default image*/}
                             <div className="min-w-0 flex-auto">
-                                <p className="text-xl leading-6 font-bold">{friends.name}</p>
+                                <p className="text-lg leading-6 font-bold">{friends.name}</p>
                             </div>
                         </div>
                         <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end text-sm leading-6">
