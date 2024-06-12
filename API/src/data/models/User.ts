@@ -10,12 +10,16 @@
     CreatedAt,
     UpdatedAt, DataType, BelongsToMany
 } from "sequelize-typescript";
+import { BelongsToManyAddAssociationMixin } from 'sequelize';
 import Score from "./Score";
 import Friendship from "./Friendship";
 import Level from "./Level";
 import UserLevel from "./UserLevel";
 import {ValidationFailed} from "sequelize-typescript/dist/browser";
-import {isString} from "../../Utils";
+import {getAvatarPath, isString} from "../../Utils";
+import Mistake from "./Mistake";
+import config from "../../config";
+import fsSync from "fs";
 
 @Table({
     timestamps: true,
@@ -23,6 +27,10 @@ import {isString} from "../../Utils";
     modelName: 'User'
 })
 class User extends Model {
+    
+    hasProfilePic(): boolean {
+        return fsSync.existsSync(getAvatarPath(this.userName));
+    }
     
     @Column({
         allowNull: false,
@@ -45,7 +53,7 @@ class User extends Model {
     @Column({
         allowNull: false,
         type:DataType.STRING,
-        defaultValue: '/avatars/Default_pfp.jpg'
+        defaultValue: `${config.externalAddress}${config.staticEndpoint}/default_pfp.webp`
     })
     declare profilePic: string;
     
@@ -57,9 +65,13 @@ class User extends Model {
     })
     declare userId: string;
     
+    @HasMany(()=>Mistake,'userId')
+    declare mistakes: Mistake[];
+    
     @BelongsToMany(()=>User,()=>Friendship,'userId','friendId')
      declare friends: User[];
-    
+
+
     @HasOne(()=>Score,'ownerId')
     declare score:Score
     

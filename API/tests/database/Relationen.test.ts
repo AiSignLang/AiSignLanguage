@@ -73,3 +73,30 @@ describe('Database relations', () => {
         expect(retrievedLevel!.tasks[1].mistakes.length).toBe(1);
     });
 });
+
+describe('User and Mistake models', () => {
+    it('should have a one-to-many relationship', async () => {
+        // Create a user
+        const user = await User.create({userName: 'TestUser3'});
+
+        // Create multiple mistakes associated with the user
+        const mistake1 = await Mistake.create({userId: user.userId, /* other fields */});
+        const mistake2 = await Mistake.create({userId: user.userId, /* other fields */});
+
+        // Retrieve the user with its associated mistakes
+        const retrievedUser = await User.findOne({
+            where: {userName: 'TestUser3'},
+            include: Mistake
+        });
+
+        // Check that the user was retrieved
+        expect(retrievedUser).not.toBeNull();
+
+        // Check that the user's mistakes were retrieved
+        expect(retrievedUser!.mistakes).toHaveLength(2);
+        expect(retrievedUser!.mistakes).toContainEqual(expect.objectContaining({
+            userId: user.userId,
+            // Check other fields as necessary
+        }));
+    });
+});

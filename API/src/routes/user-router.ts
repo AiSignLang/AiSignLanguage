@@ -1,125 +1,205 @@
 import express from "express";
-import sequelize from "../data/database";
 import Users from "../data/models/User";
 import {StatusCodes} from "http-status-codes";
+import sequelize from "../data/database";
+import multer from 'multer';
+import * as path from "node:path";
+import {convertToWebp, deleteFile, getAvatarPath, getUserPath, isNameLengthValid} from "../Utils";
+import {v4 as uuidv4} from "uuid";
+import fsSync from "fs";
+import * as fs from "node:fs";
+import {createUser} from "../services/user-service";
+import {Authorize} from "../middleware/authorization-middleware";
+import config from "../config";
+import {setAvatar} from "../services/avatar-service";
+import user from "../data/models/User";
+import {AuthRequest} from "../model";
 
 export const userRouter = express.Router();
-
+userRouter.use(Authorize);
 userRouter.get("/", async (_, res) => {
 
     try{
          const users = await Users.findAll();
 
          if(users.length === 0){
-             res.sendStatus(StatusCodes.NO_CONTENT); // TODO: or not found message ?
+             res.sendStatus(StatusCodes.NO_CONTENT);
              return;
          }
 
-         res.json(users);
+         res.json(users)
 
    }catch (err) {
-       res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+        console.error(err);
+        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
    }
 });
 
+userRouter.get("/me", async (req: any, res) => {
+    if (!req.user){
+        return res.status(StatusCodes.NOT_FOUND).send('Unauthorized');
+    }
+    
+    return res.json(req.user);
+});
 
-userRouter.get("/:id", async (req, res) => {
+userRouter.get("/:username", async (req: any, res) => {
+    if (!req.user){
+        return res.status(StatusCodes.UNAUTHORIZED).send('Unauthorized');
+    }
+    if (req.user.userName !== req.params.username){
+        return res.status(StatusCodes.UNAUTHORIZED).send('Unauthorized');
+    }
+    const username = req.params.username;
 
-    const id = parseInt(req.params.id, 10);
+    try{
+        const user = await Users.findOne({
+            where: 
+                {
+                    username: username
+                },
+            include: {all: true, nested: true}
+        });
+        if(user === null) {
+            res.sendStatus(StatusCodes.BAD_REQUEST);
+            return;
+        }
+        res.json(user);
+    }catch (err){
+        console.error(err);
+        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+});
 
-    if(isNaN(id)){
+const storage = multer.diskStorage({
+    destination: (_, file, cb) => {
+
+        cb(null, path.join(__dirname, '../../public/temp/'));
+    },
+    filename: (_, file, cb) => {
+
+        const filename = `${uuidv4()}.${path.extname(file.originalname)}`;//`${name.replace(/\s+/g, '_')}_pfp.${path.extname(file.originalname)}`; // muss denk ich fürs konvertieren den ext-namen haben
+        cb(null, filename);
+    }
+});
+
+// Create the multer instance
+const upload = multer(
+    {
+        storage: storage,
+        fileFilter(req, file: Express.Multer.File, callback: multer.FileFilterCallback) {
+            const checkMimeType = file.mimetype.includes("image/")
+            if (checkMimeType) {
+                return callback(null, true)
+
+            } else {
+                callback(new Error(": Failed to convert the image to WebP format."));
+            }
+        }
+    });
+
+
+
+userRouter.post("/",async (req,res)=>{
+    const newUser = await createUser(req.body.username)
+    if(newUser.status === StatusCodes.CREATED){
+        res.status(newUser.status).json(newUser.data);
+    }else {
+        res.sendStatus(newUser.status);
+    }
+})
+
+userRouter.put("/:username/avatar", upload.single('avatar'), async (req, res) => {
+    const username = req.params.username;
+    if (!req.file) {
+        res.sendStatus(StatusCodes.BAD_REQUEST);
+        return;
+    }
+    const result  = await setAvatar(username, req.file);
+    if(result.status === StatusCodes.OK){
+        res.json(result.data);
+    }
+    else {
+        res.sendStatus(result.status);
+    }
+})
+
+userRouter.delete("/:username", async (req, res) => {
+
+    const username = req.params.username;
+
+    if(!username || !isNameLengthValid(username)){
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
 
+    const transaction = await sequelize.transaction();
     try{
-        const user = await Users.findByPk(id);
+        const user = await Users.findOne({where: {username: username}});
 
         if(user === null) {
             res.sendStatus(StatusCodes.BAD_REQUEST);
             return;
         }
 
-        res.json(user);
+        if(!user.hasProfilePic()){// TODO: what if user is named Default? / should not allow
+            fs.rmdirSync(getUserPath(username),{recursive: true});
+        }
+        await user.destroy();
+        await transaction.commit();
+
+        res.sendStatus(StatusCodes.NO_CONTENT);
 
     }catch (err){
-        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
-    }
-});
-
-userRouter.post("/", async (req,res)=>{
-    const name = req.body.name;
-    const score = req.body.score;
-    const profilePath = req.body.profilePath; // TODO: wie wird bild geaddet?
-
-    if(!name || name.length > 18 || !score){ // TODO: done?
-        res.sendStatus(StatusCodes.BAD_REQUEST);
-        return;
-    }
-
-    // TODO: validation should be done in front end file ???
-    const transaction = await sequelize.transaction();
-    try{
-        const user = await Users.create(); // TODO: add User should be done correctly
-        res.json(user);
-        await transaction.commit();
-    }catch(err){
+        console.error(err);
         await transaction.rollback();
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
 })
 
-userRouter.delete("/:id", async (req, res) => {
+userRouter.put("/:username", async (req, res) => {
+    const userName = req.params.username;
+    const newUserName = req.body.name;
+    const user = await Users.findOne({where: {username: userName}});
 
-    const id = parseInt(req.params.id, 10);
-
-    if(isNaN(id)){
+    if(!userName || !newUserName
+        || !isNameLengthValid(userName) || !isNameLengthValid(newUserName)
+        || !user){
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
 
-    try{
-        const user = await Users.findByPk(id);
-
-        if(user === null) {
-            res.sendStatus(StatusCodes.BAD_REQUEST);
-            return;
-        }
-
-        await user.destroy();
-        res.sendStatus(StatusCodes.NO_CONTENT);
-
-    }catch (err){
-        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
-    }
-})
-
-
-userRouter.put("/:id", async (req, res) => {
-    const { id } = req.params;
-    const { userName, profilePic } = req.body;
-
-    // Basic validation example
-    if (!userName || typeof userName !== 'string' || userName.trim().length === 0) {
-        return res.sendStatus(StatusCodes.BAD_REQUEST);
+    const userExists = await Users.findOne({where: {username: newUserName}});
+    if(userExists){
+        res.sendStatus(StatusCodes.BAD_REQUEST);
+        return;
     }
 
-    // TODO: should retrieve values from database, in case user just updates one value
+    const transaction = await sequelize.transaction();
     try {
-        // Attempt to update the user
-        const [updated] = await Users.update({ userName, profilePic }, {
-            where: { userId: id }
-        });
+        await user.update({userName: newUserName});
 
-        if (updated) {
-            const updatedUser = await Users.findByPk(id);
-            res.json(updatedUser);
-        } else {
-            // No user was updated, likely because the user was not found
-            res.sendStatus(StatusCodes.NOT_FOUND);
-        }
+        const updatedUser = await Users.findOne({ where: { username: newUserName } });
+        await transaction.commit();
+        res.json(updatedUser);
+
     } catch (err) {
         console.error(err);
+        await transaction.rollback();
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+});
+
+userRouter.delete("/", async (_, res) => {
+
+    const transaction = await sequelize.transaction();
+    try{
+        await Users.destroy({where: {}});
+        res.sendStatus(StatusCodes.NO_CONTENT);
+        await transaction.commit();
+    }catch (err){
+        console.error(err);
+        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+        await transaction.rollback();
     }
 });

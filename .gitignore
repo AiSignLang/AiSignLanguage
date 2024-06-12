@@ -143,9 +143,6 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
-# mkdocs documentation
-/site
-
 # mypy
 .mypy_cache/
 .dmypy.json
@@ -363,7 +360,8 @@ fabric.properties
 logs
 **/*.backup.*
 **/*.back.*
-
+/API/coverage/
+/API/node_modules/*
 node_modules
 bower_components
 
