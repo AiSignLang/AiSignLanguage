@@ -1,13 +1,31 @@
-import {navigate} from "../../model/Utils.ts";
 import {fetchRestEndpoint} from "../../support/FetchEndpoint.ts";
 import OAuthGoogleUserData from "../../model/auth/OAuthGoogleUserData.ts";
 import {Credentials} from "google-auth-library";
 import config from "../../config.ts";
+import {Logout} from "./auth-service.ts";
+import {navigate} from "../../model/Utils.ts";
+import {userService} from "../UserService.ts";
+import {IUser} from "../../model/props.ts";
 
 export async function googleAuth() {
     const  refresh_token = localStorage.getItem('refresh_token');
+    
     if(refresh_token !== null) {
         if (await refreshToken(refresh_token)){
+            const name = sessionStorage.getItem('username')
+            if(name !== null){
+                const user = await userService.getUser(name,()=>{
+                    alert('Unauthorized')
+                    navigate("/Unauthorized")
+                });
+                if(user === null){
+                    return;
+                    Logout();
+                    navigate("/")
+                    return;
+                }
+            }
+            
             navigate("/profile")
         }
         return;
@@ -17,6 +35,7 @@ export async function googleAuth() {
         method: "POST",
     });
     const data = await response.json();
+    console.log('data', data)
     navigate(data.url);
 }
 
@@ -33,8 +52,12 @@ export async function refreshToken(refresh_token: string): Promise<boolean> {
     sessionStorage.setItem('access_token', data!.access_token!);
     sessionStorage.setItem('id_token', data!.id_token!);
     localStorage.setItem('refresh_token', data!.refresh_token!);
-    const userData = await getUserData(data!.access_token!);
-    sessionStorage.setItem('username', userData!.name!)
+    const userData = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/me`, "GET");
+    if (!userData) {
+        navigate("/Unauthorized");
+        return false;
+    }
+    sessionStorage.setItem('username', userData!.userName)
     return true;
 }
 

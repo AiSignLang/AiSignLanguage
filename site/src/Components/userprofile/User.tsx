@@ -2,10 +2,9 @@ import {userService} from "../../services/UserService.ts";
 import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import {IUser} from "../../model/props.ts";
-
+import * as Utils from "../../model/Utils.ts";
 interface IProps {
     username: string;
-    id?: string;
 }
 
 export default function User(props: IProps){
@@ -14,9 +13,15 @@ export default function User(props: IProps){
 
     useEffect(() => {
         const fetchUser = async () => {
+            console.log('fetching user')
+            const result = await userService.getUser(props.username,()=>{
+                alert('Unauthorized')
+                Utils.navigate('/Unauthorized');
+                return;
+            });
+            console.log('result', result)
             
-            const result = await userService.getUser(props.username);
-            if(!result){
+            if(result === null){
                 navigate('/ProfileNotFound');
                 return;
             }
@@ -24,7 +29,7 @@ export default function User(props: IProps){
         };
 
         fetchUser();
-    }, [props.username, props.id, navigate]);
+    }, [props.username]);
     
 
     return (
@@ -49,11 +54,11 @@ export default function User(props: IProps){
                     username/score
                 */}
                     <div className="px-5 xs:mt-5">
-                        <h1 className="text-4xl px-15">{user ? user.name:"????"}</h1>
+                        <h1 className="text-4xl px-15">{user ? user.userName:"????"}</h1>
 
                         <div className="flex justify-between gap-10">
                             <span className=" text-xl flex items-center">
-                                {user?user.score.streak:"??"}
+                                {user?user.score.dailyStreak:"??"}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="orange"
                                      className="bi bi-fire ml-2"
                                      viewBox="0 0 16 16">
@@ -62,7 +67,7 @@ export default function User(props: IProps){
                                 </svg>
                             </span>
                             <span className=" text-xl flex items-center">
-                                {user?user.score.allTasks:"??"}
+                                {user?user.score.allTimeCorrect:"??"}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="green"
                                      className="bi bi-check-all ml-2" viewBox="0 0 16 16">
                                 <path
@@ -70,7 +75,7 @@ export default function User(props: IProps){
                                 </svg>
                             </span>
                             <span className=" text-xl flex items-center">
-                                {user?user.score.doneWell:"??"}
+                                {user?user.score.perfectlyDone:"??"}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="yellow"
                                      className="bi bi-star-fill ml-2" viewBox="0 0 16 16">
                                     <path
