@@ -5,6 +5,7 @@ import { StatusCodes} from "http-status-codes";
 import * as path from "node:path";
 import fsSync from "fs";
 import {getAvatarPath, getUserPath} from "../../src/Utils";
+import * as authMiddleware from "../../src/middleware/authorization-middleware";
 
 const routePath = '/api/user';
 
@@ -18,8 +19,17 @@ afterEach(async()=>{
     await request(app).delete(routePath);
 })
 
+interface IUser {
+    userName: string;
+    profilePic: string;
+    userId: number;
+}
+
+
+
 
 describe('POST /api/user', () => {
+   
     test('should create a new user', async () => {
         const username = 'John Doe';
         const response = await request(app)
@@ -50,6 +60,7 @@ describe('POST /api/user', () => {
 describe('PUT /api/user', () => {
 
     describe('/:username/avatar', ()=>{
+        
         test('should update the avatar of a user', async () => {
 
             const username = 'Van Gogh';
@@ -73,7 +84,7 @@ describe('PUT /api/user', () => {
 
             expect(response.statusCode).toBe(StatusCodes.NOT_FOUND);
         });
-
+       
         test('should not update the avatar if no file is provided', async () => {
             const username = 'John Doe';
             await request(app).post(routePath).send({username: username});
@@ -85,10 +96,32 @@ describe('PUT /api/user', () => {
     })
 
     describe('/:username', ()=>{
+        jest.mock('../../src/middleware/authorization-middleware', () => ({
+            Authorize: jest.fn((req, res, next) => {
 
+                req.user = {
+                    userName: 'John Doe',
+                    profilePic: 'not relevant',
+                    userId: 1,
+                };
+                next();
+            }),
+        }));
         test('should update name of an user', async () =>{
             const expectedNewName = 'Mickey Mouse';
+            const originalAuthorize = authMiddleware.Authorize;
 
+            // Mock its implementation
+            jest.mock('../../src/middleware/authorization-middleware', () => ({
+                Authorize: jest.fn((req, res, next) => {
+                    req.user = { 
+                        userName: 'John Doe',
+                        profilePic: 'not relevant',
+                        userId: 1,
+                    };
+                    next();
+                }),
+            }));
             await request(app).post(routePath).send({username: 'John Doe'});
             const getBefore = await request(app).get(`${routePath}/John Doe`);
             expect(getBefore.body.userName).toBe('John Doe');
@@ -102,6 +135,16 @@ describe('PUT /api/user', () => {
         });
 
         test('should not update name, name does not fit validation (too short + too long)', async()=>{
+            jest.mock('../../src/middleware/authorization-middleware', () => ({
+                Authorize: jest.fn((req, res, next) => {
+                    req.user = {
+                        userName: 'John Doe',
+                        profilePic: 'not relevant',
+                        userId: 1,
+                    };
+                    next();
+                }),
+            }));
             const nameOfUser = 'John Doe';
             await request(app).post(routePath).send({username: nameOfUser});
             const responseTooShort = await request(app).put(`${routePath}/${nameOfUser}`).send({name: 'x'});
@@ -116,6 +159,16 @@ describe('PUT /api/user', () => {
         })
 
         test('should not update, name is null or undefined', async()=>{
+            jest.mock('../../src/middleware/authorization-middleware', () => ({
+                Authorize: jest.fn((req, res, next) => {
+                    req.user = {
+                        userName: 'John Doe',
+                        profilePic: 'not relevant',
+                        userId: 1,
+                    };
+                    next();
+                }),
+            }));
             const nameOfUser = 'John Doe';
             await request(app).post(routePath).send({username: nameOfUser});
             const nullValue = null;
@@ -132,6 +185,16 @@ describe('PUT /api/user', () => {
         });
 
         test('should not update, user does not exist', async()=>{
+            jest.mock('../../src/middleware/authorization-middleware', () => ({
+                Authorize: jest.fn((req, res, next) => {
+                    req.user = {
+                        userName: 'John Doe',
+                        profilePic: 'not relevant',
+                        userId: 1,
+                    };
+                    next();
+                }),
+            }));
             const nameOfUser = 'John Doe';
             const response = await request(app).put(`${routePath}/${nameOfUser}`).send({name: 'Mickey Mouse'});
             expect(response.statusCode).toBe(400);
@@ -140,10 +203,29 @@ describe('PUT /api/user', () => {
         test('should not update, new name is already in use', async()=>{
             const nameOfUser = 'John Doe';
             const nameOfUser2 = 'Mickey';
-
+            jest.mock('../../src/middleware/authorization-middleware', () => ({
+                Authorize: jest.fn((req, res, next) => {
+                    req.user = {
+                        userName: 'John Doe',
+                        profilePic: 'not relevant',
+                        userId: 1,
+                    };
+                    next();
+                }),
+            }));
             await request(app).post(routePath).send({username: nameOfUser});
+            jest.mock('../../src/middleware/authorization-middleware', () => ({
+                Authorize: jest.fn((req, res, next) => {
+                    req.user = {
+                        userName: 'Mickey',
+                        profilePic: 'not relevant',
+                        userId: 1,
+                    };
+                    next();
+                }),
+            }));
             await request(app).post(routePath).send({username: nameOfUser2});
-            const response = await request(app).put(`${routePath}/${nameOfUser}`).send({name: nameOfUser2});
+            const response = await request(app).put(`${routePath}/${nameOfUser2}`).send({name: nameOfUser});
 
             expect(response.statusCode).toBe(400);
 
@@ -155,6 +237,16 @@ describe('GET /api/user', () => {
 
     describe('/', ()=>{
         test('should return not found for no users', async () => {
+            jest.mock('../../src/middleware/authorization-middleware', () => ({
+                Authorize: jest.fn((req, res, next) => {
+                    req.user = {
+                        userName: 'John Doe',
+                        profilePic: 'not relevant',
+                        userId: 1,
+                    };
+                    next();
+                }),
+            }));
             const response = await request(app).get(`${routePath}`);
             expect(response.statusCode).toBe(StatusCodes.NO_CONTENT);
 
@@ -163,7 +255,7 @@ describe('GET /api/user', () => {
 
             const validUsername = 'Jeremy Meier';
             const otherValidUsername = 'Franklin Saint';
-
+            
             expect(await request(app).post(routePath).send({username: validUsername})).toBeTruthy();
             expect(await request(app).post(routePath).send({username: otherValidUsername})).toBeTruthy();
             const expectedUser = {

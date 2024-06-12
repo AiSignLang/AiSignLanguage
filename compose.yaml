@@ -17,7 +17,7 @@
     build: "./API/"
     env_file:
       - ./API/.env
-    image: ital3x/ai-sign-language_api:1.0.0
+    image: ital3x/ai-sign-language_api_dev:1.0.0
     volumes:
       - db-data:/app/data/
     networks:
@@ -29,7 +29,7 @@
     pull_policy: always
   
   sqlite:
-    container_name: sqlite-container
+    container_name: ai-sign-language-sqlite
     image: nouchka/sqlite3:latest
     volumes:
       - db-data:/app/data/

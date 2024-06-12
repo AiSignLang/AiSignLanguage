@@ -2,7 +2,8 @@
 
 import request from "supertest";
 import {app} from "../../src/app";
-
+import {Authorize} from "../../src/middleware/authorization-middleware";
+import User from "../../src/data/models/User";
 
 const friendRoute = '/api/friends';
 const userRoute = '/api/user';
@@ -15,11 +16,13 @@ const undefinedValue = undefined;
 
 beforeEach(async()=>{
     await request(app).delete(userRoute);
-
+    
 })
 afterEach(async()=>{
     await request(app).delete(userRoute);
 })
+
+
 
 
 describe('POST', ()=>{
