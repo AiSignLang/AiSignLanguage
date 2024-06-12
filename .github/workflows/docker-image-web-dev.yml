@@ -2,7 +2,7 @@ name: Docker Image React DEV
 
 on:
   push:
-    branches: [ "stable-site" ]
+    branches: [ "stable-react" ]
  
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
       with:
         context: ./site
         push: true
-        tags: ital3x/ai-sign-language_web_dev:1.0.${{ env.NEW_VERSION }},  ital3x/ai-sign-language_web_dev:latest
+        tags: ital3x/ai-sign-language_web_dev:${{ env.NEW_VERSION }},  ital3x/ai-sign-language_web_dev:latest
 
   
       
