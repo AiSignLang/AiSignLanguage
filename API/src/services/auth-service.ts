@@ -83,8 +83,13 @@ export async function registerOAuthUser(oauthUser: OAuthGoogleUserData,  provide
 
 async function createValidUser(dates:CreateUserCredentials): Promise<ServiceReturn<User>>{
     let newUser: ServiceReturn<User> | undefined = undefined;
-    for (const name in [dates.name,dates.givenName,dates.familyName]){
+    console.log("dates",dates);
+    console.log("user",newUser);
+    for (const name of [dates.name,dates.givenName,dates.familyName]){
+        if (!name) continue;
         newUser = await createUser(name);
+        console.log(dates);
+        console.log(newUser);
         if (newUser.status === StatusCodes.CREATED) {
             return newUser;
         }
