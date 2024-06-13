@@ -1,10 +1,16 @@
-import React from 'react';
+import {faGithub, faGoogle} from "@fortawesome/free-brands-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {googleAuth} from "../../services/auth/google-auth-service.ts";
 
 interface IProps {
     // TODO: Define your props here
 }
 
 export function SignIn(props: IProps) {
+
+    
+    
+    console.log("SignIn props", props);
     return (
         <div className="min-h-screen bg-bg-primary flex items-center justify-center">
             <div className="bg-bg-secondary p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -36,14 +42,16 @@ export function SignIn(props: IProps) {
                         </p>
                     </div>
                     <div className="mt-6 flex items-center justify-center space-x-2">
-                        <button type="button" className="inline-flex items-center justify-center p-2 border border-transparent rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                            <img src="../../../public/img/logos/google.png" alt="Google logo"/>
-                            Google
+                        <button type="button" 
+                                onClick={()=>googleAuth()}
+                                className="inline-flex items-center justify-center p-2 border border-transparent rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            <FontAwesomeIcon icon={faGoogle}/>
+                             Google
                         </button>
                         <button type="button"
                                 className="inline-flex items-center justify-center p-2 border border-transparent rounded-md shadow-sm text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                            <img src="../../../public/img/logos/github.png" alt="Github logo" className=""/>
-                            GitHub
+                            <FontAwesomeIcon icon={faGithub}/>
+                             GitHub
                         </button>
                     </div>
                 </form>
@@ -53,4 +61,5 @@ export function SignIn(props: IProps) {
             </div>
         </div>
     );
-};
+}
+export default SignIn;

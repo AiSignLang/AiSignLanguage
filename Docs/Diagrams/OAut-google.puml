@@ -1,0 +1,28 @@
+﻿@startuml
+'https://plantuml.com/sequence-diagram
+
+
+participant "Website" as W
+participant "API" as A
+participant "Google" as G
+
+W --> A : "POST /auth/google-auth/request"
+A --> W : "{url: "login-url}"
+W --> G : "GET {url}"
+G --> W : "/oauth-google-redirect?code=123"
+W --> A : "GET /auth/google-auth/token?code=123"
+A --> G : "client.GetTokens(code)"
+G --> A : "{access_token: "123", refresh_token: "456"}"
+A --> W : "{access_token: "123", refresh_token: "456"}"
+W --> G : "GET /userinfo?access_token=123"
+G --> W : "OAutGoogleUserData: {user: {sub: 123, name: "John"}}"
+
+group access_token expired
+    W --> A : "GET /auth/google-auth/refresh?refresh_token=456"
+    A --> G : "client.SetCredentials(refresh_token);"
+    A --> G : "client.GetTokens();
+    G --> A : "{access_token: "263", ", refresh_token: "596"}"
+    A --> W : "{access_token: "263", ", refresh_token: "596"}"
+end
+
+@enduml

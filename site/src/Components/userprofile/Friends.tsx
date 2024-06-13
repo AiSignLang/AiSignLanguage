@@ -11,24 +11,24 @@ export default function Friends() {
 
     return (
         <div className="w-full mt-10">
-            <h1 className="text-2xl font-bold text-center border-t border-b py-4">Friends</h1>
+            <h1 className="text-xl font-bold text-center border-t border-b py-4">Friends</h1>
 
-            <ul className="">
+            <ul>
                 {people.map((friends: IFriend) => (
                     <li key={friends.friendID}
                         className="flex content-center justify-between gap-x-6 py-5 text-gray-300">
                         <div className="flex min-w-0 gap-x-4">
                             <img className="h-12 w-12 flex-none rounded-full bg-gray-50"
                                  src={friends.profilePath ? friends.profilePath : undefined}
-                                 alt=""/> {/*TODO: add alt text + change profile picture to default image*/}
+                                 alt="user profile"/> {/*TODO: add alt text + change profile picture to default image*/}
                             <div className="min-w-0 flex-auto">
-                                <p className="text-xl leading-6 font-bold">{friends.name}</p>
+                                <p className="text-lg leading-6 font-bold">{friends.name}</p>
                             </div>
                         </div>
                         <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end text-sm leading-6">
                             <span className="flex items-center text-lg">
                                 <span className="flex items-center mr-7 c-md:mr-2 c-sm:mr-2">
-                                    {friends.score.streak}
+                                    {friends.score.dailyStreak}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="orange"
                                          className="bi bi-fire ml-1"
                                          viewBox="0 0 16 16">
@@ -37,7 +37,7 @@ export default function Friends() {
                                 </svg>
                               </span>
                                 <span className="flex items-center mr-7 c-md:mr-2 c-sm:mr-2">
-                                    10
+                                    {friends.score.perfectlyDone}
                                  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="green"
                                       className="bi bi-check-all" viewBox="0 0 16 16">
                                     <path
@@ -45,7 +45,7 @@ export default function Friends() {
                                     </svg>
                                 </span>
                                <span className="flex items-center">
-                                    20
+                                    {friends.score.allTimeCorrect}
                                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="yellow"
                                       className="bi bi-star-fill ml-1" viewBox="0 0 16 16">
                                         <path

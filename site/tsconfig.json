@@ -21,7 +21,8 @@
     "noFallthroughCasesInSwitch": true,
 
     "rootDir": "./src",
-    "outDir": "./out"
+    "outDir": "./out",
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

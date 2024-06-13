@@ -13,6 +13,7 @@ class CourseService {
                     taskID: 1,
                     levelID: 1,
                     type: TaskType.SPELLING,
+                    skipped: false,
                     hints: ['https://www.google.com'],
                     taskData: ['A', 'l', 'e', 'x'],
                     mistakes: null
@@ -23,11 +24,14 @@ class CourseService {
                     type: TaskType.TRANSLATION,
                     hints: ['https://www.google.com'],
                     taskData: ['World'],
+                    skipped: false,
                     mistakes: null
                 },
+
                 {
                     taskID: 3,
                     levelID: 1,
+                    skipped: false,
                     type: TaskType.TRANSLATION,
                     hints: ['https://www.google.com', 'https://www.google.com', 'https://www.google.com', 'https://www.google.com'],
                     taskData: ['Sie', 'sind', 'ein', 'Mensch'],
@@ -35,7 +39,7 @@ class CourseService {
                 }
             ]
         };
-
+        console.log(level);
         return level
     }
 
