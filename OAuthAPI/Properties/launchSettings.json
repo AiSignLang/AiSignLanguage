@@ -1,0 +1,14 @@
+﻿{
+  "profiles": {
+    "OAuth": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "http://0.0.0.0:9000",
+      "launchUrl": "http://localhost:9000/swagger/index.html",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
