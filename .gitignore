@@ -4,7 +4,7 @@ SavedModels/*.h5
 SavedModels/*.keras
 SavedModels/*.npy
 MP_Data/
-tf*/
+venv/
 hidden/
 
 
