@@ -21,7 +21,9 @@ export default function UserProfile(){
 
             <div className="bg-bg-primary text-text-primary h-full min-h-screen w-full flex p-10">
 
-                
+                <div className="w-1/10 xs:w-0 ">
+                    
+                </div>
                 <div className="w-36 c-lg:w-1/6 c-md:w-0 c-sm:w-0 xs:w-0 "/>
 
                 <div className="w-1/2 flex c-md:w-4/6 xs:w-full h-fit mr-10">
