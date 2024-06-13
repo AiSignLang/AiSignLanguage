@@ -3,6 +3,9 @@
 SavedModels/*.h5
 SavedModels/*.keras
 SavedModels/*.npy
+MP_Data/
+venv/
+hidden/
 
 
 # Byte-compiled / optimized / DLL files
