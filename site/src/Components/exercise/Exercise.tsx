@@ -5,6 +5,7 @@ import {courseService} from "../../services/CourseService.ts";
 import {ILevel} from "../../model/ILevel.ts";
 import {TaskType} from "../../model/TaskType.ts";
 import AIView from "../AIView.tsx";
+import {Alert} from "../errors/Alert.tsx";
 
 interface IProps {
     // TODO: Define your props here
@@ -58,6 +59,7 @@ export function Exercise(props: IProps) {
 
     return (
         <div className="bg-bg-primary text-text-primary h-full min-h-screen w-full">
+            <Alert title={"Plug-in your device"} image={"/public/img/error/charge.gif"} width={150} height={150} description={"For an enhanced experience, we recommend connecting your device with an outlet."}/>
             <Navbar></Navbar>
             <div className="w-full flex flex-col items-center">
                 <div className="bg-bg-secondary rounded-2xl p-4 w-1/3 mt-20" key={level && level.tasks[currentTaskIndex].taskID}>
@@ -79,7 +81,6 @@ export function Exercise(props: IProps) {
                         <button onClick={() => {handleNextTask(true,null)}} className="hover:bg-primary-greyed-hover border-2 border-primary-greyed rounded-2xl h-fit w-fit p-4">I
                     can't {level.tasks[currentTaskIndex].type} right now.
                 </button>
-
                 )}
                     {/*! TODO Change handleNext user solution param to actual user input*/}
                     {level && level.tasks[currentTaskIndex] && level.tasks[currentTaskIndex].taskData.length === userInput.length ? (
