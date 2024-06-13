@@ -92,6 +92,7 @@ export function Exercise(props: IProps) {
                         <button disabled className="bg-btn-bg-disable text-btn-text-disable rounded-2xl h-fit w-fit p-4">Next Task →</button>
                     )}
                 </div>
+
                 {level && courseService.isVisualTask(level.tasks[currentTaskIndex].type) && (
                     <div className="mt-8 overflow-hidden rounded-3xl">
                     <AIView/>
