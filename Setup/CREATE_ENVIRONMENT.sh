@@ -1,6 +1,6 @@
 ﻿#!/bin/bash
 PYTHON_VERSION="3.10.11"
-VENV_NAME=".venv"
+VENV_NAME="venv"
 
 if command -v python3.10 >/dev/null 2>&1; then
     echo "python3.10 is installed."

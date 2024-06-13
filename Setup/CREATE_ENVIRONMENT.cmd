@@ -3,7 +3,7 @@ setlocal
 
 :: Define the Python version, the name of the virtual environment, and the dependencies
 set PYTHON_VERSION=3.10.11
-set VENV_NAME=.venv
+set VENV_NAME=venv
 set DEPENDENCIES='--upgrade pip' numpy jupyter matplotlib tensorflow==2.16.1 opencv-python mediapipe scikit-learn matplotlib 'keras==3.0'
 
 :: Check if Python is already installed
