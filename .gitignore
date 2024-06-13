@@ -5,6 +5,7 @@ SavedModels/*.keras
 SavedModels/*.npy
 MP_Data/
 tf*/
+hidden/
 
 
 # Byte-compiled / optimized / DLL files
