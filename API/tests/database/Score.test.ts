@@ -10,7 +10,10 @@ beforeAll(async () => {
 describe('Score model', () => {
     let user;
     beforeAll(async () => {
-        user = await User.create({userName: 'TestUser'});
+        user = await User.findOne({where: {userName: 'TestUser'}});
+        if (user === null){
+            user = await User.create({userName: 'TestUser'});
+        }
         expect(user).toBeDefined();
     });
 

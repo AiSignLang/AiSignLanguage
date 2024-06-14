@@ -18,7 +18,13 @@ describe('User model', () => {
         }
     });
     it('should have a score', async () => {
-        const user = await User.create({userName: 'TestUser'});
+        let user;
+        user = await User.findOne({where: {userName: 'TestUser'}});
+        if (user === null) {
+            user = await User.create({userName: 'TestUser'});
+        }
+        expect(user).toBeDefined();
+        
         const score = await Score.create({dailyStreak: 5, allTimeCorrect: 10, perfectlyDone: 2, ownerId: user.userId});
         user.score = score;
         await user.save()
