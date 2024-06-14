@@ -17,79 +17,127 @@ public class AccountController(DataContext context, TokenService tokenService, E
     [HttpPost("Register")]
     public async Task<IActionResult> Register([FromBody] RegisterModel model)
     {
-        if (context.Accounts.Any(a => a.Username == model.Username))
+        using var transaction = context.Database.BeginTransaction();
+        try
         {
-            return BadRequest("Username already exists");
-        }
+            if (context.Accounts.Any(a => a.Username == model.Username))
+            {
+                return BadRequest("Username already exists");
+            }
 
-        if (context.Accounts.Any(a => a.Email == model.Email))
-        {
-            return BadRequest("Email already exists");
-        }
-        var invalids = new List<string>();
-        if(model.Email == null) invalids.Add("Invalid email");
-        if(model.Username == "") invalids.Add("Invalid username");
-        if(model.Password == "") invalids.Add("Invalid password");
-        
-        if(invalids.Count > 0)
-        {
-            return BadRequest(invalids.ToArray());
-        }
-        
-        var account = new Account(model.Username,  model.Email!);
-        account.SetPassword(model.Password);
-        //await emailService.SendEmailAsync(model.Email, "Welcome to AiSL", "You have successfully registered!");
-        context.Accounts.Add(account);
-        await context.SaveChangesAsync();
+            if (context.Accounts.Any(a => a.Email == model.Email))
+            {
+                return BadRequest("Email already exists");
+            }
+            var invalids = new List<string>();
+            if(model.Email == null) invalids.Add("Invalid email");
+            if(model.Username == "") invalids.Add("Invalid username");
+            if(model.Password == "") invalids.Add("Invalid password");
 
-        return Ok();
+            if(invalids.Count > 0)
+            {
+                return BadRequest(invalids.ToArray());
+            }
+
+            var account = new Account(model.Username,  model.Email!);
+            account.SetPassword(model.Password);
+            context.Accounts.Add(account);
+
+            // Generate token for the new user
+            var tokens = tokenService.GenerateToken(account);
+
+            await context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return Ok(tokens);
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 
     [HttpPost("Login")]
-    public IActionResult Login([FromBody] LoginModel model)
+    public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
-        Account account =context.Accounts.FirstOrDefault(a => a.Email == model.Email);
-        
-        if (account == null || !account.VerifyPassword(model.Password))
+        using var transaction = context.Database.BeginTransaction();
+        try
         {
-            return Unauthorized("Invalid username or password");
-        }
+            Account account = context.Accounts.FirstOrDefault(a => a.Email == model.Email);
 
-        var tokens = tokenService.GenerateToken(account);
-        context.SaveChangesAsync();
-        return Ok(tokens);
+            if (account == null || !account.VerifyPassword(model.Password))
+            {
+                return Unauthorized("Invalid username or password");
+            }
+
+            var tokens = tokenService.GenerateToken(account);
+            await context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+
+            return Ok(tokens);
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }    
    
     [HttpPost("[action]")]
-    public IActionResult RefreshToken([FromQuery] string refreshToken)
+    public async Task<IActionResult> RefreshToken([FromQuery] string refreshToken)
     {
-        var account = context.Accounts.FirstOrDefault(a => a.RefreshToken == refreshToken);
-
-        if (account == null || account.RefreshTokenExpiryTime < DateTime.UtcNow)
+        using var transaction = context.Database.BeginTransaction();
+        try
         {
-            return BadRequest("Invalid refresh token");
-        }
+            var account = context.Accounts.FirstOrDefault(a => a.RefreshToken == refreshToken);
 
-        var tokens = tokenService.GenerateToken(account);
-        context.SaveChangesAsync();
-        return Ok(tokens);
+            if (account == null || account.RefreshTokenExpiryTime < DateTime.UtcNow)
+            {
+                return BadRequest("Invalid refresh token");
+            }
+
+            var tokens = tokenService.GenerateToken(account);
+            await context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+
+            return Ok(tokens);
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
-    
+
     [HttpPost("[action]")]
-    public IActionResult RevokeToken([FromQuery] string refreshToken)
+    public async Task<IActionResult> RevokeToken([FromQuery] string refreshToken)
     {
-        var account = context.Accounts.FirstOrDefault(a => a.RefreshToken == refreshToken);
-
-        if (account == null)
+        using var transaction = context.Database.BeginTransaction();
+        try
         {
-            return BadRequest("Invalid refresh token");
+            var account = context.Accounts.FirstOrDefault(a => a.RefreshToken == refreshToken);
+
+            if (account == null)
+            {
+                return BadRequest("Invalid refresh token");
+            }
+
+            account.RefreshToken = null;
+            account.RefreshTokenExpiryTime = DateTime.UtcNow;
+            await context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+
+            return Ok();
         }
-
-        account.RefreshToken = null;
-        account.RefreshTokenExpiryTime = DateTime.UtcNow;
-        context.SaveChangesAsync();
-
-        return Ok();
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 
     [Authorize]

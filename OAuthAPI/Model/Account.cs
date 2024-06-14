@@ -18,9 +18,11 @@ public class Account
         Email = email;
         Id = Guid.NewGuid();
     }
+    // making that the hash is correct
     public void SetPassword(string password)
     {
-        Password = HashPassword(password);
+        var salt = Environment.GetEnvironmentVariable("SALT") ?? throw new Exception("Salt not set in Environment Variables!");
+        Password = HashPassword(password+salt);
     }
     private string HashPassword(string password)
     {
@@ -31,7 +33,9 @@ public class Account
     public bool VerifyPassword(string providedPassword)
     {
         var passwordHasher = new PasswordHasher<Account>();
-        var verificationResult = passwordHasher.VerifyHashedPassword(this, this.Password, providedPassword);
+        var salt = Environment.GetEnvironmentVariable("SALT") ?? throw new Exception("Salt not set in Environment Variables!");
+
+        var verificationResult = passwordHasher.VerifyHashedPassword(this, this.Password, providedPassword+salt);
 
         return verificationResult == PasswordVerificationResult.Success;
     }
