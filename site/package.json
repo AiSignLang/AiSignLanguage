@@ -28,7 +28,7 @@
     "flowbite-react": "^0.9.0",
     "google-auth-library": "^9.10.0",
     "http-status-codes": "^2.3.0",
-    "react": "^18.2.0",
+    "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.0"
@@ -54,11 +54,13 @@
     "vite-plugin-mediapipe": "^0.1.0"
   },
   "scripts": {
-    "dev": "vite --port 8080",
-    "build": "npm run tailwind && tsc && vite build",
+    "dev": " vite --port 8080",
+    "build": "npm run tailwind:build && tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --port 8080",
-    "tailwind": "tailwindcss -i ./src/index.css -o ./src/dist/tailwind.css"
+    "tailwind": "tailwindcss -i ./src/index.css -o ./src/dist/tailwind.css --watch",
+    "tailwind:build": "tailwindcss -i ./src/index.css -o ./src/dist/tailwind.css"
+    
   },
   "eslintConfig": {
     "extends": [

@@ -22,6 +22,6 @@ RUN apt-get update && \
 COPY nginx.conf /etc/nginx/conf.d/ASL-Project.conf
 RUN dos2unix /etc/nginx/conf.d/ASL-Project.conf
 
-EXPOSE 443
+EXPOSE 7859
 
 CMD ["nginx", "-g", "daemon off;"]

@@ -2,7 +2,8 @@
 import React,{useEffect, useRef, useState} from "react";
 
 import {drawConnectors, drawLandmarks} from "@mediapipe/drawing_utils";
-import {FACEMESH_TESSELATION, HAND_CONNECTIONS, Holistic, POSE_CONNECTIONS, Results} from "@mediapipe/holistic";
+import {FACEMESH_TESSELATION, HAND_CONNECTIONS, POSE_CONNECTIONS, Results} from "@mediapipe/holistic";
+import holistic from "../workers/Statics.ts";
 
 
 const AIView: React.FC = () =>{
@@ -39,22 +40,6 @@ const AIView: React.FC = () =>{
             });
         }
 
-
-        const holistic = new Holistic({
-            locateFile: (file) => {
-                return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`;
-            }
-        });
-
-        holistic.setOptions({
-            modelComplexity: 1,
-            smoothLandmarks: true,
-            enableSegmentation: true,
-            smoothSegmentation: true,
-            refineFaceLandmarks: true,
-            minDetectionConfidence: 0.4,
-            minTrackingConfidence: 0.4
-        });
         holistic.onResults(onResults);
 
         const sendToMediaPipe = async () => {
@@ -129,12 +114,12 @@ const AIView: React.FC = () =>{
     return (
         <>
             <div
-                className={"relative items-center block bg-white border border-gray-100 dark:bg-gray-800 dark:border-gray-800 dark:hover:bg-gray-700"}
-                style={{width: VideoWidth, height: VideoHeight}}>
+                className={"relative items-center block bg-gray-400 border border-gray-100 dark:bg-gray-800 dark:border-gray-800 dark:hover:bg-gray-700"}
+                style={{width: VideoWidth-1, height: VideoHeight-1}}>
                 <video autoPlay ref={(el) => {
                     videoRef.current = el;
                     setInputVideoReady(!!el);
-                }} className={`${loaded ? 'hidden' : 'opacity-55'} transform scale-x-[-1]`}>
+                }} className={`${loaded ? 'hidden' : 'opacity-55'} transform scale-x-[-1] `}>
                 </video>
                 <canvas className={`scale-x-[-1] absolute transform left-0 top-0 bg-transparent ${loaded?'':'hidden'}`} ref={canvasRef}
                         width={videoRef.current?.videoWidth ?? VideoWidth}
