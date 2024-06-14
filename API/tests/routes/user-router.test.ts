@@ -1,22 +1,30 @@
+
 import request from 'supertest';
-import {app} from '../../src/app';
 import { StatusCodes} from "http-status-codes";
 
 import * as path from "node:path";
 import fsSync from "fs";
 import {getAvatarPath, getUserPath} from "../../src/Utils";
 import * as authMiddleware from "../../src/middleware/authorization-middleware";
+import {JS_EXT_TO_TREAT_AS_ESM} from "ts-jest";
+import express, {NextFunction} from "express";
+import sequelize from "../database/database.mock";
 
 const routePath = '/api/user';
 
 
 
 beforeEach(async()=>{
-    await request(app).delete(routePath);
+    const app = (await import('../../src/app')).app;
+    const agent = request(app);
+    const response = await agent.delete(routePath).send();
+
 
 })
 afterEach(async()=>{
-    await request(app).delete(routePath);
+    const app = (await import('../../src/app')).app;
+    const agent = request(app);
+    const response = await agent.delete(routePath).send();
 })
 
 interface IUser {
@@ -32,6 +40,9 @@ describe('POST /api/user', () => {
    
     test('should create a new user', async () => {
         const username = 'John Doe';
+
+        const app = (await import('../../src/app')).app;
+        const agent = request(app);
         const response = await request(app)
             .post(routePath)
             .send({
@@ -43,6 +54,9 @@ describe('POST /api/user', () => {
 
     test('should not create a user with the same name', async () => {
         const username = 'John Doe';
+
+        const app = (await import('../../src/app')).app;
+        const agent = request(app);
         const response = await request(app)
             .post(routePath)
             .send({
@@ -65,6 +79,8 @@ describe('PUT /api/user', () => {
 
             const username = 'Van Gogh';
 
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             await request(app).post(routePath).send({username: username});
             const response = await request(app)
                 .put(`${routePath}/${username}/avatar`)
@@ -78,6 +94,8 @@ describe('PUT /api/user', () => {
 
             const username = 'Van Gogh';
 
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             const response = await request(app)
                 .put(`${routePath}/${username}/avatar`)
                 .attach('avatar', path.join(__dirname, '../Download.jpeg')); // Adjust the path to the avatar image file
@@ -86,6 +104,9 @@ describe('PUT /api/user', () => {
         });
        
         test('should not update the avatar if no file is provided', async () => {
+
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             const username = 'John Doe';
             await request(app).post(routePath).send({username: username});
             const response = await request(app)
@@ -96,17 +117,7 @@ describe('PUT /api/user', () => {
     })
 
     describe('/:username', ()=>{
-        jest.mock('../../src/middleware/authorization-middleware', () => ({
-            Authorize: jest.fn((req, res, next) => {
-
-                req.user = {
-                    userName: 'John Doe',
-                    profilePic: 'not relevant',
-                    userId: 1,
-                };
-                next();
-            }),
-        }));
+        
         test('should update name of an user', async () =>{
             const expectedNewName = 'Mickey Mouse';
             const originalAuthorize = authMiddleware.Authorize;
@@ -122,6 +133,9 @@ describe('PUT /api/user', () => {
                     next();
                 }),
             }));
+
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             await request(app).post(routePath).send({username: 'John Doe'});
             const getBefore = await request(app).get(`${routePath}/John Doe`);
             expect(getBefore.body.userName).toBe('John Doe');
@@ -145,6 +159,9 @@ describe('PUT /api/user', () => {
                     next();
                 }),
             }));
+
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             const nameOfUser = 'John Doe';
             await request(app).post(routePath).send({username: nameOfUser});
             const responseTooShort = await request(app).put(`${routePath}/${nameOfUser}`).send({name: 'x'});
@@ -169,6 +186,8 @@ describe('PUT /api/user', () => {
                     next();
                 }),
             }));
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             const nameOfUser = 'John Doe';
             await request(app).post(routePath).send({username: nameOfUser});
             const nullValue = null;
@@ -185,18 +204,20 @@ describe('PUT /api/user', () => {
         });
 
         test('should not update, user does not exist', async()=>{
-            jest.mock('../../src/middleware/authorization-middleware', () => ({
-                Authorize: jest.fn((req, res, next) => {
-                    req.user = {
-                        userName: 'John Doe',
-                        profilePic: 'not relevant',
-                        userId: 1,
-                    };
-                    next();
-                }),
-            }));
+            
+            jest.spyOn(authMiddleware, 'Authorize').mockImplementation((req: any, res: express.Response, next: express.NextFunction) => {
+                req.user = {
+                    userName: 'John Doe',
+                    profilePic: 'not relevant',
+                    userId: 1,
+                };
+                next();
+                return req.user;
+            });
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             const nameOfUser = 'John Doe';
-            const response = await request(app).put(`${routePath}/${nameOfUser}`).send({name: 'Mickey Mouse'});
+            const response = await agent.put(`${routePath}/${nameOfUser}`).send({name: 'Mickey Mouse'});
             expect(response.statusCode).toBe(400);
         })
 
@@ -213,6 +234,9 @@ describe('PUT /api/user', () => {
                     next();
                 }),
             }));
+
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             await request(app).post(routePath).send({username: nameOfUser});
             jest.mock('../../src/middleware/authorization-middleware', () => ({
                 Authorize: jest.fn((req, res, next) => {
@@ -237,16 +261,19 @@ describe('GET /api/user', () => {
 
     describe('/', ()=>{
         test('should return not found for no users', async () => {
-            jest.mock('../../src/middleware/authorization-middleware', () => ({
-                Authorize: jest.fn((req, res, next) => {
+            jest.mock("../../src/middleware/authorization-middleware", () => {
+                return jest.fn().mockImplementation((req: any, res: Response, next: NextFunction) => {
                     req.user = {
                         userName: 'John Doe',
                         profilePic: 'not relevant',
                         userId: 1,
                     };
                     next();
-                }),
-            }));
+                });
+            });
+
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             const response = await request(app).get(`${routePath}`);
             expect(response.statusCode).toBe(StatusCodes.NO_CONTENT);
 
@@ -255,7 +282,9 @@ describe('GET /api/user', () => {
 
             const validUsername = 'Jeremy Meier';
             const otherValidUsername = 'Franklin Saint';
-            
+
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             expect(await request(app).post(routePath).send({username: validUsername})).toBeTruthy();
             expect(await request(app).post(routePath).send({username: otherValidUsername})).toBeTruthy();
             const expectedUser = {
@@ -279,12 +308,17 @@ describe('GET /api/user', () => {
     describe('/:username', ()=>{
         test('should return 400 for a username that is too short', async () => {
 
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             const username = 'x'; // Assuming this ID does not exist
             const response = await request(app).get(`${routePath}/${username}`);
             expect(response.statusCode).toBe(400);
         });
 
         test('should return 400 for a bad request (username too long)', async () => {
+
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             const invalidUserName = 'invalid is way too long to be a username, validation should return bad requeset'; // Invalid ID format
             const response = await request(app).get(`${routePath}/${invalidUserName}`);
             expect(response.statusCode).toBe(400);
@@ -292,6 +326,9 @@ describe('GET /api/user', () => {
 
         test('should return 400 for a bad request, because user does not exist', async () => {
             const username = 'userdoesnotexist';
+
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             const response = await request(app).get(`${routePath}/${username}`);
             expect(response.statusCode).toBe(400);
         })
@@ -299,6 +336,8 @@ describe('GET /api/user', () => {
         test('should return a user in json format for an existing user', async () => {
             const validUsername = 'Jeremy Meier';
 
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             await request(app).post(routePath).send({username: validUsername});
             const expectedUser = {
                 id: 1,
@@ -320,32 +359,49 @@ describe('DELETE /api/user', () => {
     describe('/:username', ()=>{
         test('should return 400 for a username that is too short', async () => {
             const username = 'x'; // Assuming this ID does not exist
+
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             const response = await request(app).delete(`${routePath}/${username}`);
             expect(response.statusCode).toBe(400);
         });
         test('should return 400 for a bad request (username too long)', async () => {
+
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             const invalidUserName = 'invalid is way too long to be a username, validation should return bad requeset'; // Invalid ID format
             const response = await request(app).delete(`${routePath}/${invalidUserName}`);
             expect(response.statusCode).toBe(400);
         });
         test('should return 400 for a bad request, because user does not exist', async ()=>{
             const username = 'userdoesnotexist';
+
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             const response = await request(app).delete(`${routePath}/${username}`);
             expect(response.statusCode).toBe(400);
         });
         test('should return 400 for a bad request, because null was given', async ()=>{
             const username = null;
+
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             const response = await request(app).delete(`${routePath}/${username}`);
             expect(response.statusCode).toBe(400);
         });
         test('should return 400 for a bad request, because undefined was given', async ()=>{
             const username = undefined;
+
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             const response = await request(app).delete(`${routePath}/${username}`);
             expect(response.statusCode).toBe(400);
         });
         test('should return 204 for a known username, now deleted', async () => {
             const username = 'testadmintodelete';
 
+            const app = (await import('../../src/app')).app;
+            const agent = request(app);
             let response = await request(app).post(routePath).send({username: username});
             expect(response.statusCode).toBe(201);
             response = await request(app)

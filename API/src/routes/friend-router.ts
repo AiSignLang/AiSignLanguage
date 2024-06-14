@@ -55,8 +55,20 @@ friendRouter.post("/:username/friends/:friendUsername", async (req, res) => {
 
 
     try{
-        const user = await User.findOne({where: {username: username}});
-        const friend = await User.findOne({where: {username: friendUsername}});
+        const user = await User.findOne({
+            where: {
+                userName: username
+            },
+            include: User
+        });
+        const friend = await User.findOne(
+            {
+                where: 
+                    {
+                        userName: friendUsername
+                    },
+                include: User
+            });
 
         if(user === null || friend === null || user === friend){
             res.sendStatus(StatusCodes.BAD_REQUEST);
@@ -86,14 +98,15 @@ friendRouter.delete("/:username/friends/:friendUsername", async (req, res) => {
     const username = req.params.username;
     const friendUsername = req.params.friendUsername;
 
-    if(!username ||
-        !friendUsername ||
-        !isNameLengthValid(username) ||
+    if(!username|| username === null || friendUsername === null || !friendUsername || !isNameLengthValid(username) ||
         !isNameLengthValid(friendUsername)){
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
-
+    if (username === friendUsername) {
+        res.sendStatus(StatusCodes.BAD_REQUEST);
+        return;
+    }
 
     try{
         const user = await User.findOne(
@@ -107,7 +120,11 @@ friendRouter.delete("/:username/friends/:friendUsername", async (req, res) => {
                     include: User
             });
 
-        if(user === null || friend === null || user === friend){
+        if (friend === null) {
+            res.sendStatus(StatusCodes.NOT_FOUND);
+            return;
+        }
+        if(user === null || user === friend){
             res.sendStatus(StatusCodes.BAD_REQUEST);
             return;
         }
@@ -118,6 +135,7 @@ friendRouter.delete("/:username/friends/:friendUsername", async (req, res) => {
 
         const friendship = await Friendship.findOne({where: {userId: user.userId, friendId: friend.userId}})
         if(!friendship){
+            console.error('Friendship not found');
             res.sendStatus(StatusCodes.NOT_FOUND);
             return;
         }

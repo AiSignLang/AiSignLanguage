@@ -17,7 +17,7 @@ export const getAvatarPath = (username: string) => {
     return path.join(getUserPath(username),`/avatars/`);
 }
 export const getStaticUrl = (urlPath:string) =>{
-    return path.join(config.externalAddress,config.staticEndpoint, urlPath);
+    return path.join(config.staticEndpoint, urlPath).replace(/\\/g, '/');
 }
 
 export async function downloadImage(url: string, dest: string):Promise<string> {
