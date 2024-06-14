@@ -1,4 +1,3 @@
-
 name: Docker Image React DEV
 
 on:
@@ -32,3 +31,5 @@ jobs:
         push: true
         tags: ital3x/ai-sign-language_web_dev:${{ env.NEW_VERSION }},  ital3x/ai-sign-language_web_dev:latest
 
+  
+      
