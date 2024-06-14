@@ -36,7 +36,8 @@ public class AccountController(DataContext context, TokenService tokenService, E
             return BadRequest(invalids.ToArray());
         }
         
-        var account = new Account(model.Username, model.Password, model.Email!);
+        var account = new Account(model.Username,  model.Email!);
+        account.SetPassword(model.Password);
         //await emailService.SendEmailAsync(model.Email, "Welcome to AiSL", "You have successfully registered!");
         context.Accounts.Add(account);
         await context.SaveChangesAsync();
@@ -47,8 +48,8 @@ public class AccountController(DataContext context, TokenService tokenService, E
     [HttpPost("Login")]
     public IActionResult Login([FromBody] LoginModel model)
     {
-        var account = context.Accounts.FirstOrDefault(a => a.Email == model.Email);
-
+        Account account =context.Accounts.FirstOrDefault(a => a.Email == model.Email);
+        
         if (account == null || !account.VerifyPassword(model.Password))
         {
             return Unauthorized("Invalid username or password");
@@ -92,7 +93,7 @@ public class AccountController(DataContext context, TokenService tokenService, E
     }
 
     [Authorize]
-    [HttpGet("[controller]")]
+    [HttpGet]
     public IActionResult GetAccount()
     {
         var id = GetGuidFromToken(HttpContext);
@@ -110,7 +111,7 @@ public class AccountController(DataContext context, TokenService tokenService, E
     
     
     
-    [HttpGet]
+    [HttpGet("confirm-email")]
     public IActionResult Confirm()
     {
         

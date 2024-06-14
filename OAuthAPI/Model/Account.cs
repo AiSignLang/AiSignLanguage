@@ -12,14 +12,16 @@ public class Account
     public string? RefreshToken { get; set; }
     public DateTime RefreshTokenExpiryTime { get; set; }
     
-    public Account(string username, string password, string email)
+    public Account(string username, string email)
     {
         Username = username;
-        Password = HashPassword(password);
         Email = email;
         Id = Guid.NewGuid();
     }
-    
+    public void SetPassword(string password)
+    {
+        Password = HashPassword(password);
+    }
     private string HashPassword(string password)
     {
         var passwordHasher = new PasswordHasher<Account>();
