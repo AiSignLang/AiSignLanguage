@@ -3,9 +3,14 @@ import React,{useEffect, useRef, useState} from "react";
 
 import {drawConnectors, drawLandmarks} from "@mediapipe/drawing_utils";
 import {FACEMESH_TESSELATION, HAND_CONNECTIONS, Holistic, POSE_CONNECTIONS, Results} from "@mediapipe/holistic";
+import {courseService} from "../services/CourseService.ts";
 
+interface IProps {
+    isCollecting: boolean;
+    setIsCollecting: (isCollecting: boolean) => void;
+}
 
-const AIView: React.FC = () =>{
+export function AIView(props: IProps) {
     //const [holistic,setHolistic] = useState<Holistic|null>(null);
     const VideoWidth = 1280;
     const VideoHeight = 720;
@@ -16,7 +21,38 @@ const AIView: React.FC = () =>{
     
     const [inputVideoReady, setInputVideoReady] = useState(false);
     const [loaded, setLoaded] = useState(false);
-    
+
+    const [keypoints, setKeypoints] = useState<number[][]>([]);
+    function extractKeypoints(results: Results) {
+        let pose: number[], face: number[], lh: number[], rh: number[];
+        if (results.poseLandmarks) {
+            pose = results.poseLandmarks.flatMap(res => res.x !== undefined && res.y !== undefined && res.z !== undefined && res.visibility !== undefined
+                ? [res.x, res.y, res.z, res.visibility]
+                : [0, 0, 0, 0]);
+        } else {
+            pose = new Array(33 * 4).fill(0);
+        }
+
+        if (results.faceLandmarks) {
+            face = results.faceLandmarks.flatMap(res => [res.x, res.y, res.z]);
+        } else {
+            face = new Array(468 * 3).fill(0);
+        }
+
+        if (results.leftHandLandmarks) {
+            lh = results.leftHandLandmarks.flatMap(res => [res.x, res.y, res.z]);
+        } else {
+            lh = new Array(21 * 3).fill(0);
+        }
+
+        if (results.rightHandLandmarks) {
+            rh = results.rightHandLandmarks.flatMap(res => [res.x, res.y, res.z]);
+        } else {
+            rh = new Array(21 * 3).fill(0);
+        }
+
+        return [...pose, ...face, ...lh, ...rh];
+    }
     useEffect(() => {
         /*setHolistic(new Holistic({
             locateFile: (file) => {
@@ -38,7 +74,6 @@ const AIView: React.FC = () =>{
                 sendToMediaPipe();
             });
         }
-
 
         const holistic = new Holistic({
             locateFile: (file) => {
@@ -72,10 +107,25 @@ const AIView: React.FC = () =>{
     },  [inputVideoReady]);
 
     
-    
     function onResults(results: Results) {
 
-        if (canvasRef.current === null || contextRef.current === null) return; 
+        if (canvasRef.current === null || contextRef.current === null) return;
+
+     //   console.log(props.isCollecting)
+      //  console.log(keypoints.length)
+        if(props.isCollecting){
+            console.log(props.isCollecting)
+            console.log(keypoints.length)
+            setKeypoints([...keypoints, extractKeypoints(results)]);
+            if(keypoints.length === 30){
+                console.log(props.isCollecting)
+                console.log(keypoints.length)
+                props.setIsCollecting(false);
+                console.log(courseService.getPrediction(keypoints));
+                setKeypoints([]);
+            }
+        }
+
         
         //canvasCtx.drawImage(results.segmentationMask, 0, 0, canvasElement.width, canvasElement.height);
         setLoaded(true);
@@ -129,7 +179,7 @@ const AIView: React.FC = () =>{
     return (
         <>
             <div
-                className={"relative items-center block bg-white border border-gray-100 dark:bg-gray-800 dark:border-gray-800 dark:hover:bg-gray-700"}
+                className={"relative items-center block bg-white dark:bg-gray-800 dark:border-gray-800 dark:hover:bg-gray-700"}
                 style={{width: VideoWidth, height: VideoHeight}}>
                 <video autoPlay ref={(el) => {
                     videoRef.current = el;

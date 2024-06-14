@@ -15,12 +15,15 @@ interface IProps {
 export function Exercise(props: IProps) {
     console.log("Exerciseprops", props);
     const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const type = queryParams.get('type');  // replace 'myParam' with the name of your parameter
+    const type = new URLSearchParams(location.search).get('type');
+
+    //States
     const [level, setLevel] = useState<ILevel | null>(null);
     const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
     const [userInput, setUserInput] = useState<string[]>([]);
     const [showJoyride, setShowJoyride] = useState(false);
+    const [isCollecting, setIsCollecting] = useState(false);
+
     const handleNextTask = (skipped: boolean, userSolution: string[] | null) => {
         console.log('userSolution', userSolution);
         if (skipped && level && level.tasks[currentTaskIndex]) {
@@ -120,7 +123,16 @@ export function Exercise(props: IProps) {
                         }} className="bg-primary rounded-2xl h-fit w-fit p-4 hover:bg-primary-hover">Next Task →</button>
                     ) : (
                         <div>
-                            <button className="collect bg-primary rounded-2xl h-fit w-fit p-4 hover:bg-primary-hover">Collect</button>
+                            {isCollecting && (<button disabled
+                                    className="collect bg-btn-bg-disable rounded-2xl h-fit w-fit p-4">Collect</button>
+                            )}
+                            {!isCollecting && (
+                                <button className="collect bg-primary rounded-2xl h-fit w-fit p-4 hover:bg-primary-hover" onClick={() => {
+                                    setIsCollecting(true);
+                                    console.log("changed it");
+                                    console.log(isCollecting);
+                                }} >Collect</button>
+                            )}
                             <button disabled
                                     className="next-task ml-5 bg-btn-bg-disable text-btn-text-disable rounded-2xl h-fit w-fit p-4">Next
                                 Task →
@@ -131,7 +143,7 @@ export function Exercise(props: IProps) {
 
                 {level && courseService.isVisualTask(level.tasks[currentTaskIndex].type) && (
                     <div className="mt-8 overflow-hidden rounded-3xl">
-                    <AIView/>
+                        <AIView isCollecting={isCollecting} setIsCollecting={setIsCollecting}/>
                         <button className="p-4 bg-primary" onClick={() => {
                             handleUserInput('A');
                         }}>P</button>

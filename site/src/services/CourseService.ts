@@ -53,6 +53,21 @@ class CourseService {
         return visualTasks[taskType];
     }
 
+    public getPrediction(taskData: (number[])[]) {
+        fetch('http://localhost:8501/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(taskData),
+        })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        return taskData;
+    }
 }
 
 
