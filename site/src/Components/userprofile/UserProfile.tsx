@@ -33,9 +33,9 @@ export default function UserProfile(){
                     </div>
                 </div>
 
-                <div className="w-1/6 xs:w-0">
+                {/*<div className="w-1/6 xs:w-0">
                     <Recommendations/>
-                </div>
+                </div>*/}
             </div>
         </>
     )

@@ -20,7 +20,6 @@ import {Unauthorized} from "./Components/errors/Unauthorized.tsx";
 import OAuthRedirect from "./Components/auth/OAuthRedirect.tsx";
 
 
-
 function App() {
     
   return (

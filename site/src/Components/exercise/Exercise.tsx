@@ -93,7 +93,7 @@ export function Exercise(props: IProps) {
                 </div>
 
                 {level && courseService.isVisualTask(level.tasks[currentTaskIndex].type) && (
-                    <div className="mt-8 overflow-hidden rounded-3xl">
+                    <div className="mt-8 overflow-hidden rounded-3xl ">
                     <AIView/>
                         <button className="p-4 bg-primary" onClick={() => {
                             handleUserInput('A');
