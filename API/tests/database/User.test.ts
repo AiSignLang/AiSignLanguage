@@ -41,10 +41,10 @@ describe('User model', () => {
         const user = await User.create({userName: 'TestUser2'});
         expect(user.profilePic).toContain('default_pfp.webp');
     });
-    it('should not exist an user with the same name', () => {
+    it('should not exist an user with the same name',  async () => {
             try {
-                User.create({userName: 'TestUser'});
-                User.create({userName: 'TestUser'});
+                await User.create({userName: 'TestUser'});
+                await User.create({userName: 'TestUser'});
             }
             catch (e) {
                 expect(e).toBeTruthy();
