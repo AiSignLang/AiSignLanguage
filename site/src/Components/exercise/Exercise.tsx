@@ -6,6 +6,7 @@ import {ILevel} from "../../model/ILevel.ts";
 import {TaskType} from "../../model/TaskType.ts";
 import AIView from "../AIView.tsx";
 import {Alert} from "../errors/Alert.tsx";
+import Joyride from "react-joyride";
 
 interface IProps {
     // TODO: Define your props here
@@ -19,8 +20,7 @@ export function Exercise(props: IProps) {
     const [level, setLevel] = useState<ILevel | null>(null);
     const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
     const [userInput, setUserInput] = useState<string[]>([]);
-    //const navigate = useNavigate(); not used
-
+    const [showJoyride, setShowJoyride] = useState(false);
     const handleNextTask = (skipped: boolean, userSolution: string[] | null) => {
         console.log('userSolution', userSolution);
         if (skipped && level && level.tasks[currentTaskIndex]) {
@@ -35,6 +35,9 @@ export function Exercise(props: IProps) {
     const handleUserInput = (input: string) => {
         setUserInput(prevUserInput => [...prevUserInput, input]);
     }
+    const handleAlertClose = () => {
+        setShowJoyride(true);
+    };
     useEffect(() => {
         switch (type) {
             case 'next': {
@@ -57,9 +60,35 @@ export function Exercise(props: IProps) {
         //return <XnotFound subject="Task" />;
     }*/
 
+    useEffect(() => {
+        const guideCompleted = localStorage.getItem('exerciseGuideCompleted');
+    }, []);
+
+    const steps = [
+        {
+            target: '.cant-spell',
+            content: 'In case you cannot spell the word, you can skip the task.',
+        },
+        {
+            target: '.collect',
+            content: 'For each underlined world, you should click this button and after a count down, you should sign it into the camera.',
+        },
+        {
+            target: '.next-task',
+            content: "This will only unlock when you've signed all the words or made too many mistakes."
+        },
+        ];
+
     return (
         <div className="bg-bg-primary text-text-primary h-full min-h-screen w-full">
-            <Alert title={"Plug-in your device"} image={"/public/img/error/charge.gif"} width={150} height={150} description={"For an enhanced experience, we recommend connecting your device with an outlet."}/>
+            <Alert
+                title={"Plug-in your device"}
+                image={"/public/img/error/charge.gif"}
+                width={150}
+                height={150}
+                description={"For an enhanced experience, we recommend connecting your device with an outlet."}
+                onClose={handleAlertClose}
+            />
             <Navbar></Navbar>
             <div className="w-full flex flex-col items-center">
                 <div className="bg-bg-secondary rounded-2xl p-4 w-1/3 mt-20" key={level && level.tasks[currentTaskIndex].taskID}>
@@ -78,7 +107,7 @@ export function Exercise(props: IProps) {
                 </div>
                 <div className="w-1/3 flex justify-between mt-5">
                     {level && level.tasks[currentTaskIndex] && level.tasks[currentTaskIndex].type !== TaskType.RECOGNITION && ( //TODO MAYBE GENERALIZE, COULD BE ISSUE LATER
-                        <button onClick={() => {handleNextTask(true,null)}} className="hover:bg-primary-greyed-hover border-2 border-primary-greyed rounded-2xl h-fit w-fit p-4">I
+                        <button onClick={() => {handleNextTask(true,null)}} className="cant-spell hover:bg-primary-greyed-hover border-2 border-primary-greyed rounded-2xl h-fit w-fit p-4">I
                     can't {level.tasks[currentTaskIndex].type} right now.
                 </button>
                 )}
@@ -87,9 +116,14 @@ export function Exercise(props: IProps) {
                         <button onClick={() => {
                             handleNextTask(false, level.tasks[currentTaskIndex].taskData)
                         }} className="bg-primary rounded-2xl h-fit w-fit p-4 hover:bg-primary-hover">Next Task →</button>
-
                     ) : (
-                        <button disabled className="bg-btn-bg-disable text-btn-text-disable rounded-2xl h-fit w-fit p-4">Next Task →</button>
+                        <div>
+                            <button className="collect bg-primary rounded-2xl h-fit w-fit p-4 hover:bg-primary-hover">Collect</button>
+                            <button disabled
+                                    className="next-task ml-5 bg-btn-bg-disable text-btn-text-disable rounded-2xl h-fit w-fit p-4">Next
+                                Task →
+                            </button>
+                        </div>
                     )}
                 </div>
 
@@ -102,6 +136,23 @@ export function Exercise(props: IProps) {
                     </div>
                 )}
             </div>
+            {showJoyride && (
+                <Joyride
+                    steps={steps}
+                    continuous
+                    showSkipButton
+                    showProgress
+                    styles={{
+                        options: {
+                            zIndex: 10000,
+                            textColor: '#fff',
+                            backgroundColor: '#374151',
+                            primaryColor: '#d81d3f',
+                            arrowColor: '#374151',
+                        },
+                    }}
+                />
+            )}
         </div>
     );
 }

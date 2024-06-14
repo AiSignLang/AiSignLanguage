@@ -6,15 +6,15 @@ interface IProps {
     width: number,
     height: number,
     description: string,
+    onClose?: () => void
 }
 
 export function Alert(props: IProps) {
     const [visible, setVisible] = useState(true);
-
     const handleClose = () => {
         setVisible(false);
+        props.onClose && props.onClose();
     };
-
     if (!visible) {
         return null;
     }
