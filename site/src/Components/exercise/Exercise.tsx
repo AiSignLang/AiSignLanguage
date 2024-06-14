@@ -6,7 +6,7 @@ import {ILevel} from "../../model/ILevel.ts";
 import {TaskType} from "../../model/TaskType.ts";
 import AIView from "../AIView.tsx";
 import {Alert} from "../errors/Alert.tsx";
-import Joyride from "react-joyride";
+import Joyride, {CallBackProps, STATUS} from "react-joyride";
 
 interface IProps {
     // TODO: Define your props here
@@ -38,6 +38,12 @@ export function Exercise(props: IProps) {
     const handleAlertClose = () => {
         setShowJoyride(true);
     };
+    const handleNextStep = (data: CallBackProps) => {
+        const { status } = data;
+        if (status === STATUS.FINISHED || status === STATUS.SKIPPED){
+            localStorage.setItem('exerciseGuideCompleted', 'true');
+        }
+    };
     useEffect(() => {
         switch (type) {
             case 'next': {
@@ -60,10 +66,6 @@ export function Exercise(props: IProps) {
         //return <XnotFound subject="Task" />;
     }*/
 
-    useEffect(() => {
-        const guideCompleted = localStorage.getItem('exerciseGuideCompleted');
-    }, []);
-
     const steps = [
         {
             target: '.cant-spell',
@@ -71,11 +73,11 @@ export function Exercise(props: IProps) {
         },
         {
             target: '.collect',
-            content: 'For each underlined world, you should click this button and after a count down, you should sign it into the camera.',
+            content: 'For each underlined word, click this button. After a countdown, sign the word. 👋📸.',
         },
         {
             target: '.next-task',
-            content: "This will only unlock when you've signed all the words or made too many mistakes."
+            content: "This will only unlock 🔓 when you've signed all the words or made too many mistakes ❌."
         },
         ];
 
@@ -136,12 +138,22 @@ export function Exercise(props: IProps) {
                     </div>
                 )}
             </div>
-            {showJoyride && (
+            {showJoyride && localStorage.getItem('exerciseGuideCompleted') !== 'true' && (
                 <Joyride
                     steps={steps}
                     continuous
                     showSkipButton
+                    spotlightClicks={false}
+                    disableOverlayClose={true}
                     showProgress
+                    locale={{
+                        back: 'Back',
+                        close: 'Close',
+                        last: 'Finish',
+                        next: 'Next',
+                        skip: 'Close and don\'t show this again',
+                    }}
+                    callback={handleNextStep}
                     styles={{
                         options: {
                             zIndex: 10000,
@@ -149,6 +161,7 @@ export function Exercise(props: IProps) {
                             backgroundColor: '#374151',
                             primaryColor: '#d81d3f',
                             arrowColor: '#374151',
+                            beaconSize: 50,
                         },
                     }}
                 />
