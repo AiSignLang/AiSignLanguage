@@ -1,7 +1,7 @@
 
 
 import request from "supertest";
-import {app} from "../../src/app";
+import {app, server} from "../../src/app";
 import {Authorize} from "../../src/middleware/authorization-middleware";
 import User from "../../src/data/models/User";
 import {createUser} from "../../src/services/user-service";
@@ -17,8 +17,12 @@ const nullValue = null;
 const undefinedValue = undefined;
 afterAll(async()=>{
     await sequelize.close();
+    server.close();
 });
-
+beforeAll(async () => {
+    await User.destroy({where: {}});
+    await sequelize.sync({force: true});
+});
 beforeEach(async()=>{
     await User.destroy({where: {}});
     await sequelize.sync({force: true});

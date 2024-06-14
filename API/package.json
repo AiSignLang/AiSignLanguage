@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx ./src/app.ts --watch",
     "start": "tsx ./src/app.ts",
-    "test": "bash ./tests/run-tests.sh"
+    "test": "jest --detectOpenHandles --forceExit --maxWorkers=1"
   },
   "author": "",
   "license": "ISC",

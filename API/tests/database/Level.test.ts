@@ -1,6 +1,12 @@
 ﻿import Level from "../../src/data/models/Level";
 import Task from "../../src/data/models/Task";
+import User from "../../src/data/models/User";
+import sequelize from "./database.mock";
 
+beforeAll(async () => {
+    await Level.destroy({where: {}});
+    await sequelize.sync({force: true});
+});
 describe('Level model', () => {
     it('should create and retrieve a level', async () => {
         const createdLevel = await Level.create({

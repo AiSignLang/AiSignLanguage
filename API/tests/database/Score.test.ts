@@ -2,6 +2,11 @@
 import User from "../../src/data/models/User";
 import sequelize from "./database.mock";
 
+beforeAll(async () => {
+    await User.destroy({where: {}});
+    await Score.destroy({where: {}});
+    await sequelize.sync({force: true});
+});
 describe('Score model', () => {
     let user;
     beforeAll(async () => {

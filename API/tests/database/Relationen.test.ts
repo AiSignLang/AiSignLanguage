@@ -4,7 +4,13 @@ import Level from '../../src/data/models/Level';
 import Friendship from '../../src/data/models/Friendship';
 import Mistake from "../../src/data/models/Mistake";
 import Task from "../../src/data/models/Task";
+import sequelize from "./database.mock";
 
+
+beforeAll(async () => {
+    await User.destroy({where: {}});
+    await sequelize.sync({force: true});
+});
 describe('Database relations', () => {
     it('User should have a Score', async () => {
         const user = await User.create({userName: 'TestUser'});

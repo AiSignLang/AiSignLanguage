@@ -6,12 +6,10 @@ import * as path from "node:path";
 import fsSync from "fs";
 import {getAvatarPath, getUserPath} from "../../src/Utils";
 import * as authMiddleware from "../../src/middleware/authorization-middleware";
-import {JS_EXT_TO_TREAT_AS_ESM} from "ts-jest";
 import express, {NextFunction} from "express";
-import sequelize from "../database/database.mock";
+import "../database/database.mock";
 
 const routePath = '/api/user';
-
 
 
 beforeEach(async()=>{

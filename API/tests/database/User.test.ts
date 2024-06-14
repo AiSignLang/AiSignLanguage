@@ -1,6 +1,11 @@
 ﻿import User from '../../src/data/models/User';
 import Score from '../../src/data/models/Score';
+import sequelize from "./database.mock";
 
+beforeAll(async () => {
+    await User.destroy({where: {}});
+    await sequelize.sync({force: true});
+});
 describe('User model', () => {
     
 

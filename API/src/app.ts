@@ -43,7 +43,9 @@ sequelize.sync({force:true}).then(async () => {
 });*/
 
 
-app.listen(config.port, () => {
+const server = app.listen(config.port, () => {
     console.log(`Server is running at ${config.address}`);
     console.log(`External Server is running at ${config.externalAddress}`);
 });
+
+export { server};
