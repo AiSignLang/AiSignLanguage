@@ -11,12 +11,14 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:latest
+FROM nginx:latest as production
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/build /usr/share/nginx/html
 
-COPY --from=build /app/dist /usr/share/nginx/html
 
-EXPOSE 80
+COPY nginx.conf /etc/nginx/conf.d/ASL-Project.conf
+RUN dos2unix /etc/nginx/conf.d/ASL-Project.conf
+
+EXPOSE 7859
 
 CMD ["nginx", "-g", "daemon off;"]

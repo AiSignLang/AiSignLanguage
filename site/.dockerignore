@@ -1,0 +1,10 @@
+﻿# .dockerignore
+node_modules
+coverage
+tests
+jest.config.ts
+requests.http
+.idea
+build
+dist
+
