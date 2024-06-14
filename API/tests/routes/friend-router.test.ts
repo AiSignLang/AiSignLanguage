@@ -15,10 +15,14 @@ const usernameShort = 'a';
 const userNameLong = 'this name is way too long to be valid username';
 const nullValue = null;
 const undefinedValue = undefined;
+afterAll(async()=>{
+    await sequelize.close();
+});
 
 beforeEach(async()=>{
     await User.destroy({where: {}});
     await sequelize.sync({force: true});
+    
 })
 afterEach(async()=>{
     await User.destroy({where: {}});
