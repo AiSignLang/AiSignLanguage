@@ -1,6 +1,11 @@
 ﻿import User from '../../src/data/models/User';
 import Score from '../../src/data/models/Score';
+import sequelize from "./database.mock";
 
+beforeAll(async () => {
+    await User.destroy({where: {}});
+    await sequelize.sync({force: true});
+});
 describe('User model', () => {
     
 
@@ -13,7 +18,13 @@ describe('User model', () => {
         }
     });
     it('should have a score', async () => {
-        const user = await User.create({userName: 'TestUser'});
+        let user;
+        user = await User.findOne({where: {userName: 'TestUser'}});
+        if (user === null) {
+            user = await User.create({userName: 'TestUser'});
+        }
+        expect(user).toBeDefined();
+        
         const score = await Score.create({dailyStreak: 5, allTimeCorrect: 10, perfectlyDone: 2, ownerId: user.userId});
         user.score = score;
         await user.save()
@@ -30,10 +41,10 @@ describe('User model', () => {
         const user = await User.create({userName: 'TestUser2'});
         expect(user.profilePic).toContain('default_pfp.webp');
     });
-    it('should not exist an user with the same name', () => {
+    it('should not exist an user with the same name',  async () => {
             try {
-                User.create({userName: 'TestUser'});
-                User.create({userName: 'TestUser'});
+                await User.create({userName: 'TestUser'});
+                await User.create({userName: 'TestUser'});
             }
             catch (e) {
                 expect(e).toBeTruthy();

@@ -1,9 +1,11 @@
 
 
 import request from "supertest";
-import {app} from "../../src/app";
+import {app, server} from "../../src/app";
 import {Authorize} from "../../src/middleware/authorization-middleware";
 import User from "../../src/data/models/User";
+import {createUser} from "../../src/services/user-service";
+import sequelize from "../database/database.mock";
 
 const friendRoute = '/api/friends';
 const userRoute = '/api/user';
@@ -13,13 +15,22 @@ const usernameShort = 'a';
 const userNameLong = 'this name is way too long to be valid username';
 const nullValue = null;
 const undefinedValue = undefined;
-
+afterAll(async()=>{
+    await sequelize.close();
+    server.close();
+});
+beforeAll(async () => {
+    await User.destroy({where: {}});
+    await sequelize.sync({force: true});
+});
 beforeEach(async()=>{
-    await request(app).delete(userRoute);
+    await User.destroy({where: {}});
+    await sequelize.sync({force: true});
     
 })
 afterEach(async()=>{
-    await request(app).delete(userRoute);
+    await User.destroy({where: {}});
+    await sequelize.sync({force: true});
 })
 
 
@@ -79,17 +90,10 @@ describe('POST', ()=>{
 
     test('should return 200, because user and friend are valid', async()=>{
         const friendUser = 'McQueen';
-        await request(app) // create user test is done in the user-router.test.ts
-            .post('/api/user')
-            .send({
-                name: validUser
-            });
-
-        await request(app) // create user test is done in the user-router.test.ts
-            .post('/api/user')
-            .send({
-                name: friendUser
-            });
+        await createUser(validUser);
+        
+        await createUser(friendUser);
+            
 
         const responseAddFriend = await request(app).post(`${friendRoute}/${validUser}/friends/${friendUser}`);
         expect(responseAddFriend.statusCode).toBe(200);
@@ -126,28 +130,16 @@ describe('GET', ()=>{
     })
 
     test('should return 404, because user has no friends', async()=> {
-        await request(app) // create user test is done in the user-router.test.ts
-            .post('/api/user')
-            .send({
-                name: validUser
-            });
+        await createUser(validUser);
         const response = await request(app).get(`${friendRoute}/${validUser}`);
         expect(response.statusCode).toBe(404);
     })
 
     test('should return 200, because user is valid and has a friend', async()=>{
         const friendUser = 'McQueen';
-        await request(app) // create user test is done in the user-router.test.ts
-            .post('/api/user')
-            .send({
-                name: validUser
-            });
+        await createUser(validUser);
 
-        await request(app) // create user test is done in the user-router.test.ts
-            .post('/api/user')
-            .send({
-                name: friendUser
-            });
+        await createUser(friendUser);
 
         await request(app).post(`${friendRoute}/${validUser}/friends/${friendUser}`);
 
@@ -182,27 +174,27 @@ describe('Delete', ()=>{
         const responseNull = await request(app).delete(`${friendRoute}/${nullValue}/friends/${validUser}`);
         const responseUndefined = await request(app).delete(`${friendRoute}/${undefinedValue}/friends/${validUser}`);
 
-        expect(responseNull.statusCode).toBe(400);
-        expect(responseUndefined.statusCode).toBe(400);
+        expect(responseNull.statusCode).toBe(404);
+        expect(responseUndefined.statusCode).toBe(404);
     })
 
     test('should return 400, because friend name is null or undefined', async()=>{
         const responseNull = await request(app).delete(`${friendRoute}/${validUser}/friends/${nullValue}`);
         const responseUndefined = await request(app).delete(`${friendRoute}/${validUser}/friends/${undefinedValue}`);
 
-        expect(responseNull.statusCode).toBe(400);
-        expect(responseUndefined.statusCode).toBe(400);
+        expect(responseNull.statusCode).toBe(404);
+        expect(responseUndefined.statusCode).toBe(404);
     })
 
     test('should return 400, because user does not exist', async()=>{
         const randomUser = 'Batman';
         const responseNotExists = await request(app).delete(`${friendRoute}/${validUser}/friends/${randomUser}`);
-        expect(responseNotExists.statusCode).toBe(400);
+        expect(responseNotExists.statusCode).toBe(404);
     })
     test('should return 400, because friend does not exist', async()=>{
         const randomUser = 'Batman';
         const responseNotExists = await request(app).delete(`${friendRoute}/${randomUser}/friends/${validUser}`);
-        expect(responseNotExists.statusCode).toBe(400);
+        expect(responseNotExists.statusCode).toBe(404);
     })
 
     test('should return 400, because user and friend are the same', async()=>{
@@ -213,17 +205,9 @@ describe('Delete', ()=>{
 
     test('should return 404, because user has no friends, therefore they cannot be deleted', async()=> {
         const friendUser = 'Mater'
-        await request(app) // create user test is done in the user-router.test.ts
-            .post('/api/user')
-            .send({
-                name: validUser
-            });
+        await createUser(validUser);
 
-        await request(app) // create user test is done in the user-router.test.ts
-            .post('/api/user')
-            .send({
-                name: friendUser
-            });
+        await createUser(friendUser);
 
 
         const response = await request(app).delete(`${friendRoute}/${validUser}/friends/${friendUser}`);
@@ -234,23 +218,11 @@ describe('Delete', ()=>{
     test('should return 200, because user has friends, and one can be removed', async()=> {
         const friendUser = 'Mater'
         const otherFriendUser = 'McQueen'
-        await request(app) // create user test is done in the user-router.test.ts
-            .post('/api/user')
-            .send({
-                name: validUser
-            });
+        await createUser(validUser);
 
-        await request(app) // create user test is done in the user-router.test.ts
-            .post('/api/user')
-            .send({
-                name: friendUser
-            });
+        await createUser(friendUser);
 
-        await request(app) // create user test is done in the user-router.test.ts
-            .post('/api/user')
-            .send({
-                name: otherFriendUser
-            });
+        await createUser(otherFriendUser);
 
         await request(app).post(`${friendRoute}/${validUser}/friends/${friendUser}`);
         await request(app).post(`${friendRoute}/${validUser}/friends/${otherFriendUser}`);

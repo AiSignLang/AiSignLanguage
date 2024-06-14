@@ -45,9 +45,11 @@ userRouter.get("/me", async (req: any, res) => {
 
 userRouter.get("/:username", async (req: any, res) => {
     if (!req.user){
+        console.log(req.user);
         return res.status(StatusCodes.UNAUTHORIZED).send('Unauthorized');
     }
     if (req.user.userName !== req.params.username){
+        console.log(req.user);
         return res.status(StatusCodes.UNAUTHORIZED).send('Unauthorized');
     }
     const username = req.params.username;
@@ -102,6 +104,7 @@ const upload = multer(
 
 userRouter.post("/",async (req,res)=>{
     const newUser = await createUser(req.body.username)
+    
     if(newUser.status === StatusCodes.CREATED){
         res.status(newUser.status).json(newUser.data);
     }else {

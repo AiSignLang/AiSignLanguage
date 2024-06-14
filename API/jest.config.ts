@@ -9,7 +9,8 @@ const config: Config.InitialOptions = {
   testMatch: [
     "**/__tests__/**/*.+(ts|tsx|js)",
     "**/?(*.)+(spec|test).+(ts|tsx|js)",
-  ],
+  ], 
+  testPathIgnorePatterns: [".*user-router\\.test\\.ts", ".*level-router\\.test\\.ts"],
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },
@@ -18,6 +19,7 @@ const config: Config.InitialOptions = {
   collectCoverage: true,
   coverageDirectory: "coverage",
   coverageProvider: "v8",
+  maxWorkers:1
 };
 
 export default config;

@@ -2,10 +2,18 @@
 import User from "../../src/data/models/User";
 import sequelize from "./database.mock";
 
+beforeAll(async () => {
+    await User.destroy({where: {}});
+    await Score.destroy({where: {}});
+    await sequelize.sync({force: true});
+});
 describe('Score model', () => {
     let user;
     beforeAll(async () => {
-        user = await User.create({userName: 'TestUser'});
+        user = await User.findOne({where: {userName: 'TestUser'}});
+        if (user === null){
+            user = await User.create({userName: 'TestUser'});
+        }
         expect(user).toBeDefined();
     });
 
