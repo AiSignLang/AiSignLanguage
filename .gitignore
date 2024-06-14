@@ -5,6 +5,7 @@ SavedModels/*.keras
 SavedModels/*.npy
 **/.idea/
 
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -358,11 +359,13 @@ fabric.properties
 
 ### react ###
 .DS_*
+
 logs
 **/*.backup.*
 **/*.back.*
 /API/coverage/
 /API/node_modules/*
+
 node_modules
 bower_components
 
