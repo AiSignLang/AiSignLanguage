@@ -8,15 +8,16 @@ import googleAuthRouter from "./routes/auth/google-auth-router";
 import * as fs from "node:fs";
 import config from "./config";
 
+import cors from "cors";
 export const app = express();
 
 app.use(config.staticEndpoint,express.static("public"));
 app.use(express.json());
+app.use(cors());
 
 app.use("/api/user", userRouter);
 app.use("/api/friends", friendRouter);
 app.use("/auth/google-auth/", googleAuthRouter);
-
 if (!fs.existsSync(path.join(__dirname, '../data/db.sqlite3'))) {
     sequelize.sync({force: true}).then(async () => {
         console.log('Database synchronized');
