@@ -1,5 +1,4 @@
-import {IFriend} from "../model/props.ts";
-import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
+import {IFriend, IUser} from "../model/props.ts";
 //import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
 
 class FriendService{
@@ -83,19 +82,15 @@ class FriendService{
     }
 
     public async getFriends(){
-        //const response = await fetchRestEndpoint('http://localhost:3000/friends',"GET");
-        //
-        // return response.json();
-        let friends: IFriend[] = [];
-        const username = sessionStorage.getItem('username');
-        const data: IUser[] | undefined = await fetchRestEndpoint(`http://localhost:5000/api/friends/${username}`,"GET")
-        if(data === undefined){
-            return friends;
+        const sessionUser = sessionStorage.getItem('user');
+        if(!sessionUser){
+            return []; //! TODO Renaviagte to login
         }
-        return this.mapUsersToFriends(data);
+       const users: IUser[] = JSON.parse(sessionUser).friends;
+        return users;
     }
 
-    private mapUsersToFriends(users: IUser[]): IFriend[] {
+    /*private mapUsersToFriends(users: IUser[]): IFriend[] {
         return users.map(user => ({
             friendID: parseInt(user.userId),
             name: user.userName,
@@ -108,6 +103,7 @@ class FriendService{
             profilePath: user.profilePic,
         }));
     }
+     */
 }
 
 

@@ -29,7 +29,7 @@ export default function UserProfile(){
                 <div className="w-1/2 flex c-md:w-4/6 xs:w-full h-fit mr-10">
                     <div className="w-full bg-bg-secondary rounded-3xl p-10">
                         <User username={sessionStorage.getItem("username")??"John Doe" }/>
-                        <Friends/>
+                        <Friends />
                     </div>
                 </div>
 

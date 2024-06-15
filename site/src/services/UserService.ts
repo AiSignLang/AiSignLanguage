@@ -20,6 +20,7 @@ class UserService{
             });
             if (user) {
                 console.log(user);
+                sessionStorage.setItem('user', JSON.stringify(user));
                 return user;
             }
             return null;

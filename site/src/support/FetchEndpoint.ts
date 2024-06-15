@@ -5,7 +5,8 @@ export async function fetchRestEndpoint<t>(route: string, method: "GET" |"POST" 
  //   console.log('auth', auth);
     options.headers = {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${auth}`
+        "Authorization": `Bearer ${auth}`,
+        "Access-Control-Allow-Origin": "*"
     };
     if (data) {
         options.body = JSON.stringify(data);
