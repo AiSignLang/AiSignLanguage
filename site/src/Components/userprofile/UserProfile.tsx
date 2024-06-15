@@ -13,23 +13,23 @@ export default function UserProfile(){
     const steps = [
         {
             target: '#streak',
-            content: 'This is your streak. Don\'t break it!',
+            content: 'This is your streak 🔥. Don\'t break it!',
         },
         {
             target: '#tasksDone',
-            content: 'This is the number of tasks you have completed. Ever!',
+            content: 'This is the number of tasks you have completed 📚. Ever!',
         },
         {
             target: '#perfectTasks',
-            content: 'These are the tasks you did without mistakes. Keep it up!',
+            content: 'These are the tasks you did without mistakes 💫. Keep it up!',
         },
         {
             target: '#friends',
-            content: 'These are your friends. Healthy competition never hurt anyone.',
+            content: 'These are your friends. Healthy competition never hurt anyone 👀.',
         },
         {
             target: '#recommendations',
-            content: 'Why not make some more friends? These may be friends of friends or total strangers, you never know...'
+            content: 'Why not make some more friends? These may be friends of friends or total strangers, you never know...🧐'
         },
     ];
     const handleNextStep = (data: CallBackProps) => {

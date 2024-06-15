@@ -3,11 +3,15 @@ import {friendService} from "../../services/FriendService.ts";
 import React from "react";
 
 export class Recommendations extends React.Component {
-    private suggestions: IUser[] = [];
+    state = {
+        suggestions: [] as IUser[],
+    };
+
 
     componentDidMount() {
         friendService.getSuggestions().then((suggestions) => {
-            this.suggestions = suggestions;
+            console.log("Got them")
+            this.setState({suggestions: suggestions});
         });
     }
 
@@ -17,7 +21,7 @@ export class Recommendations extends React.Component {
             <div className="flex flex-col w-full  bg-bg-secondary rounded-3xl p-7">
                 <h1 className="text-xl font-bold mb-5 text-center">Friend suggestions</h1>
                 <ul>
-                    {this.suggestions.map((friends: IUser) => (
+                    {this.state.suggestions.map((friends: IUser) => (
                         <li key={friends.userId}
                             className="text-gray-300 flex justify-between items-center mb-7">
                             <div className="flex items-center">
@@ -29,7 +33,7 @@ export class Recommendations extends React.Component {
                                 </div>
                             </div>
                             <button className="bg-primary text-text-primary font-bold h-fit flex items-center p-2 rounded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white"
                                      className="bi bi-person-plus-fill mr-2" viewBox="0 0 16 16">
                                     <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
                                     <path fillRule="evenodd"
