@@ -57,7 +57,7 @@ export default function User(props: IProps){
                         <h1 className="text-4xl px-15">{user ? user.userName:"????"}</h1>
 
                         <div className="flex justify-between gap-10">
-                            <span className=" text-xl flex items-center">
+                            <span id="streak" className="text-xl flex items-center">
                                 {user?user.score.dailyStreak:"??"}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="orange"
                                      className="bi bi-fire ml-2"
@@ -66,7 +66,7 @@ export default function User(props: IProps){
                                         d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16m0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15"/>
                                 </svg>
                             </span>
-                            <span className=" text-xl flex items-center">
+                            <span id="tasksDone" className="text-xl flex items-center">
                                 {user?user.score.allTimeCorrect:"??"}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="green"
                                      className="bi bi-check-all ml-2" viewBox="0 0 16 16">
@@ -74,7 +74,7 @@ export default function User(props: IProps){
                                     d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486z"/>
                                 </svg>
                             </span>
-                            <span className=" text-xl flex items-center">
+                            <span id="perfectTasks" className=" text-xl flex items-center">
                                 {user?user.score.perfectlyDone:"??"}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="yellow"
                                      className="bi bi-star-fill ml-2" viewBox="0 0 16 16">
