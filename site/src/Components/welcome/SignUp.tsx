@@ -3,22 +3,17 @@ import EmailPassword from "./sign-up/EmailPassword.tsx";
 import OtherAuth from "./sign-up/OtherAuth.tsx";
 import {useEffect, useState} from "react";
 import UploadForm from "./sign-up/UploadForm.tsx";
+import EnterUsername from "./sign-up/EnterUsername.tsx";
 
 interface IProps {
     // TODO: Define your props here
 }
 
 export function SignUp(props: IProps) {
-    console.log("SignUp props", props);
-
     const [progressStep, setProgressStep] = useState<number>(1);
 
     const changeStep = (step: number)=>{
-        console.log("this method got called from the child component")
         setProgressStep(step);
-
-        console.log("Progress step got updated: " + step);
-
     }
     return (
         <div className="min-h-screen bg-bg-primary flex items-center justify-center">
@@ -28,17 +23,24 @@ export function SignUp(props: IProps) {
 
                 <ProgressBar progressStep={progressStep} changeStep={changeStep} />
 
-                {progressStep === 1 && <>
-                    <EmailPassword changeStep={changeStep}/>
-                    <OtherAuth/>
-                </>}
-
-
-
+                {progressStep === 1 &&
+                    <>
+                        <EmailPassword changeStep={changeStep}/>
+                        <OtherAuth/>
+                    </>
+                }
 
                 {
-                    progressStep === 2 && <>
+                    progressStep === 2 &&
+                    <>
                         <UploadForm changeStep={changeStep}/>
+                    </>
+                }
+
+                {
+                    progressStep === 3 &&
+                    <>
+                        <EnterUsername/>
                     </>
                 }
 

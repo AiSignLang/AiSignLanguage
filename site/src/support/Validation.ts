@@ -1,9 +1,13 @@
+import {userService} from "../services/UserService.ts";
+
 export enum ValidationErrors {
     TOO_SHORT,
     CHAR_NOT_CONTAINED,
     NUMBER_NOT_CONTAINED,
+    TOO_LONG,
+    ALREADY_IN_USE,
+    USERNAME_TOO_SHORT
 }
-
 
 export const validatePassword = (password: string): ValidationErrors[] => {
     const errors: ValidationErrors[] = [];
@@ -19,15 +23,39 @@ export const validatePassword = (password: string): ValidationErrors[] => {
     return errors;
 }
 
+export const validateUsername = async (username: string)=>{
+    const errors: ValidationErrors[] = [];
+    const user = await userService.getUser(username);
+    if(username.length === 20){
+        errors.push(ValidationErrors.TOO_LONG);
+    }
+
+    if(username.length < 1){
+        errors.push(ValidationErrors.USERNAME_TOO_SHORT);
+    }
+
+    if(user){
+        errors.push(ValidationErrors.ALREADY_IN_USE);
+    }
+
+    return errors;
+}
+
 export const replaceValue = (enumValue: ValidationErrors) =>{
 
     switch (enumValue){
         case ValidationErrors.TOO_SHORT:
-            return "Password needs at least 8 characters"
+            return "Password/Username needs at least 8 characters"
+        case ValidationErrors.USERNAME_TOO_SHORT:
+            return "Username is too short (at least a character needed)"
         case ValidationErrors.CHAR_NOT_CONTAINED:
-            return "Password must contain a character"
+            return "Password/Username must contain a character"
         case ValidationErrors.NUMBER_NOT_CONTAINED:
-            return "Password must contain a number"
+            return "Password/Username must contain a number"
+        case ValidationErrors.TOO_LONG:
+            return "Password/Username is too long (max. 20 chars)"
+        case ValidationErrors.ALREADY_IN_USE:
+            return "Password/Username is already in use/chose another name"
         default:
             return "Unknown error"
     }
