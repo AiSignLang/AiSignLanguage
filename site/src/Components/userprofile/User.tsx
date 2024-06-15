@@ -40,7 +40,8 @@ export default function User(props: IProps){
                 */}
                 <div className="flex items-center flex-wrap justify-center">
                     <img
-                        className="inline-block h-fit w-fit min-h-[15rem] min-w-[15rem] rounded-full ring-2 ring-white
+                        width="10"
+                        className="inline-block  min-h-[15rem] min-w-[15rem] rounded-full ring-2 ring-white
                     md:col-start-1 md:col-end-4 md:row-start-1
                     xs:col-start-1 xs:col-end-4 xs:row-start-1
                     "
