@@ -2,7 +2,7 @@ import {StatusCodes} from "http-status-codes";
 export async function fetchRestEndpoint<t>(route: string, method: "GET" |"POST" |"PUT" |"DELETE", data?: object,onError?:(code:StatusCodes)=>void): Promise<t|undefined> {
     const options:RequestInit = { method };
     const auth = sessionStorage.getItem('id_token');
-    console.log('auth', auth);
+ //   console.log('auth', auth);
     options.headers = {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${auth}`
