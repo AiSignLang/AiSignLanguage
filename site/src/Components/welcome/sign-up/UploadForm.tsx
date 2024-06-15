@@ -1,20 +1,14 @@
-/*
-  This example requires some changes to your config:
 
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { PhotoIcon } from '@heroicons/react/24/solid'
+import React from "react";
 
-export default function UploadForm() {
+interface IProps {
+    // TODO: Define your props here
+    //sendData: (email: string, password: string) => void;
+    changeStep: (step: number)=> void;
+}
+
+export default function UploadForm(prop: IProps) {
     return (
         <div>
             <form className="container mx-auto text-blueGray-500 border border-gray-500">
@@ -31,7 +25,8 @@ export default function UploadForm() {
                                 className="relative cursor-pointer rounded-md bg-bg-secondary font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                             >
                                 <span>Upload a file</span>
-                                <input id="file-upload" name="file-upload" type="file" className="sr-only"/>
+                                <input id="file-upload" name="file-upload" type="file" className="sr-only"
+                                       accept="image/*"/>
                             </label>
                             <p className="pl-1">or drag and drop</p>
                         </div>
@@ -40,6 +35,28 @@ export default function UploadForm() {
                 </div>
             </form>
 
+            <button onClick={(event) => {
+                console.log("clicked")
+                prop.changeStep(1);
+                // TODO: store it in localstorage or in another component
+
+
+            }} type="submit"
+                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm
+                    text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none
+                    focus:ring-2 focus:ring-offset-2 focus:ring-primary">Back
+            </button>
+            <button onClick={(event) => {
+                console.log("clicked")
+                prop.changeStep(3);
+                // TODO: store it in localstorage or in another component
+
+
+            }} type="submit"
+                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm
+                    text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none
+                    focus:ring-2 focus:ring-offset-2 focus:ring-primary">Next
+            </button>
         </div>
     )
 }

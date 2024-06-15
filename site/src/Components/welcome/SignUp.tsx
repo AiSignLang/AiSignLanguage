@@ -2,6 +2,7 @@ import ProgressBar from "./sign-up/ProgressBar.tsx";
 import EmailPassword from "./sign-up/EmailPassword.tsx";
 import OtherAuth from "./sign-up/OtherAuth.tsx";
 import {useEffect, useState} from "react";
+import UploadForm from "./sign-up/UploadForm.tsx";
 
 interface IProps {
     // TODO: Define your props here
@@ -18,7 +19,6 @@ export function SignUp(props: IProps) {
 
         console.log("Progress step got updated: " + step);
 
-
     }
     return (
         <div className="min-h-screen bg-bg-primary flex items-center justify-center">
@@ -27,10 +27,20 @@ export function SignUp(props: IProps) {
 
 
                 <ProgressBar progressStep={progressStep} changeStep={changeStep} />
+
                 {progressStep === 1 && <>
                     <EmailPassword changeStep={changeStep}/>
                     <OtherAuth/>
                 </>}
+
+
+
+
+                {
+                    progressStep === 2 && <>
+                        <UploadForm changeStep={changeStep}/>
+                    </>
+                }
 
             </div>
 
