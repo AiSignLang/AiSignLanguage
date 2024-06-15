@@ -1,11 +1,12 @@
 import React from "react";
 import {friendService} from "../../services/FriendService.ts";
 
-// TODO: Service provides data to this constant
 export default class Friends extends React.Component {
     private people: IUser[] = [];
     componentDidMount() {
         friendService.getFriends().then((data) => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             this.people = data;
         });
     }
