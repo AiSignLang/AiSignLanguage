@@ -14,35 +14,51 @@ export default function EmailPassword(prop: IProps) {
     const [passwordErrors, setPasswordErrors] = useState([] as ValidationErrors[]);
 
     useEffect(() => {
-        const storedPassword = localStorage.getItem("password") || '';
-        const storedEmail = localStorage.getItem("email") || '';
-        setPassword(storedPassword);
+        const storedPassword = sessionStorage.getItem("password") || '';
+        const storedEmail = sessionStorage.getItem("email") || '';
+        //setPassword(storedPassword);
+        console.log(storedPassword);
         setCachePassword(storedPassword);
-        setEmail(storedEmail);
+        //setEmail(storedEmail);// TODO: might be a bug, when I directly set it to the email and password state, but also not? how exactly do I fix this ???
         setCacheEmail(storedEmail);
         }, []);
 
-    const passwordValidation = (event: React.ChangeEvent<HTMLInputElement>) => {
+    useEffect(() => {
+        console.log("hm");
+        console.log("password got set: " + password);
 
-        const possibleErrors: ValidationErrors[] = validatePassword(event.target.value);
+    }, [password]);
+
+    const passwordValidation = (event: React.ChangeEvent<HTMLInputElement> | string) => {
+
+        console.log("password validation should be the cached password: "+event);
+        const typedPassword = typeof event === "string" ? event : event.target.value;
+        const possibleErrors: ValidationErrors[] = validatePassword(typedPassword);
 
         setPasswordErrors(possibleErrors)
-        setCachePassword(event.target.value);
+        setCachePassword(typedPassword);
         if(possibleErrors.length === 0){
-            setPassword(event.target.value); // TODO: store it in the backend, more secure
+            console.log("password about to be setted: " + typedPassword);
+            setPassword(typedPassword); // TODO: state bug: the current password is the same as typed password. typedPassword gets printed out. After that I set it with setPassword. After that I want to print password, but nothing appears. why?
+            console.log("password got set: " + password);
         }
     }
 
-    const emailClick = (event: React.ChangeEvent<HTMLInputElement>)=>{
+    const emailClick = (event: React.ChangeEvent<HTMLInputElement> | string)=>{
         // TODO: some email checks here later, ig , can add them here, but rn just able to enter any email , valid email, can store it in the back end
-        setCacheEmail(event.target.value);
-        setEmail(event.target.value);
+        const typedEmail = typeof event === "string" ? event : event.target.value;
+
+        setCacheEmail(typedEmail);
+        setEmail(typedEmail);
     }
     const submitCorrect = (): boolean =>{
+        console.log("email: " + email + " password: " + password);
+        console.log("chache email: " + cacheEmail + " cache password: " + cachePassword);
+
         if(email.length !== 0 && password.length !== 0){
             // TODO: values valid, should not send yet!
-            localStorage.setItem("email", email);
-            localStorage.setItem("password", password);
+            sessionStorage.setItem("email", cacheEmail);
+            sessionStorage.setItem("password", cachePassword);
             console.log(email + " " + password);
             console.log("password is valid")
             return true;
@@ -77,12 +93,19 @@ export default function EmailPassword(prop: IProps) {
             </div>
 
             <button onClick={(event) => {
+                event.preventDefault();
+                console.log("on buttom submit plus cachedPass: "+cachePassword);
+                console.log("on buttom submit plus cachedEmail: "+cacheEmail);
+                emailClick(cacheEmail);
+                passwordValidation(cachePassword);
+                // TODO: the bug mentioned above, if you come back after all values are correct, and then want to go to step 2 again, it will say that is wrong
                 if(submitCorrect()) {
                     event.preventDefault();
                     console.log("values are correct");
                     prop.changeStep(2);
+                    return;
                 }
-                // TODO: store it in localstorage or in another component
+                // TODO: state update issue: when I click the submit button, the state gets updated async. But that way, I get an error message, but if I click it again (now it finally loaded) then it works, how can I fix this?
             }} type="submit"
                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm
                     text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none

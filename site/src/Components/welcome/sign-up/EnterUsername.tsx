@@ -13,9 +13,10 @@ export default function EnterUsername(){
     const [cacheUsername, setCacheUsername] = useState('');
     const [usernameErrors, setUsernameErrors] = useState([] as ValidationErrors[]);
     useEffect(() => {
-        const storedUsername = localStorage.getItem("username") || '';
+        const storedUsername = sessionStorage.getItem("username") || '';
+        console.log(storedUsername);
         setCacheUsername(storedUsername);
-        setUsername(storedUsername);
+        setUsername(storedUsername); // TODO: might be a bug, when  I set it directly to the username
     }, []);
 
     const usernameValidation = (event: React.ChangeEvent<HTMLInputElement>)=>{
@@ -28,7 +29,10 @@ export default function EnterUsername(){
             setUsernameErrors(possibleErrors);
             setCacheUsername(typedUsername);
 
+            sessionStorage.setItem("username", typedUsername);
+
             if(possibleErrors.length === 0){
+                console.log("username in validation block: "+typedUsername);
                 setUsername(typedUsername);
             }
         })();
@@ -65,7 +69,9 @@ export default function EnterUsername(){
             <button onClick={() => {
                 usernameValidation(null as unknown as React.ChangeEvent<HTMLInputElement>);
 
-                // TODO: store it in localstorage or in another component
+
+
+                // TODO: call to backend to create a new user with all its properties
             }} type="submit"
                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm
                     text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none
