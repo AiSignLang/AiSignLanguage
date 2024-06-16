@@ -4,6 +4,7 @@ import React,{useEffect, useRef, useState} from "react";
 import {drawConnectors, drawLandmarks} from "@mediapipe/drawing_utils";
 import {FACEMESH_TESSELATION, HAND_CONNECTIONS, Holistic, POSE_CONNECTIONS, Results} from "@mediapipe/holistic";
 import {courseService} from "../services/CourseService.ts";
+import holistic from "../workers/Statics.ts";
 
 interface IProps {
     isCollecting: boolean;
@@ -184,7 +185,7 @@ export function AIView(props: IProps) {
                 <video autoPlay ref={(el) => {
                     videoRef.current = el;
                     setInputVideoReady(!!el);
-                }} className={`${loaded ? 'hidden' : 'opacity-55'} transform scale-x-[-1]`}>
+                }} className={`${loaded ? 'hidden' : 'opacity-55'} transform scale-x-[-1] `}>
                 </video>
                 <canvas className={`scale-x-[-1] absolute transform left-0 top-0 bg-transparent ${loaded?'':'hidden'}`} ref={canvasRef}
                         width={videoRef.current?.videoWidth ?? VideoWidth}
