@@ -84,6 +84,10 @@ class User extends Model {
     
     @BelongsToMany(()=>Level,()=>UserLevel)
     declare levels: Level[]
+
+    equals(other: this): boolean {
+        return other.userId === this.userId;
+    }
 }
 
 export default User;

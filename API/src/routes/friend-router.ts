@@ -27,6 +27,7 @@ friendRouter.get("/:username/suggestions", async (req, res) => {
             return;
         }
 
+        // Get friends of friends
         let suggestions: User[] = [];
         for (let friend of user.friends) {
             const friendOfFriend = await User.findAll({
@@ -39,8 +40,6 @@ friendRouter.get("/:username/suggestions", async (req, res) => {
             });
             suggestions = [...suggestions, ...friendOfFriend];
         }
-
-        suggestions = suggestions.filter(suggestion => !user.friends.includes(suggestion));
         if (suggestions.length < 7) {
             const randomUsers = await User.findAll({
                 where: {
@@ -52,7 +51,13 @@ friendRouter.get("/:username/suggestions", async (req, res) => {
             });
             suggestions = [...suggestions, ...randomUsers];
         }
-
+        suggestions = suggestions.filter((suggestion, index, self) =>
+                index === self.findIndex((t) => (
+                    t.userId === suggestion.userId
+                ))
+        )
+        let friendIds = user.friends.map(friend => friend.userId);
+        suggestions = suggestions.filter(suggestion => !friendIds.includes(suggestion.userId) && suggestion.userId !== user.userId);
         suggestions = suggestions.slice(0, 7);  // Limited to 7 suggestions
         res.json(suggestions);
     } catch (err){
