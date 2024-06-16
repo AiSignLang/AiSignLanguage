@@ -25,8 +25,8 @@ Welcome to the **AiSignLanguage** project! This repository is dedicated to devel
 Make sure you have the following installed:
 - Python 3.10
 - pip
-- 
-
+- node
+  
 ### Installation
 1. Clone the repository:
     ```bash
