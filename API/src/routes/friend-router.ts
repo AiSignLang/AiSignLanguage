@@ -3,9 +3,68 @@ import {StatusCodes} from "http-status-codes";
 import User from "../data/models/User";
 import {isNameLengthValid} from "../Utils";
 import Friendship from "../data/models/Friendship";
+import {Op} from "sequelize";
 
 export const friendRouter = express.Router();
 
+friendRouter.get("/:username/suggestions", async (req, res) => {
+    const username = req.params.username;
+
+    if(!username || !isNameLengthValid(username)){
+        res.sendStatus(StatusCodes.BAD_REQUEST);
+        return;
+    }
+
+    try{
+        const user = await User.findOne(
+            {where:
+                    {username: username},
+                include: User
+            });
+
+        if(user === null) {
+            res.sendStatus(StatusCodes.BAD_REQUEST);
+            return;
+        }
+
+        // Get friends of friends
+        let suggestions: User[] = [];
+        for (let friend of user.friends) {
+            const friendOfFriend = await User.findAll({
+                where: {
+                    username: {
+                        [Op.ne]: friend.userName
+                    }
+                },
+                include: User
+            });
+            suggestions = [...suggestions, ...friendOfFriend];
+        }
+        if (suggestions.length < 7) {
+            const randomUsers = await User.findAll({
+                where: {
+                    username: {
+                        [Op.ne]: user.userName
+                    }
+                },
+                limit: 7 - suggestions.length
+            });
+            suggestions = [...suggestions, ...randomUsers];
+        }
+        suggestions = suggestions.filter((suggestion, index, self) =>
+                index === self.findIndex((t) => (
+                    t.userId === suggestion.userId
+                ))
+        )
+        let friendIds = user.friends.map(friend => friend.userId);
+        suggestions = suggestions.filter(suggestion => !friendIds.includes(suggestion.userId) && suggestion.userId !== user.userId);
+        suggestions = suggestions.slice(0, 7);  // Limited to 7 suggestions
+        res.json(suggestions);
+    } catch (err){
+        console.error(err);
+        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+});
 friendRouter.get("/:username", async (req, res) => {
 
     const username = req.params.username;
