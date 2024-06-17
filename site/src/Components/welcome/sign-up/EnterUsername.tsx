@@ -74,7 +74,7 @@ export default function EnterUsername(prop: IProps){
                 <button onClick={() => {
                     prop.changeStep(2);
                 }} type="submit"
-                        className="w-full justify-center py-2 px-4 border-4 border-black rounded-md shadow-sm
+                        className="w-full justify-center py-2 px-4 rounded-md shadow-sm
                     text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none
                     focus:ring-2 focus:ring-offset-2 focus:ring-primary
                     inline-flex">go back
@@ -86,7 +86,7 @@ export default function EnterUsername(prop: IProps){
                     console.log("login done")
 
                 }} type="submit"
-                        className="w-full justify-center py-2 px-4 border-4 border-black rounded-md shadow-sm
+                        className="w-full justify-center py-2 px-4 rounded-md shadow-sm
                     text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none
                     focus:ring-2 focus:ring-offset-2 focus:ring-primary inline-flex">finish up!
                 </button>
