@@ -9,6 +9,7 @@ export enum ValidationErrors {
     USERNAME_TOO_SHORT
 }
 
+
 export const validatePassword = (password: string): ValidationErrors[] => {
     const errors: ValidationErrors[] = [];
     if (password.length < 8) {
@@ -25,7 +26,7 @@ export const validatePassword = (password: string): ValidationErrors[] => {
 
 export const validateUsername = async (username: string)=>{
     const errors: ValidationErrors[] = [];
-    const user = await userService.getUser(username);
+    const user = await userService.getUser(username); // TODO: check if user exists auth stuff
     if(username.length === 20){
         errors.push(ValidationErrors.TOO_LONG);
     }
@@ -45,17 +46,17 @@ export const replaceValue = (enumValue: ValidationErrors) =>{
 
     switch (enumValue){
         case ValidationErrors.TOO_SHORT:
-            return "Password/Username needs at least 8 characters"
+            return "Password needs at least 8 characters"
         case ValidationErrors.USERNAME_TOO_SHORT:
             return "Username is too short (at least a character needed)"
         case ValidationErrors.CHAR_NOT_CONTAINED:
-            return "Password/Username must contain a character"
+            return "Password must contain a character"
         case ValidationErrors.NUMBER_NOT_CONTAINED:
-            return "Password/Username must contain a number"
+            return "Password must contain a number"
         case ValidationErrors.TOO_LONG:
-            return "Password/Username is too long (max. 20 chars)"
+            return "Username is too long (max. 20 chars)"
         case ValidationErrors.ALREADY_IN_USE:
-            return "Password/Username is already in use/chose another name"
+            return "Username is already in use/chose another name"
         default:
             return "Unknown error"
     }
