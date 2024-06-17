@@ -75,9 +75,8 @@ export default function EmailPassword(prop: IProps) {
                     </ul>
                 </label>
                 <input onChange={passwordValidation} type="password" id="password"
-                       value={cachePassword} className="mt-1 block w-full px-3 py-2 bg-primary-greyed text-text-primary border
-                       border-primary-greyed-hover rounded-md shadow-sm placeholder-gray-400 focus:outline-none
-                       focus:ring-primary focus:border-primary sm:text-sm min-h-[50px]" />
+                       value={cachePassword} className="mt-1 block w-full px-3 py-2 bg-primary-greyed text-text-primary border border-primary-greyed-hover
+                       rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" />
             </div>
 
             <button onClick={(event) => {
