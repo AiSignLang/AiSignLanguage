@@ -40,7 +40,7 @@ export function SignUp(props: IProps) {
                 {
                     progressStep === 3 &&
                     <>
-                        <EnterUsername/>
+                        <EnterUsername changeStep={changeStep}/>
                     </>
                 }
 

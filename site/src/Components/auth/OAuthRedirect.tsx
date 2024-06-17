@@ -34,6 +34,7 @@ const OAuthRedirect = () => {
 
         navigate("/Unauthorized");
       }
+
       navigate("/profile")
 
     }

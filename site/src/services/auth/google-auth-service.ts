@@ -37,6 +37,7 @@ export async function googleAuth() {
     const data = await response.json();
     console.log('data', data)
     navigate(data.url);
+
 }
 
 export async function getUserData(access_token: string): Promise<OAuthGoogleUserData|undefined> {

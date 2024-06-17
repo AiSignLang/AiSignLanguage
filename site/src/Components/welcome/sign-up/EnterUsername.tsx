@@ -4,10 +4,12 @@ import {
     ValidationErrors
 } from "../../../support/Validation.ts";
 
+interface IProps {
+    changeStep: (step: number) => void;
+}
 
 
-
-export default function EnterUsername(){
+export default function EnterUsername(prop: IProps){
 
     const [username, setUsername] = useState('');
     const [cacheUsername, setCacheUsername] = useState('');
@@ -66,18 +68,28 @@ export default function EnterUsername(){
                 />
             </div>
 
-            <button onClick={() => {
-                usernameValidation(null as unknown as React.ChangeEvent<HTMLInputElement>);
 
-
-
-                // TODO: call to backend to create a new user with all its properties
-            }} type="submit"
-                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm
+            <div className="flex justify-between rounded mt-5 space-x-4">
+                <button onClick={() => {
+                    prop.changeStep(2);
+                }} type="submit"
+                        className="w-full justify-center py-2 px-4 border-4 border-black rounded-md shadow-sm
                     text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none
-                    focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                Finish up!
-            </button>
+                    focus:ring-2 focus:ring-offset-2 focus:ring-primary
+                    inline-flex">go back
+                </button>
+                <button onClick={() => {
+                    usernameValidation(null as unknown as React.ChangeEvent<HTMLInputElement>);
+
+                    alert("can navigate to the next page")
+                    console.log("login done")
+
+                }} type="submit"
+                        className="w-full justify-center py-2 px-4 border-4 border-black rounded-md shadow-sm
+                    text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none
+                    focus:ring-2 focus:ring-offset-2 focus:ring-primary inline-flex">finish up!
+                </button>
+            </div>
         </div>
     )
 }
