@@ -1,11 +1,13 @@
 from flask import Flask, request, jsonify
 import tensorflow as tf
+from flask_cors import CORS
+
 
 # Load the model
-model = tf.saved_model.load("./SavedModels")
+model = tf.keras.models.load_model("./SavedModel")
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -20,7 +22,7 @@ def predict():
     input_tensor = tf.convert_to_tensor(input_data)
 
     # Perform prediction
-    predictions = model(input_tensor)
+    predictions = model.predict(input_tensor)
 
     # Convert predictions to a list (if needed)
     prediction_list = predictions.numpy().tolist()
