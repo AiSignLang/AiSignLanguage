@@ -43,6 +43,7 @@ export function Exercise(props: IProps) {
     };
     const handleCollected = (res: string[]) => {
         setIsCollecting(false);
+        console.log(res);
     }
     const handleNextStep = (data: CallBackProps) => {
         const { status } = data;
