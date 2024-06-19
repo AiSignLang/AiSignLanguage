@@ -7,6 +7,8 @@ import websockets
 # Load the .keras model
 model = tf.keras.models.load_model('dynamicModel.keras')
 
+actions = ['hallo', 'wiegehtesdir', 'tschüss', 'ich', 'du', 'wir']
+
 
 async def handle_client_connection(websocket, path):
     print(f'New connection from {websocket.remote_address}')
@@ -21,8 +23,8 @@ async def handle_client_connection(websocket, path):
                 await websocket.send(response)
             return
 
-        input_data = data['instances']
-        input_tensor = tf.convert_to_tensor(input_data)
+        data_reshaped = np.reshape(data['instances'], (-1, 30, 1662))
+        input_tensor = tf.convert_to_tensor(data_reshaped)
         #print input shape
         # Perform prediction
         predictions = model(input_tensor)
@@ -30,7 +32,12 @@ async def handle_client_connection(websocket, path):
         print(f"Predictions: {prediction_list}")
 
         # Send the response
-        response = json.dumps({'predictions': prediction_list})
+        response = json.dumps(
+            {
+                'classes': actions,
+                'probabilities': prediction_list
+            }
+        )
         if websocket.open:  # Check if the connection is still open
             await websocket.send(response)
     except Exception as e:
