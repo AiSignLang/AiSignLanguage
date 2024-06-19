@@ -5,17 +5,6 @@ export interface IFriend{
     profilePath: string | null;
 }
 
-export interface IUser{
-    userId: number;
-    userName: string;
-    score: IScore;
-    profilePic: string;
-}
-
-export interface IProfile{
-    
-}
-
 export interface IScore{
     scoreId: number;
     dailyStreak: number;

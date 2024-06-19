@@ -1,4 +1,3 @@
-import AIView from "../AIView.tsx";
 import Navbar from "../navbar/Navbar.tsx";
 import {useLocation} from "react-router-dom";
 import {NavService} from "../../services/NavigationService.ts";
@@ -13,7 +12,6 @@ export function Sandbox(props: IProps) {
     return (
         <div className="bg-bg-primary text-text-primary h-full min-h-screen w-full">
             <Navbar></Navbar>
-            <AIView></AIView>
         </div>
     );
-};
+}

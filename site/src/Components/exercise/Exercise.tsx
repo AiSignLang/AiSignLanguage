@@ -5,6 +5,8 @@ import {courseService} from "../../services/CourseService.ts";
 import {ILevel} from "../../model/ILevel.ts";
 import {TaskType} from "../../model/TaskType.ts";
 import AIView from "../AIView.tsx";
+import {Alert} from "../errors/Alert.tsx";
+import Joyride, {CallBackProps, STATUS} from "react-joyride";
 
 interface IProps {
     // TODO: Define your props here
@@ -13,12 +15,14 @@ interface IProps {
 export function Exercise(props: IProps) {
     console.log("Exerciseprops", props);
     const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const type = queryParams.get('type');  // replace 'myParam' with the name of your parameter
+    const type = new URLSearchParams(location.search).get('type');
+
+    //States
     const [level, setLevel] = useState<ILevel | null>(null);
     const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
     const [userInput, setUserInput] = useState<string[]>([]);
-    //const navigate = useNavigate(); not used
+    const [showJoyride, setShowJoyride] = useState(false);
+    const [isCollecting, setIsCollecting] = useState(false);
 
     const handleNextTask = (skipped: boolean, userSolution: string[] | null) => {
         console.log('userSolution', userSolution);
@@ -34,6 +38,19 @@ export function Exercise(props: IProps) {
     const handleUserInput = (input: string) => {
         setUserInput(prevUserInput => [...prevUserInput, input]);
     }
+    const handleAlertClose = () => {
+        setShowJoyride(true);
+    };
+    const handleCollected = (res: string[]) => {
+        setIsCollecting(false);
+        console.log(res);
+    }
+    const handleNextStep = (data: CallBackProps) => {
+        const { status } = data;
+        if (status === STATUS.FINISHED || status === STATUS.SKIPPED){
+            localStorage.setItem('exerciseGuideCompleted', 'true');
+        }
+    };
     useEffect(() => {
         switch (type) {
             case 'next': {
@@ -56,8 +73,31 @@ export function Exercise(props: IProps) {
         //return <XnotFound subject="Task" />;
     }*/
 
+    const steps = [
+        {
+            target: '.cant-spell',
+            content: 'In case you cannot spell the word, you can skip the task.',
+        },
+        {
+            target: '.collect',
+            content: 'For each underlined word, click this button. After a countdown, sign the word. 👋📸.',
+        },
+        {
+            target: '.next-task',
+            content: "This will only unlock 🔓 when you've signed all the words or made too many mistakes ❌."
+        },
+        ];
+
     return (
         <div className="bg-bg-primary text-text-primary h-full min-h-screen w-full">
+            <Alert
+                title={"Plug-in your device"}
+                image={"/public/img/error/charge.gif"}
+                width={150}
+                height={150}
+                description={"For an enhanced experience, we recommend connecting your device with an outlet."}
+                onClose={handleAlertClose}
+            />
             <Navbar></Navbar>
             <div className="w-full flex flex-col items-center">
                 <div className="bg-bg-secondary rounded-2xl p-4 w-1/3 mt-20" key={level && level.tasks[currentTaskIndex].taskID}>
@@ -76,31 +116,72 @@ export function Exercise(props: IProps) {
                 </div>
                 <div className="w-1/3 flex justify-between mt-5">
                     {level && level.tasks[currentTaskIndex] && level.tasks[currentTaskIndex].type !== TaskType.RECOGNITION && ( //TODO MAYBE GENERALIZE, COULD BE ISSUE LATER
-                        <button onClick={() => {handleNextTask(true,null)}} className="hover:bg-primary-greyed-hover border-2 border-primary-greyed rounded-2xl h-fit w-fit p-4">I
+                        <button onClick={() => {handleNextTask(true,null)}} className="cant-spell hover:bg-primary-greyed-hover border-2 border-primary-greyed rounded-2xl h-fit w-fit p-4">I
                     can't {level.tasks[currentTaskIndex].type} right now.
                 </button>
-
                 )}
                     {/*! TODO Change handleNext user solution param to actual user input*/}
                     {level && level.tasks[currentTaskIndex] && level.tasks[currentTaskIndex].taskData.length === userInput.length ? (
                         <button onClick={() => {
                             handleNextTask(false, level.tasks[currentTaskIndex].taskData)
                         }} className="bg-primary rounded-2xl h-fit w-fit p-4 hover:bg-primary-hover">Next Task →</button>
-
                     ) : (
-                        <button disabled className="bg-btn-bg-disable text-btn-text-disable rounded-2xl h-fit w-fit p-4">Next Task →</button>
+                        <div>
+                            {isCollecting && (<button disabled
+                                    className="collect bg-btn-bg-disable rounded-2xl h-fit w-fit p-4">Collect</button>
+                            )}
+                            {!isCollecting && (
+                                <button className="collect bg-primary rounded-2xl h-fit w-fit p-4 hover:bg-primary-hover" onClick={() => {
+                                    setIsCollecting(true);
+                                    console.log("changed it");
+                                    console.log(isCollecting);
+                                }} >Collect</button>
+                            )}
+                            <button disabled
+                                    className="next-task ml-5 bg-btn-bg-disable text-btn-text-disable rounded-2xl h-fit w-fit p-4">Next
+                                Task →
+                            </button>
+                        </div>
                     )}
                 </div>
 
                 {level && courseService.isVisualTask(level.tasks[currentTaskIndex].type) && (
-                    <div className="mt-8 overflow-hidden rounded-3xl ">
-                    <AIView/>
+                    <div className="mt-8 overflow-hidden rounded-3xl">
+                        <AIView isCollecting={isCollecting} collectionCallback={handleCollected}/>
                         <button className="p-4 bg-primary" onClick={() => {
                             handleUserInput('A');
                         }}>P</button>
                     </div>
                 )}
             </div>
+            {showJoyride && localStorage.getItem('exerciseGuideCompleted') !== 'true' && (
+                <Joyride
+                    steps={steps}
+                    continuous
+                    showSkipButton
+                    spotlightClicks={false}
+                    disableOverlayClose={true}
+                    showProgress
+                    locale={{
+                        back: 'Back',
+                        close: 'Close',
+                        last: 'Finish',
+                        next: 'Next',
+                        skip: 'Close and don\'t show this again',
+                    }}
+                    callback={handleNextStep}
+                    styles={{
+                        options: {
+                            zIndex: 10000,
+                            textColor: '#fff',
+                            backgroundColor: '#374151',
+                            primaryColor: '#d81d3f',
+                            arrowColor: '#374151',
+                            beaconSize: 50,
+                        },
+                    }}
+                />
+            )}
         </div>
     );
 }
