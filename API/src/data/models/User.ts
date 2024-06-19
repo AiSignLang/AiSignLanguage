@@ -85,6 +85,15 @@ class User extends Model {
     @BelongsToMany(()=>Level,()=>UserLevel)
     declare levels: Level[]
 
+    @Column({
+        type: DataType.INTEGER,
+        validate: {
+            isInt: true
+        },
+        defaultValue: 0
+    })
+    declare levelNumber: number;
+
     equals(other: this): boolean {
         return other.userId === this.userId;
     }

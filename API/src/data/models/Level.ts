@@ -24,6 +24,16 @@ class Level extends Model{
     })
     declare levelId: string;
 
+
+    @Column({
+        type: DataType.INTEGER,
+        validate: {
+            isInt: true
+        },
+        defaultValue: 0
+    })
+    declare levelNumber: number;
+
     @HasMany(()=>Task,'levelId')
     declare tasks: Task[]
     
