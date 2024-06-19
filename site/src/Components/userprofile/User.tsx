@@ -1,7 +1,6 @@
 import {userService} from "../../services/UserService.ts";
 import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import {IUser} from "../../model/props.ts";
 import * as Utils from "../../model/Utils.ts";
 interface IProps {
     username: string;
