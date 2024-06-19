@@ -49,38 +49,47 @@ export function AIView(props: IProps) {
         let pose: number[], face: number[], lh: number[], rh: number[];
 
         if (results.poseLandmarks) {
-            pose = results.poseLandmarks.flatMap(res =>
+            pose = results.poseLandmarks.map(res =>
                 res.x !== undefined && res.y !== undefined && res.z !== undefined && res.visibility !== undefined
-                    ? [res.x, res.y, res.z]
-                    : [0, 0, 0]
-            );
+                    ? [res.x, res.y, res.z,res.visibility]
+                    : [0, 0, 0,0]
+            ).flat();
         } else {
             pose = new Array(33 * 3).fill(0);  // 33 landmarks * 3 values (x, y, z)
         }
 
         if (results.faceLandmarks) {
-            face = results.faceLandmarks.flatMap(res => [res.x, res.y, res.z]);
+            face = results.faceLandmarks.map(res =>
+                res.x !== undefined && res.y !== undefined && res.z !== undefined
+                    ? [res.x, res.y, res.z]
+                    : [0, 0, 0]
+            ).flat();
         } else {
             face = new Array(468 * 3).fill(0);  // 468 landmarks * 3 values (x, y, z)
         }
 
         if (results.leftHandLandmarks) {
-            lh = results.leftHandLandmarks.flatMap(res => [res.x, res.y, res.z]);
+            lh = results.leftHandLandmarks.map(res =>
+                res.x !== undefined && res.y !== undefined && res.z !== undefined
+                    ? [res.x, res.y, res.z]
+                    : [0, 0, 0]
+            ).flat();
         } else {
             lh = new Array(21 * 3).fill(0);  // 21 landmarks * 3 values (x, y, z)
         }
 
         if (results.rightHandLandmarks) {
-            rh = results.rightHandLandmarks.flatMap(res => [res.x, res.y, res.z]);
+            rh = results.rightHandLandmarks.map(res =>
+                res.x !== undefined && res.y !== undefined && res.z !== undefined
+                    ? [res.x, res.y, res.z]
+                    : [0, 0, 0]
+            ).flat();
         } else {
             rh = new Array(21 * 3).fill(0);  // 21 landmarks * 3 values (x, y, z)
         }
 
-        let res = [...pose, ...face, ...lh, ...rh];
-        if(res.length < 1662){
-            res = rh.concat(new Array(1662 - res.length).fill(0));
-        }
-        res = [...pose, ...face, ...lh, ...rh];
+        const res = [...pose, ...face, ...lh, ...rh];
+        console.log("Shape: " + res.length);
         return res;
     }
 
