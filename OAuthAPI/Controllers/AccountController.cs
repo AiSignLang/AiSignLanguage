@@ -9,7 +9,7 @@ using OAuthAPI.Services;
 
 
 namespace OAuthAPI.Controllers;
-[Route("[controller]")]
+[Route("auth/[controller]")]
 [ApiController]
 public class AccountController(DataContext context, TokenService tokenService, EmailService emailService) : ControllerBase
 {
@@ -20,18 +20,12 @@ public class AccountController(DataContext context, TokenService tokenService, E
         using var transaction = context.Database.BeginTransaction();
         try
         {
-            if (context.Accounts.Any(a => a.Username == model.Username))
-            {
-                return BadRequest("Username already exists");
-            }
-
             if (context.Accounts.Any(a => a.Email == model.Email))
             {
                 return BadRequest("Email already exists");
             }
             var invalids = new List<string>();
             if(model.Email == null) invalids.Add("Invalid email");
-            if(model.Username == "") invalids.Add("Invalid username");
             if(model.Password == "") invalids.Add("Invalid password");
 
             if(invalids.Count > 0)
@@ -39,17 +33,16 @@ public class AccountController(DataContext context, TokenService tokenService, E
                 return BadRequest(invalids.ToArray());
             }
 
-            var account = new Account(model.Username,  model.Email!);
+            var account = new Account( model.Email!);
             account.SetPassword(model.Password);
             context.Accounts.Add(account);
 
             // Generate token for the new user
-            var tokens = tokenService.GenerateToken(account);
 
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
 
-            return Ok(tokens);
+            return Ok(new{code=tokenService.GenerateAccessCode(account)});
         }
         catch (Exception)
         {
@@ -71,20 +64,35 @@ public class AccountController(DataContext context, TokenService tokenService, E
                 return Unauthorized("Invalid username or password");
             }
 
-            var tokens = tokenService.GenerateToken(account);
+            //tokenService.GenerateToken(account);
             await context.SaveChangesAsync();
-
             await transaction.CommitAsync();
-
-            return Ok(tokens);
+            
+            return Ok(new{code=tokenService.GenerateToken(account)});
         }
         catch (Exception)
         {
             await transaction.RollbackAsync();
             throw;
         }
-    }    
-   
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> Token([FromBody] GetTokenModel code )
+    {
+        if(!tokenService.AccessCodes.TryGetValue(code.Email, out var accessCode))
+        {
+            return BadRequest("Invalid access code");
+        }
+        if(!tokenService.ValidateAccessCode(code.AccessCode, accessCode))
+        {
+            return BadRequest("Invalid access code");
+        }
+        var account = context.Accounts.FirstOrDefault(a => a.Email == code.Email);
+        if(account == null) return ValidationProblem("User not found");
+        return Ok(tokenService.GenerateToken(account));
+    }
+    
     [HttpPost("[action]")]
     public async Task<IActionResult> RefreshToken([FromQuery] string refreshToken)
     {
@@ -131,7 +139,7 @@ public class AccountController(DataContext context, TokenService tokenService, E
 
             await transaction.CommitAsync();
 
-            return Ok();
+            return Ok(new{message="Token revoked"});
         }
         catch (Exception)
         {
@@ -151,13 +159,37 @@ public class AccountController(DataContext context, TokenService tokenService, E
         return Ok(
             new AccountInfoModel
             {
-                Username = account.Username,
                 Email = account.Email,
                 Id = account.Id.ToString()
             });
     }
     
+    [HttpPost("verify")]
+    public IActionResult Verify([FromBody] VerifyTokenModel token)
+    {
+        var email = tokenService.VerifyToken(token.Token);
+        if (email == null) 
+        {
+            return Unauthorized();
+        }
+        var account = context.Accounts.FirstOrDefault(a => a.Email == email);
+        if(account == null) return ValidationProblem("User not found");
+        return Ok(new AccountInfoModel
+        {
+            Email = email,
+            Id = account.Id.ToString()
+        });
+    }
     
+    [HttpGet("validate-email")]
+    public IActionResult ValidateEmail([FromQuery] string email)
+    {
+        if (context.Accounts.Any(a => a.Email == email))
+        {
+            return BadRequest("Email already exists");
+        }
+        return Ok(new{message="Email is available"});
+    }
     
     [HttpGet("confirm-email")]
     public IActionResult Confirm()
