@@ -42,6 +42,22 @@ class Task extends Model{
         type: DataType.UUID
     })
     declare levelId: string;
+
+    @Column({
+        type: DataType.STRING,
+        validate: {
+            isString: isString
+        }
+    })
+    declare words: string;
+
+    @Column({
+        type: DataType.STRING,
+        validate: {
+            isString: isString
+        }
+    })
+    declare videoPath: string;
     
     @BelongsTo(()=>Level)
     declare level: Level;
