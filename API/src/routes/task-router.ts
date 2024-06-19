@@ -1,8 +1,6 @@
 import express from "express";
 import {isIDValid} from "../Utils";
 import {StatusCodes} from "http-status-codes";
-import user from "../data/models/User";
-import level from "../data/models/Level";
 import Task from "../data/models/Task";
 
 export const taskRouter = express.Router();
