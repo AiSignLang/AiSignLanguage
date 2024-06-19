@@ -4,9 +4,6 @@ export interface IFriend{
     score: IScore;
     profilePath: string | null;
 }
-export interface IProfile{
-    
-}
 
 export interface IScore{
     scoreId: number;
