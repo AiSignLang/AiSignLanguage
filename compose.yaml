@@ -2,7 +2,7 @@
   web:
     build: "./site/"
     ports:
-      - "8080:8080"
+      - "7859:7859"
     image: ital3x/ai-sign-language_web:1.0.0
     env_file:
       - ./site/.env.production

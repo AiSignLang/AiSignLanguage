@@ -3,6 +3,8 @@ import {
     replaceValue, validateUsername,
     ValidationErrors
 } from "../../../support/Validation.ts";
+import AslAuthService from "../../../services/auth/asl-auth-service.ts";
+import {userService} from "../../../services/UserService.ts";
 
 interface IProps {
     changeStep: (step: number) => void;
@@ -36,6 +38,7 @@ export default function EnterUsername(prop: IProps){
             if(possibleErrors.length === 0){
                 console.log("username in validation block: "+typedUsername);
                 setUsername(typedUsername);
+                
             }
         })();
     }
@@ -72,6 +75,10 @@ export default function EnterUsername(prop: IProps){
 
             <div className="flex justify-between rounded mt-5 space-x-4">
                 <button onClick={() => {
+                    usernameValidation(null as unknown as React.ChangeEvent<HTMLInputElement>);
+                    if (usernameErrors.length === 0){
+                        const response = userService.postUser(username);
+                    }
                     prop.changeStep(2);
                 }} type="submit"
                         className="w-full justify-center py-2 px-4 rounded-md shadow-sm

@@ -10,7 +10,7 @@ import {navigate} from "../../model/Utils.ts";
 export default function UserProfile(){
     NavService.changeNavHighlight(useLocation().pathname);
     
-    if (sessionStorage.getItem('access_token') === null
+    if (sessionStorage.getItem('id_token') === null
         || sessionStorage.getItem("username") === null) {
         navigate('/login');
         return ;

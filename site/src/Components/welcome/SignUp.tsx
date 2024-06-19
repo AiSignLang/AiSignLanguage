@@ -11,10 +11,11 @@ interface IProps {
 
 export function SignUp(props: IProps) {
     const [progressStep, setProgressStep] = useState<number>(1);
-
+    
     const changeStep = (step: number)=>{
         setProgressStep(step);
     }
+    console.log(props);
     return (
         <div className="min-h-screen bg-bg-primary flex items-center justify-center">
             <div className="min-h-80 bg-bg-secondary p-10 rounded-lg shadow-lg w-full max-w-md">
@@ -25,7 +26,7 @@ export function SignUp(props: IProps) {
 
                 {progressStep === 1 &&
                     <>
-                        <EmailPassword changeStep={changeStep}/>
+                        <EmailPassword changeStep={changeStep} />
                         <OtherAuth/>
                     </>
                 }
@@ -40,7 +41,7 @@ export function SignUp(props: IProps) {
                 {
                     progressStep === 3 &&
                     <>
-                        <EnterUsername changeStep={changeStep}/>
+                        <EnterUsername changeStep={changeStep} />
                     </>
                 }
 

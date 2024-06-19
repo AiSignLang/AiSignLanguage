@@ -59,7 +59,7 @@
     "build": "npm run tailwind && tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --port 7070",
-    "tailwind": "tailwindcss -i ./src/index.css -o ./src/dist/tailwind.css"
+    "tailwind": "tailwindcss -i ./src/index.css -o ./src/dist/tailwind.css --watch"
   },
   "eslintConfig": {
     "extends": [

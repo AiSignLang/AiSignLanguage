@@ -18,7 +18,7 @@ const OAuthRedirect = () => {
     console.log('code in redirect', code);
     if (code) {
       
-      const tokens = await fetchRestEndpoint<Credentials>(`${config.externalAddress}/auth/google-auth/token?code=${code}`, "GET")
+      const tokens = await fetchRestEndpoint<Credentials>(`${config.externalAddress}/oauth/google-auth/token?code=${code}`, "GET")
       console.log('tokens in redirect', tokens)
       if (!tokens || !tokens.access_token || !tokens.refresh_token || !tokens.id_token) {
         navigate("/Unauthorized");

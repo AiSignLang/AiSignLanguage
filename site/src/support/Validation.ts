@@ -6,9 +6,20 @@ export enum ValidationErrors {
     NUMBER_NOT_CONTAINED,
     TOO_LONG,
     ALREADY_IN_USE,
-    USERNAME_TOO_SHORT
+    USERNAME_TOO_SHORT,
+    EMAIL_ALREADY_IN_USE ,
+    EMAIL_NOT_VALID_PATTERN
 }
 
+export const validateEmail = (email:string):ValidationErrors[] => {
+    
+    console.log(email);
+    if (!RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/).test(email)){
+        console.log("email not valid")
+        return [ValidationErrors.EMAIL_NOT_VALID_PATTERN];
+    }
+    return [];
+}
 
 export const validatePassword = (password: string): ValidationErrors[] => {
     const errors: ValidationErrors[] = [];
@@ -26,7 +37,7 @@ export const validatePassword = (password: string): ValidationErrors[] => {
 
 export const validateUsername = async (username: string)=>{
     const errors: ValidationErrors[] = [];
-    const user = await userService.getUser(username); // TODO: check if user exists auth stuff
+    const user = await userService.validateUsername(username); // TODO: check if user exists auth stuff
     if(username.length === 20){
         errors.push(ValidationErrors.TOO_LONG);
     }
@@ -57,6 +68,10 @@ export const replaceValue = (enumValue: ValidationErrors) =>{
             return "Username is too long (max. 20 chars)"
         case ValidationErrors.ALREADY_IN_USE:
             return "Username is already in use/chose another name"
+        case ValidationErrors.EMAIL_ALREADY_IN_USE:
+            return "Email is already in use"
+        case ValidationErrors.EMAIL_NOT_VALID_PATTERN:
+            return "Email is not valid"
         default:
             return "Unknown error"
     }

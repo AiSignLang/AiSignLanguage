@@ -12,7 +12,7 @@ class UserService{
     // TODO: change route as needed
     public async getUser(username: string,onUnauthorized?:()=>void): Promise<IUser | null>{
         try{
-            const user = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/${username}`, "GET",undefined,(err:StatusCodes)=>
+            const user = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/${username}`, "GET",undefined,true,(err:StatusCodes)=>
             {
                 if(err === StatusCodes.UNAUTHORIZED){
                     onUnauthorized?.();
@@ -29,7 +29,16 @@ class UserService{
             return null;
         }
     }
-
+    public async validateUsername(username: string): Promise<boolean>{
+        try{
+            await fetchRestEndpoint<void>(`${config.externalAddress}/api/user/validate-username`, "GET", {username});
+            
+        }catch (e){
+            console.error(e);
+            return false;
+        }
+        return true;
+    }
 }
 
 
