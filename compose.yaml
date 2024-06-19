@@ -1,0 +1,13 @@
+﻿services:
+  tf-serving:
+    build: "./TfServing/"
+    image: ai-sign-language_tf_dev:latest
+    ports:
+        - "5002:8501"
+    networks:
+        - front-tier
+    expose:
+        - "8501"
+networks:
+  back-tier: {}
+  front-tier: {}
