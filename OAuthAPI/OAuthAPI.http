@@ -1,6 +1,0 @@
-OAuthAPI_HostAddress = http://localhost:5240
-
-GET {{OAuthAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
