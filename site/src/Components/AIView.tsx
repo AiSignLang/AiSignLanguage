@@ -51,12 +51,13 @@ export function AIView(props: IProps) {
         if (results.poseLandmarks) {
             pose = results.poseLandmarks.map(res =>
                 res.x !== undefined && res.y !== undefined && res.z !== undefined && res.visibility !== undefined
-                    ? [res.x, res.y, res.z,res.visibility]
-                    : [0, 0, 0,0]
+                    ? [res.x, res.y, res.z, res.visibility]
+                    : [0, 0, 0, 0]
             ).flat();
         } else {
-            pose = new Array(33 * 3).fill(0);  // 33 landmarks * 3 values (x, y, z)
+            pose = new Array(33 * 4).fill(0);  // 33 landmarks * 4 values (x, y, z, visibility)
         }
+        console.log("Pose length: " + pose.length);
 
         if (results.faceLandmarks) {
             face = results.faceLandmarks.map(res =>
@@ -67,6 +68,7 @@ export function AIView(props: IProps) {
         } else {
             face = new Array(468 * 3).fill(0);  // 468 landmarks * 3 values (x, y, z)
         }
+        console.log("Face length: " + face.length);
 
         if (results.leftHandLandmarks) {
             lh = results.leftHandLandmarks.map(res =>
@@ -77,6 +79,7 @@ export function AIView(props: IProps) {
         } else {
             lh = new Array(21 * 3).fill(0);  // 21 landmarks * 3 values (x, y, z)
         }
+        console.log("Left hand length: " + lh.length);
 
         if (results.rightHandLandmarks) {
             rh = results.rightHandLandmarks.map(res =>
@@ -87,11 +90,13 @@ export function AIView(props: IProps) {
         } else {
             rh = new Array(21 * 3).fill(0);  // 21 landmarks * 3 values (x, y, z)
         }
+        console.log("Right hand length: " + rh.length);
 
         const res = [...pose, ...face, ...lh, ...rh];
-        console.log("Shape: " + res.length);
+        console.log("Total length: " + res.length);
         return res;
     }
+
 
 
     useEffect(() => {
@@ -128,7 +133,7 @@ export function AIView(props: IProps) {
             smoothLandmarks: true,
             enableSegmentation: true,
             smoothSegmentation: true,
-            refineFaceLandmarks: true,
+        //    refineFaceLandmarks: true, //! This adds unwanted complexity and therefore changes the input shape
             minDetectionConfidence: 0.4,
             minTrackingConfidence: 0.4
         });
