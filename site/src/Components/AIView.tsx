@@ -101,6 +101,7 @@ export function AIView(props: IProps) {
             });
         }
 
+
         const holistic = new Holistic({
             locateFile: (file) => {
                 return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`;
