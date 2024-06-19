@@ -19,7 +19,8 @@
       - ./API/.env
     image: ital3x/ai-sign-language_api_dev:1.0.0
     volumes:
-      - db-data:/app/data/
+      - db-data/data:/app/data/
+      - db-data/public:/app/public/
     networks:
       - back-tier
     expose:
@@ -35,8 +36,21 @@
       - db-data:/app/data/
     restart: always
 
+  auth:
+    build: "./OAuthAPI/"
+    env_file:
+      - ./OAuthAPI/.env
+    volumes:
+      - db-accounts:/app/Data/
+    networks:
+      - back-tier
+    expose:
+      - "5001"
+    
+  
 volumes:
     db-data:
+    db-accounts:
 
 networks:
   back-tier: {}

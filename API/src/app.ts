@@ -9,6 +9,7 @@ import * as fs from "node:fs";
 import config from "./config";
 
 import cors from "cors";
+import aslAuthRouter from "./routes/auth/asl-auth-router";
 export const app = express();
 
 app.use(config.staticEndpoint,express.static("public"));
@@ -17,7 +18,8 @@ app.use(cors());
 
 app.use("/api/user", userRouter);
 app.use("/api/friends", friendRouter);
-app.use("/auth/google-auth/", googleAuthRouter);
+app.use("/oauth/google-auth/", googleAuthRouter);
+app.use("/oauth/asl-auth/", aslAuthRouter);
 if (!fs.existsSync(path.join(__dirname, '../data/db.sqlite3'))) {
     sequelize.sync({force: true}).then(async () => {
         console.log('Database synchronized');

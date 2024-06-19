@@ -80,7 +80,13 @@ googleAuthRouter.get( "/token", async (req, res) => {
             }
         });
         if (!existingUser) {
-            const resi = await registerOAuthUser(userData, OAuthProvider.GOOGLE);
+            const resi = await registerOAuthUser({
+                id: userData.sub,
+                name: userData.name,
+                familyName: userData.family_name,
+                givenName: userData.given_name,
+                picture: userData.picture
+            }, OAuthProvider.GOOGLE);
             if (resi.status !== StatusCodes.CREATED) {
                 res.sendStatus(resi.status);
                 return;
@@ -120,7 +126,13 @@ googleAuthRouter.post("/refresh", async (req, res) => {
             }
         });
         if (existingUser === null) {
-            const resi = await registerOAuthUser(userData, OAuthProvider.GOOGLE);
+            const resi = await registerOAuthUser({
+                id:userData.sub,
+                name:userData.name,
+                familyName:userData.family_name,
+                givenName:userData.given_name,
+                picture:userData.picture
+            }, OAuthProvider.GOOGLE);
             if (resi.status !== StatusCodes.CREATED) {
                 res.sendStatus(resi.status);
                 return;
