@@ -1,4 +1,3 @@
-import {IUser} from "../model/props.ts";
 //import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
 
 
@@ -7,7 +6,7 @@ class LevelService{
 
     // TODO: this method gets ID and returns user object + needs to be switched down below
     // TODO: change route as needed
-    public async getLevel(username: string, id?: string): Promise<IUser | null>{
+    /*public async getLevel(username: string, id?: string): Promise<IUser | null>{
 
         console.log(`getUser called${username} ${id}`);
         //await fetchRestEndpoint(this.route, 'GET')
@@ -25,6 +24,8 @@ class LevelService{
         }
         return user;
     }
+
+     */
 }
 
 

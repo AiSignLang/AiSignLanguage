@@ -18,7 +18,6 @@ import {SignIn} from "./Components/welcome/SignIn.tsx";
 import {SignUp} from "./Components/welcome/SignUp.tsx";
 import {Unauthorized} from "./Components/errors/Unauthorized.tsx";
 import OAuthRedirect from "./Components/auth/OAuthRedirect.tsx";
-import ProgressBar from "./Components/welcome/sign-up/ProgressBar.tsx";
 import UploadForm from "./Components/welcome/sign-up/UploadForm.tsx";
 
 
@@ -28,7 +27,7 @@ function App() {
       <Router>
         <Routes>
             {/*   <Route path="/" element={<XnotFound subject={"Profile"} message={"Please try again later."}/>}/> */}
-            <Route path="/progress" element={<UploadForm/>}></Route>
+            <Route path="/progress" element={<UploadForm changeStep={() => 1}/>}></Route>
             <Route path="/" element={<LandingPage/>}/>
             <Route path="/login" element={<SignIn/>}/>
             <Route path="/signup" element={<SignUp/>}/>

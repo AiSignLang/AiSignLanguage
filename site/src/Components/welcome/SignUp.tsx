@@ -5,11 +5,8 @@ import {useState} from "react";
 import UploadForm from "./sign-up/UploadForm.tsx";
 import EnterUsername from "./sign-up/EnterUsername.tsx";
 
-interface IProps {
-    // TODO: Define your props here
-}
 
-export function SignUp(props: IProps) {
+export function SignUp() {
     const [progressStep, setProgressStep] = useState<number>(1);
 
     const changeStep = (step: number)=>{
