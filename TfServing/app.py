@@ -1,33 +1,50 @@
-from flask import Flask, request, jsonify
+import json
 import tensorflow as tf
+import numpy as np
+import asyncio
+import websockets
 
-# Load the model
-model = tf.saved_model.load("./SavedModels")
-
-app = Flask(__name__)
+# Load the .keras model
+model = tf.keras.models.load_model('dynamicModel.keras')
 
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    data = request.get_json(force=True)
-    # Assuming the input is in the format {"instances": [...]}
-    #Dont assume, check
-    if 'instances' not in data:
-        return jsonify({'error': 'no instances key found'})
-    input_data = data['instances']
+async def handle_client_connection(websocket, path):
+    print(f'New connection from {websocket.remote_address}')
+    try:
+        request = await websocket.recv()
+        print(f"Received request: Request")
+        # Parse the JSON request
+        data = json.loads(request)
+        if 'instances' not in data:
+            response = json.dumps({'error': 'no instances key found'})
+            if websocket.open:  # Check if the connection is still open
+                await websocket.send(response)
+            return
 
-    # Prepare the input tensor
-    input_tensor = tf.convert_to_tensor(input_data)
+        input_data = data['instances']
+        input_tensor = tf.convert_to_tensor(input_data)
+        #print input shape
+        # Perform prediction
+        predictions = model(input_tensor)
+        prediction_list = predictions.numpy().tolist()
+        print(f"Predictions: {prediction_list}")
 
-    # Perform prediction
-    predictions = model(input_tensor)
+        # Send the response
+        response = json.dumps({'predictions': prediction_list})
+        if websocket.open:  # Check if the connection is still open
+            await websocket.send(response)
+    except Exception as e:
+        response = json.dumps({'error': str(e)})
+        print(f"Error: {response}")
+        if websocket.open:  # Check if the connection is still open
+            await websocket.send(response)
 
-    # Convert predictions to a list (if needed)
-    prediction_list = predictions.numpy().tolist()
 
-    # Return the predictions as JSON
-    return jsonify({'predictions': prediction_list})
+async def main():
+    async with websockets.serve(handle_client_connection, "localhost", 8501):
+        print("Server started at ws://localhost:8501")
+        await asyncio.Future()  # Run forever
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8501)
+    asyncio.run(main())
