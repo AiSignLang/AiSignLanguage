@@ -31,6 +31,7 @@
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
+    "react-joyride": "^2.8.2",
     "react-router-dom": "^6.23.0"
   },
   "devDependencies": {
@@ -55,11 +56,12 @@
     "vite-plugin-mediapipe": "^0.1.0"
   },
   "scripts": {
-    "dev": "vite --port 8080",
-    "build": "npm run tailwind && tsc && vite build",
+    "dev": " vite --port 8080",
+    "build": "npm run tailwind:build && tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview --port 7070",
-    "tailwind": "tailwindcss -i ./src/index.css -o ./src/dist/tailwind.css --watch"
+    "preview": "vite preview --port 8080",
+    "tailwind": "tailwindcss -i ./src/index.css -o ./src/dist/tailwind.css --watch",
+    "tailwind:build": "tailwindcss -i ./src/index.css -o ./src/dist/tailwind.css"
   },
   "eslintConfig": {
     "extends": [

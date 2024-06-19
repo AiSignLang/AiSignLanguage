@@ -1,8 +1,17 @@
 import {ILevel} from "../model/ILevel.ts";
 import {TaskType} from "../model/TaskType.ts";
+type TaskTuple = [number, number];
 
 class CourseService {
-
+    public getDoneTasksCount(): TaskTuple[] {
+        const sessionUser = sessionStorage.getItem('user');
+        if(!sessionUser){
+            return []; //! TODO Renaviagte to login
+        }
+        const user = JSON.parse(sessionUser);
+        console.log(user);
+        return [];
+    }
     public async getNextLevel() {
         //Instance of ILevel
         const level: ILevel = {
@@ -53,6 +62,15 @@ class CourseService {
         return visualTasks[taskType];
     }
 
+    public getPrediction(taskData: (number[])[]) {
+        return fetch('http://localhost:8501/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({instances: taskData})
+        });
+    }
 }
 
 

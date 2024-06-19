@@ -90,7 +90,7 @@ export default function EnterUsername(prop: IProps){
                     usernameValidation(null as unknown as React.ChangeEvent<HTMLInputElement>);
 
                     alert("can navigate to the next page")
-                    console.log("login done")
+                    console.log(username)
 
                 }} type="submit"
                         className="w-full justify-center py-2 px-4 rounded-md shadow-sm
