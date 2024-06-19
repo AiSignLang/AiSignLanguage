@@ -17,8 +17,8 @@ export default function Text() {
                 </div>
                 <div className="-ml-12 -mt-12 p-12 lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
                     <img
-                        className="w-[8rem] rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[8rem]"
-                        src="../../../../public/img/placeholders/Learning-rafiki.png"
+                        className="w-[40rem] rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10"
+                        src={"./img/placeholders/Learning-rafiki.png"}
                         alt="Learning girl placeholder"
                     />
                 </div>
