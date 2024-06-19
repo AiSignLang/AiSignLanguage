@@ -9,10 +9,6 @@ RUN npm install
 
 COPY . .
 
-RUN npm cache clean --force
-RUN rm -rf node_modules
-RUN npm install
-
 RUN npm run build
 
 FROM nginx:latest as production
@@ -26,6 +22,6 @@ RUN apt-get update && \
 COPY nginx.conf /etc/nginx/conf.d/ASL-Project.conf
 RUN dos2unix /etc/nginx/conf.d/ASL-Project.conf
 
-EXPOSE 8080
+EXPOSE 7859
 
 CMD ["nginx", "-g", "daemon off;"]

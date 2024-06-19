@@ -3,6 +3,7 @@ const Config = () => {
     const externalPort = import.meta.env.VITE_EXTERNAL_PORT || 8080;
     const domain = import.meta.env.VITE_DOMAIN || "http://localhost";
     const externalDomain = import.meta.env.VITE_EXTERNAL_DOMAIN || "http://localhost";
+    const tfServing = import.meta.env.VITE_TF_SERVING || "ws://localhost:8501";
     
     return {
         port: parseInt(port.toString()),
@@ -10,7 +11,8 @@ const Config = () => {
         domain: domain,
         externalDomain: externalDomain,
         address: `${domain}:${port}`,
-        externalAddress: `${externalDomain}:${externalPort}`
+        externalAddress: `${externalDomain}:${externalPort}`,
+        tfServing
     }
 }
 export default Config();

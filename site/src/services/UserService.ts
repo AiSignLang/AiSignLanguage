@@ -1,4 +1,3 @@
-import {IUser} from "../model/props.ts";
 import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
 import config from "../config.ts";
 import {StatusCodes} from "http-status-codes";
@@ -20,6 +19,7 @@ class UserService{
             });
             if (user) {
                 console.log(user);
+                sessionStorage.setItem('user', JSON.stringify(user));
                 return user;
             }
             return null;

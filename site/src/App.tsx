@@ -22,7 +22,6 @@ import ProgressBar from "./Components/welcome/sign-up/ProgressBar.tsx";
 import UploadForm from "./Components/welcome/sign-up/UploadForm.tsx";
 
 
-
 function App() {
     
   return (
