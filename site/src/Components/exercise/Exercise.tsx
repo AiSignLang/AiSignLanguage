@@ -41,6 +41,9 @@ export function Exercise(props: IProps) {
     const handleAlertClose = () => {
         setShowJoyride(true);
     };
+    const handleCollected = (res: string[]) => {
+        setIsCollecting(false);
+    }
     const handleNextStep = (data: CallBackProps) => {
         const { status } = data;
         if (status === STATUS.FINISHED || status === STATUS.SKIPPED){
@@ -143,7 +146,7 @@ export function Exercise(props: IProps) {
 
                 {level && courseService.isVisualTask(level.tasks[currentTaskIndex].type) && (
                     <div className="mt-8 overflow-hidden rounded-3xl">
-                        <AIView isCollecting={isCollecting} setIsCollecting={setIsCollecting}/>
+                        <AIView isCollecting={isCollecting} collectionCallback={handleCollected}/>
                         <button className="p-4 bg-primary" onClick={() => {
                             handleUserInput('A');
                         }}>P</button>

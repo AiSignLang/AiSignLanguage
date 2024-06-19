@@ -4,14 +4,6 @@ export interface IFriend{
     score: IScore;
     profilePath: string | null;
 }
-
-export interface IUser{
-    userId: number;
-    userName: string;
-    score: IScore;
-    profilePic: string;
-}
-
 export interface IProfile{
     
 }

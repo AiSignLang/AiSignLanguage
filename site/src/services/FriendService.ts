@@ -1,4 +1,3 @@
-import {IUser} from "../model/props.ts";
 import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
 import config from "../config.ts";
 //import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
@@ -17,7 +16,22 @@ class FriendService{
         }
         return users;
     }
-
+    public async addFriend(friendUsername: string){
+        const sessionUser = sessionStorage.getItem('user');
+        if(!sessionUser){
+            return; //! TODO Renaviagte to login
+        }
+        const username = JSON.parse(sessionUser).userName; //! TODO Nächste Zeile könnte krachen
+        await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/friends/${username}/friends/${friendUsername}`, "POST",undefined);
+    }
+    public async removeFriend(friendUsername: string){
+        const sessionUser = sessionStorage.getItem('user');
+        if(!sessionUser){
+            return; //! TODO Renaviagte to login
+        }
+        const username = JSON.parse(sessionUser).userName; //! TODO Nächste Zeile könnte krachen
+        await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/friends/${username}/friends/${friendUsername}`, "DELETE",undefined);
+    }
     public async getFriends(){
         const sessionUser = sessionStorage.getItem('user');
         if(!sessionUser){

@@ -13,6 +13,10 @@ export default class Friends extends React.Component {
         });
     }
 
+    update(){
+        this.forceUpdate()
+    }
+
     render(){
         return (
             <div className="w-full mt-10">
