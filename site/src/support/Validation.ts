@@ -37,16 +37,18 @@ export const validatePassword = (password: string): ValidationErrors[] => {
 
 export const validateUsername = async (username: string)=>{
     const errors: ValidationErrors[] = [];
-    const user = await userService.validateUsername(username); // TODO: check if user exists auth stuff
     if(username.length === 20){
         errors.push(ValidationErrors.TOO_LONG);
+        return errors;
     }
 
     if(username.length < 1){
         errors.push(ValidationErrors.USERNAME_TOO_SHORT);
+        return errors;
     }
+    const isValid = await userService.validateUsername(username); // TODO: check if user exists auth stuff
 
-    if(user){
+    if(!isValid){
         errors.push(ValidationErrors.ALREADY_IN_USE);
     }
 

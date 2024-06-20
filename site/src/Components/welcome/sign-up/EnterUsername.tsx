@@ -3,11 +3,11 @@ import {
     replaceValue, validateUsername,
     ValidationErrors
 } from "../../../support/Validation.ts";
-import AslAuthService from "../../../services/auth/asl-auth-service.ts";
 import {userService} from "../../../services/UserService.ts";
 
 interface IProps {
     changeStep: (step: number) => void;
+    
 }
 
 
@@ -74,10 +74,18 @@ export default function EnterUsername(prop: IProps){
 
 
             <div className="flex justify-between rounded mt-5 space-x-4">
-                <button onClick={() => {
+                <button onClick={async() => {
                     usernameValidation(null as unknown as React.ChangeEvent<HTMLInputElement>);
                     if (usernameErrors.length === 0){
-                        const response = userService.postUser(username);
+                        const curUser = await userService.getMe();
+                        if (!curUser) {
+                            return;   
+                        }
+                        const response = await  userService.patchUser(curUser!.userName, {userName: username});
+                        if (!response) {
+                            return;
+                        }
+                        localStorage.setItem("username", response!.userName);
                     }
                     prop.changeStep(2);
                 }} type="submit"
