@@ -62,7 +62,7 @@ export async function deleteFile(filePath: string):Promise<boolean> {
 }
 
 export function isNameLengthValid(line: string): boolean {
-    return line.length > 1 && line.length <= 20;
+    return line.length >= 1 && line.length <= 20;
 }
 
 export function isIDValid(id: string): boolean {

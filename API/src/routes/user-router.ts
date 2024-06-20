@@ -43,7 +43,7 @@ userRouter.get("/me", async (req: any, res) => {
     return res.json(req.user);
 });
 
-userRouter.post("validate-username", async (req, res) => {
+userRouter.post("/validate-username", async (req, res) => {
     const username = req.body.username;
     if (!username || !isNameLengthValid(username)){
         res.sendStatus(StatusCodes.BAD_REQUEST);
@@ -55,7 +55,7 @@ userRouter.post("validate-username", async (req, res) => {
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
-    res.sendStatus(StatusCodes.OK);
+    res.status(StatusCodes.OK).send({message:'Username is valid'});
 });
 
 userRouter.get("/:username", async (req: any, res) => {
