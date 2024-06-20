@@ -16,7 +16,7 @@
   api:
     build: "./API/"
     env_file:
-      - ./API/.env
+      - ./API/..env
     image: ital3x/ai-sign-language_api_dev:1.0.0
     volumes:
       - db-data:/app/data/
