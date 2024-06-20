@@ -1,0 +1,16 @@
+TaskName;Words;VideoPath
+Begrüßung;Hallo;default_path
+Pronomen;Du;default_path
+Verabschiedung;Tschüss;default_path
+Pronomen;Ich;default_path
+Verb;mögen;default_path
+Pronomen;Wir;default_path
+Verb;helfen;default_path
+Fragewort;wie;default_path
+Verb;können;default_path
+Frage;Wie geht es dir?;default_path
+Fragewort;Warum;default_path
+Nomen;Ananas;default_path
+Präposition;auf;default_path
+Nomen;Pizza;default_path
+Verb;gehen;default_path
