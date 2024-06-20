@@ -34,7 +34,7 @@ public class TokenService
         try
         {
             var claims = _tokenHandler.ValidateToken(token, tokenValidationParameters, out _);
-            return claims.FindFirst(JwtRegisteredClaimNames.Email)?.Value;
+            return claims.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
         }
         catch
         {
