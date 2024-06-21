@@ -177,11 +177,11 @@ userRouter.delete("/:username", async (req, res) => {
 
 userRouter.patch("/:username", async (req, res) => {
     const userName = req.params.username;
-    const newUserName = req.body.name;
+    const newUserName = req.body.userName;
     const user = await Users.findOne({where: {username: userName}});
 
     if(!userName || !newUserName
-        || !isNameLengthValid(userName) || !isNameLengthValid(newUserName)
+        || !isNameLengthValid(newUserName)
         || !user){
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
