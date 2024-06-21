@@ -87,23 +87,31 @@ export default function EnterUsername(prop: IProps){
                         }
                         localStorage.setItem("username", response!.userName);
                     }
-                    prop.changeStep(2);
+                    prop.changeStep(1);
                 }} type="submit"
                         className="w-full justify-center py-2 px-4 rounded-md shadow-sm
                     text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none
                     focus:ring-2 focus:ring-offset-2 focus:ring-primary
                     inline-flex">go back
                 </button>
-                <button onClick={() => {
+                <button onClick={async () => {
                     usernameValidation(null as unknown as React.ChangeEvent<HTMLInputElement>);
-
-                    alert("can navigate to the next page")
-                    console.log("login done")
-
+                    if (usernameErrors.length === 0) {
+                        const curUser = await userService.getMe();
+                        if (!curUser) {
+                            return;
+                        }
+                        const response = await userService.patchUser(curUser!.userName, {userName: username});
+                        if (!response) {
+                            return;
+                        }
+                        localStorage.setItem("username", response!.userName);
+                    }
+                    prop.changeStep(3);
                 }} type="submit"
                         className="w-full justify-center py-2 px-4 rounded-md shadow-sm
                     text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none
-                    focus:ring-2 focus:ring-offset-2 focus:ring-primary inline-flex">finish up!
+                    focus:ring-2 focus:ring-offset-2 focus:ring-primary inline-flex">nearly done!
                 </button>
             </div>
         </div>
