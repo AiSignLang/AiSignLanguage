@@ -8,7 +8,6 @@ import {verifyASLToken} from "./verify-asl";
 
 export async function Authorize(req:  any, res: express.Response, next: express.NextFunction) {
     const token = req.headers.authorization?.split(' ')[1];
-    
     if (!token) {
         return res.status(401).send('Unauthorized');
     }
