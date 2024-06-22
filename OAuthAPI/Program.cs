@@ -16,6 +16,7 @@ var apiKey = Environment.GetEnvironmentVariable("API_SECRET");
 var  smtpServer = Environment.GetEnvironmentVariable("SMTP_SERVER");
 var smtpPortStr = Environment.GetEnvironmentVariable("SMTP_PORT");
 var emailAdress = Environment.GetEnvironmentVariable("EMAIL_ADDRESS");
+var clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET");
 var issuer = builder.Configuration["Jwt:Issuer"];
 var audience = builder.Configuration["Jwt:Audience"];
 if (string.IsNullOrWhiteSpace(apiKey)
@@ -24,12 +25,13 @@ if (string.IsNullOrWhiteSpace(apiKey)
     || string.IsNullOrWhiteSpace(smtpServer)
     || string.IsNullOrWhiteSpace(emailAdress)
     || string.IsNullOrWhiteSpace(smtpPortStr)
+    || string.IsNullOrWhiteSpace(clientSecret)
     || !int.TryParse(smtpPortStr, out var smtpPort))
 {
     throw new Exception("Environment variables not set");
 }
 
-builder.Services.AddSingleton(new KeyService(apiKey, issuer, audience));
+builder.Services.AddSingleton(new KeyService(apiKey, issuer, audience, clientSecret));
 builder.Services.AddSingleton<JwtSecurityTokenHandler>();
 builder.Services.AddSingleton(new EmailService(emailAdress, smtpServer, smtpPort));
 builder.Services.AddSingleton<TokenService>(d=> new TokenService(d.GetRequiredService<JwtSecurityTokenHandler>(), d.GetRequiredService<KeyService>()));
@@ -71,16 +73,11 @@ using (var scope = app.Services.CreateScope())
     await context.Database.MigrateAsync();
 }
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-   
-}
-else
-{
-    app.UseHttpsRedirection();
-}
+//if (app.Environment.IsDevelopment())
+
+app.UseSwagger();
+app.UseSwaggerUI();
+ 
 
 
 app.UseAuthentication();

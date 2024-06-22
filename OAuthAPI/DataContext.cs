@@ -21,14 +21,8 @@ public sealed class  DataContext : DbContext
         modelBuilder.Entity<Account>().ToTable("Accounts");
         modelBuilder.Entity<Account>().HasKey(u => u.Id);
         modelBuilder.Entity<Account>()
-            .HasIndex(u => u.Username)
-            .IsUnique();
-        modelBuilder.Entity<Account>()
             .HasIndex(u => u.Email)
             .IsUnique();
-        modelBuilder.Entity<Account>()
-            .Property(u => u.Username)
-            .IsRequired();
         modelBuilder.Entity<Account>()
         .Property(u => u.Password)
                     .IsRequired();

@@ -10,23 +10,70 @@ namespace OAuthAPI.Services;
 public class TokenService
 {
     
-    private static readonly TimeSpan TokenLifetime = TimeSpan.FromHours(8);
+    private static readonly TimeSpan TokenLifetime = TimeSpan.FromHours(5);
     private readonly JwtSecurityTokenHandler _tokenHandler;
     private readonly KeyService _keyService;
-
+    public Dictionary<string,string> AccessCodes = new(); // email, accessCode
     public TokenService(JwtSecurityTokenHandler tokenHandler, KeyService keyService)
     {
         _tokenHandler = tokenHandler;
         _keyService = keyService;
     }
 
+    public string? VerifyToken(string token)
+    {
+        var tokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidIssuer = _keyService.Issuer,
+            ValidAudience = _keyService.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_keyService.SecretKey))
+        };
+
+        try
+        {
+            var claims = _tokenHandler.ValidateToken(token, tokenValidationParameters, out _);
+            return claims.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public string GenerateAccessCode(Account user)
+    {
+        // Generate a new random access code
+        var randomNumber = new byte[32];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        var accessCode = Convert.ToBase64String(randomNumber);
+        if(AccessCodes.ContainsKey(user.Email))
+            AccessCodes.Remove(user.Email);
+        AccessCodes.Add(user.Email, accessCode);
+        return accessCode;
+    }
+    
+    public bool ValidateAccessCode(string providedCode, string accessCode)
+    {
+        // Hash the provided access code with the client secret 
+        using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(_keyService.ClientSecret));
+        var newHashedAccessCode = hmac.ComputeHash(Encoding.UTF8.GetBytes(accessCode));
+
+        // Convert the byte array to a string
+        var newHashedAccessCodeStr = Convert.ToBase64String(newHashedAccessCode);
+
+        // Compare the newly hashed access code with the provided hashed access code
+        return newHashedAccessCodeStr == providedCode;
+    }
+    
     public Tokens GenerateToken(Account user)
     {
         var tokenDescriptor = new SecurityTokenDescriptor()
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
-                new(JwtRegisteredClaimNames.Name,user.Username),
                 new(JwtRegisteredClaimNames.Email, user.Email),
                 new(JwtRegisteredClaimNames.NameId, user.Id.ToString())
             }),
@@ -39,7 +86,7 @@ public class TokenService
                 SecurityAlgorithms.HmacSha256Signature
             )
         };
-
+        
         var token = _tokenHandler.CreateToken(tokenDescriptor);
         var accessToken = _tokenHandler.WriteToken(token);
 
