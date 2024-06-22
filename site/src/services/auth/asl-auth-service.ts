@@ -11,6 +11,7 @@ async function Login(email:string,  password:string,onSuccess?:()=>void,onError?
     if (!response){
         return false;
     }
+    console.log('response', response)
     const tokens = await fetchRestEndpoint<OAuthASLTokens>(`${config.externalAddress}/oauth/asl-auth/token`,"POST",{
         'code':response.code,
         'email':email,
@@ -51,9 +52,8 @@ async function VerifyToken(token:string,onSuccess?:()=>void,onError?:(response:S
 }
 
 async function ValidateEmail(email:string,onSuccess?:()=>void,onError?:(response:StatusCodes)=>void):Promise<boolean>{
-    await fetchRestEndpoint(`${config.externalAddress}/auth/Account/validate-email?email=${email}`,"GET",undefined,false,onError);
     try{
-        console.log('email', email)
+        await fetchRestEndpoint(`${config.externalAddress}/auth/Account/validate-email?email=${email}`,"GET",undefined,false,onError);
     }catch (e){
         return false;
     }

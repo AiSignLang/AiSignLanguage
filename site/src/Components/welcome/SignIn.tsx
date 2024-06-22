@@ -58,7 +58,7 @@ export function SignIn() {
                                     event.preventDefault();
                                     aslAuthService.Login(email, password, ()=>{
                                         navigate('/profile');
-                                    },(status)=>{
+                                    },()=>{
                                         setError(true);
                                     })
                                 }}
