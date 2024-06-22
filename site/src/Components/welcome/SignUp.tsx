@@ -1,7 +1,7 @@
 import ProgressBar from "./sign-up/ProgressBar.tsx";
 import EmailPassword from "./sign-up/EmailPassword.tsx";
 import OtherAuth from "./sign-up/OtherAuth.tsx";
-import React, {useState} from "react";
+import  {useState} from "react";
 import UploadForm from "./sign-up/UploadForm.tsx";
 import EnterUsername from "./sign-up/EnterUsername.tsx";
 
