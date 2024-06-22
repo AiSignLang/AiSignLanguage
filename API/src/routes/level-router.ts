@@ -32,7 +32,7 @@ levelRouter.get("/:levelId", async (req, res) => {
     }
 
     try{
-        const level = await Score.findByPk(levelId);
+        const level = await Level.findByPk(levelId);
         if(level === null) {
             res.sendStatus(StatusCodes.BAD_REQUEST);
             return;
@@ -46,24 +46,30 @@ levelRouter.get("/:levelId", async (req, res) => {
 
 });
 
-levelRouter.delete(":levelId", async (req, res) => {
-    const levelId = req.params.levelId;
-
-    if(!isIDValid(levelId)){
+levelRouter.get("/:index", async (req,res)=>{
+    let index = parseInt(req.params.index);
+    if(!req.params.index || isNaN(index) || index < 0){
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;
     }
 
+
     try{
-        const score = await Score.findByPk(levelId);
-        if(score === null) {
-            res.sendStatus(StatusCodes.BAD_REQUEST);
+        const level = await Level.findOne({
+            where: {
+                levelNumber: ++index
+            }
+        })
+
+        if(level === null){
+            // TODO: create a level -> in the future
+            res.sendStatus(StatusCodes.NOT_FOUND);
             return;
         }
-        await score.destroy();
-        res.sendStatus(StatusCodes.NO_CONTENT);
 
-    }catch (err){
+        res.json(level);
+    }catch(err){
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+        console.error(err);
     }
 })

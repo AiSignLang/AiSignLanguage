@@ -161,3 +161,14 @@ export async function fetchRestEndpoint<t>(route: string, method: "GET" | "POST"
         return await res.json();
     }
 }
+
+export async function readFile(filePath: string, isAsync: boolean)  {
+    try {
+        return isAsync
+            ? await fs.readFile(path.join(__dirname,filePath), 'utf-8')
+            : fsSync.readFileSync(path.join(__dirname,filePath), 'utf-8');
+    }catch (err){
+        console.error(err);
+        return  "";
+    }
+}
