@@ -49,6 +49,8 @@ public class TokenService
         using var rng = RandomNumberGenerator.Create();
         rng.GetBytes(randomNumber);
         var accessCode = Convert.ToBase64String(randomNumber);
+        if(AccessCodes.ContainsKey(user.Email))
+            AccessCodes.Remove(user.Email);
         AccessCodes.Add(user.Email, accessCode);
         return accessCode;
     }

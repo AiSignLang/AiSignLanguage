@@ -10,6 +10,14 @@ COPY ["OAuthAPI.csproj", "./"]
 RUN dotnet restore "OAuthAPI.csproj"
 COPY . .
 WORKDIR "/src/"
+
+# Install dotnet-ef tool
+RUN dotnet tool install --global dotnet-ef --version 8.0.0
+
+# Run migrations
+RUN /root/.dotnet/tools/dotnet-ef migrations add PublishMigration
+RUN /root/.dotnet/tools/dotnet-ef database update PublishMigration
+
 RUN dotnet build "OAuthAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
@@ -19,4 +27,8 @@ RUN dotnet publish "OAuthAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN mkdir -p /app/Data
+RUN chown -R $APP_UID /app/Data
+RUN chmod -R 770 /app/Data
+
 ENTRYPOINT ["dotnet", "OAuthAPI.dll"]

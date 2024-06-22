@@ -54,10 +54,10 @@ public class AccountController(DataContext context, TokenService tokenService, E
     [HttpPost("Login")]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
-        using var transaction = context.Database.BeginTransaction();
+        await using var transaction =  await context.Database.BeginTransactionAsync();
         try
         {
-            Account account = context.Accounts.FirstOrDefault(a => a.Email == model.Email);
+            var account = context.Accounts.FirstOrDefault(a => a.Email == model.Email);
 
             if (account == null || !account.VerifyPassword(model.Password))
             {
@@ -68,7 +68,7 @@ public class AccountController(DataContext context, TokenService tokenService, E
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
             
-            return Ok(new{code=tokenService.GenerateToken(account)});
+            return Ok(new{code=tokenService.GenerateAccessCode(account)});
         }
         catch (Exception)
         {
@@ -96,7 +96,7 @@ public class AccountController(DataContext context, TokenService tokenService, E
     [HttpPost("[action]")]
     public async Task<IActionResult> RefreshToken([FromQuery] string refreshToken)
     {
-        using var transaction = context.Database.BeginTransaction();
+        await using var transaction =  await context.Database.BeginTransactionAsync();
         try
         {
             var account = context.Accounts.FirstOrDefault(a => a.RefreshToken == refreshToken);
@@ -123,7 +123,7 @@ public class AccountController(DataContext context, TokenService tokenService, E
     [HttpPost("[action]")]
     public async Task<IActionResult> RevokeToken([FromQuery] string refreshToken)
     {
-        using var transaction = context.Database.BeginTransaction();
+        await using var transaction =  await context.Database.BeginTransactionAsync();
         try
         {
             var account = context.Accounts.FirstOrDefault(a => a.RefreshToken == refreshToken);
