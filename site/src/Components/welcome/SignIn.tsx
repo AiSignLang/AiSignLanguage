@@ -84,7 +84,7 @@ export function SignIn() {
                     </div>
                 </form>
                 <p className="mt-6 text-center text-sm text-text-primary">
-                    Not a member? <a href="#" className="font-medium text-primary hover:text-primary-hover">Start a 14 day free trial</a>
+                    Not a member? <a href="/signup" className="font-medium text-primary hover:text-primary-hover">Sign Up</a>
                 </p>
             </div>
         </div>
