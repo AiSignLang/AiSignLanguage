@@ -15,7 +15,6 @@ export default function User(props: IProps){
         const fetchUser = async () => {
             console.log('fetching user')
             const result = await userService.getUser(props.username,()=>{
-                alert('Unauthorized')
                 Utils.navigate('/Unauthorized');
                 return;
             });
