@@ -8,7 +8,7 @@ import {userService} from "../UserService.ts";
 import {IUser} from "../../model/props.ts";
 
 export async function googleAuth() {
-    const  refresh_token = localStorage.getItem('refresh_token');
+    const  refresh_token = localStorage.getItem('refresh_token_g');
     
     if(refresh_token !== null) {
         if (await refreshToken(refresh_token)){
@@ -52,7 +52,7 @@ export async function refreshToken(refresh_token: string): Promise<boolean> {
     }
     sessionStorage.setItem('access_token', data!.access_token!);
     sessionStorage.setItem('id_token', data!.id_token!);
-    localStorage.setItem('refresh_token', data!.refresh_token!);
+    localStorage.setItem('refresh_token_g', data!.refresh_token!);
     const userData = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/me`, "GET");
     if (!userData) {
         navigate("/Unauthorized");

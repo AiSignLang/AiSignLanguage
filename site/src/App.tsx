@@ -42,7 +42,7 @@ function App() {
             <Route path="/Unauthorized" element={<Unauthorized />}/>
             <Route path="/ProfileNotFound" element={<XnotFound subject="Profile" />}/>
             <Route path="/profile" element={<UserProfile/>}/>
-            <Route path="/oauth-google-redirect" element={<OAuthRedirect/>}/>
+            <Route path="/google-redirect" element={<OAuthRedirect/>}/>
         </Routes>
       </Router>
   );

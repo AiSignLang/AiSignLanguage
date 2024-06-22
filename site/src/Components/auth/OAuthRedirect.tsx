@@ -26,7 +26,7 @@ const OAuthRedirect = () => {
       console.log("setting tokens in redirect")
       sessionStorage.setItem('access_token', tokens!.access_token!);
       sessionStorage.setItem('id_token', tokens!.id_token!);
-      localStorage.setItem('refresh_token', tokens!.refresh_token!);
+      localStorage.setItem('refresh_token_g', tokens!.refresh_token!);
       const userData = await getUserData(tokens!.access_token!);
       sessionStorage.setItem('username', userData!.name!)
       console.log('userData in redirect', userData)
