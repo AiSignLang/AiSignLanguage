@@ -30,7 +30,7 @@ export async function googleAuth() {
         return;
     }
     
-    const response = await fetch(`${config.externalAddress}/auth/google-auth/request`, {
+    const response = await fetch(`${config.externalAddress}/oauth/google-auth/request`, {
         method: "POST",
     });
     const data = await response.json();
@@ -44,7 +44,7 @@ export async function getUserData(access_token: string): Promise<OAuthGoogleUser
 }
 
 export async function refreshToken(refresh_token: string): Promise<boolean> {
-    const data = await fetchRestEndpoint<Credentials>(`${config.externalAddress}/auth/google-auth/refresh`, "POST",{refresh_token});
+    const data = await fetchRestEndpoint<Credentials>(`${config.externalAddress}/oauth/google-auth/refresh`, "POST",{refresh_token});
     if (!data || !data.access_token || !data.refresh_token) {
         navigate("/Unauthorized");
         return false;
@@ -62,7 +62,7 @@ export async function refreshToken(refresh_token: string): Promise<boolean> {
 }
 
 export async function verifyGoogleAuth(access_token: string): Promise<boolean> {
-    const response = await fetch(`${config.externalAddress}/auth/google-auth/verify`, {
+    const response = await fetch(`${config.externalAddress}/oauth/google-auth/verify`, {
         method: "POST",
         body: JSON.stringify({access_token}),
         headers: {

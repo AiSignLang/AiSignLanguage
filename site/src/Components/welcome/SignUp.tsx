@@ -8,7 +8,6 @@ import EnterUsername from "./sign-up/EnterUsername.tsx";
 
 export function SignUp() {
     const [progressStep, setProgressStep] = useState<number>(1);
-
     const changeStep = (step: number)=>{
         setProgressStep(step);
     }
@@ -22,7 +21,7 @@ export function SignUp() {
 
                 {progressStep === 1 &&
                     <>
-                        <EmailPassword changeStep={changeStep}/>
+                        <EmailPassword changeStep={changeStep} />
                         <OtherAuth/>
                     </>
                 }
@@ -30,14 +29,15 @@ export function SignUp() {
                 {
                     progressStep === 2 &&
                     <>
-                        <UploadForm changeStep={changeStep}/>
+                        <EnterUsername changeStep={changeStep}/>
                     </>
+                    
                 }
 
                 {
                     progressStep === 3 &&
                     <>
-                        <EnterUsername changeStep={changeStep}/>
+                        <UploadForm changeStep={changeStep}/>
                     </>
                 }
 
