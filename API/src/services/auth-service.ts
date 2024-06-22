@@ -1,4 +1,4 @@
-﻿import {OAuthGoogleUserData, OAuthProvider} from "../routes/auth/model";
+﻿import {OAuthASLUserData, OAuthGoogleUserData, OAuthProvider} from "../routes/auth/model";
 import OAuthAccount from "../data/models/OAuthAccount";
 import User from "../data/models/User";
 import sequelize from "../data/database";
@@ -16,26 +16,16 @@ interface CreateUserCredentials
     name: string;
     familyName: string|null;
     givenName: string|null;
+    picture: string|null;
 }
 
-export async function registerOAuthUser(oauthUser: OAuthGoogleUserData,  provider: OAuthProvider, dbUser: User | null = null) : Promise<ServiceReturn<OAuthAccount>>
+export async function registerOAuthUser(oauthUser: CreateUserCredentials,  provider: OAuthProvider, dbUser: User | null = null) : Promise<ServiceReturn<OAuthAccount>>
 {
-    let dates: CreateUserCredentials;
-    // switch for different providers
-    switch (provider) {
-        case OAuthProvider.GOOGLE:
-            dates = {
-                id: oauthUser.sub,
-                name: oauthUser.name,
-                familyName: oauthUser.family_name,
-                givenName: oauthUser.given_name 
-            }
-            break;
-    }
+    
     
     const existingUser = await OAuthAccount.findOne({
         where: {
-            oAuthId: dates.id,
+            oAuthId: oauthUser.id,
             oAuthProvider: provider
         }
     });
@@ -46,10 +36,10 @@ export async function registerOAuthUser(oauthUser: OAuthGoogleUserData,  provide
         };
     }
     if (!dbUser) {
-        const newUser = await createValidUser(dates);
+        const newUser = await createValidUser(oauthUser);
         dbUser = newUser.data;
     }
-    if (dbUser && !dbUser.hasProfilePic()) {
+    if (dbUser && !dbUser.hasProfilePic() && oauthUser.picture) {
         const outPath = path.join(publicPath, 'temp');
         const file = await downloadImage(oauthUser.picture, outPath);
         await setAvatar(dbUser.userName, {
@@ -60,7 +50,7 @@ export async function registerOAuthUser(oauthUser: OAuthGoogleUserData,  provide
     const transaction = await sequelize.transaction();
     try {
         const user = await OAuthAccount.create({
-            oAuthId: dates.id,
+            oAuthId: oauthUser.id,
             oAuthProvider: provider,
             userId: dbUser!.userId
         });

@@ -43,6 +43,21 @@ userRouter.get("/me", async (req: any, res) => {
     return res.json(req.user);
 });
 
+userRouter.post("/validate-username", async (req, res) => {
+    const username = req.body.username;
+    if (!username || !isNameLengthValid(username)){
+        res.sendStatus(StatusCodes.BAD_REQUEST);
+        return;
+    }
+
+    const user = await Users.findOne({where: {username: username}});
+    if(user){
+        res.sendStatus(StatusCodes.BAD_REQUEST);
+        return;
+    }
+    res.status(StatusCodes.OK).send({message:'Username is valid'});
+});
+
 userRouter.get("/:username", async (req: any, res) => {
     if (!req.user){
         console.log(req.user);
@@ -160,13 +175,13 @@ userRouter.delete("/:username", async (req, res) => {
     }
 })
 
-userRouter.put("/:username", async (req, res) => {
+userRouter.patch("/:username", async (req, res) => {
     const userName = req.params.username;
-    const newUserName = req.body.name;
+    const newUserName = req.body.userName;
     const user = await Users.findOne({where: {username: userName}});
 
     if(!userName || !newUserName
-        || !isNameLengthValid(userName) || !isNameLengthValid(newUserName)
+        || !isNameLengthValid(newUserName)
         || !user){
         res.sendStatus(StatusCodes.BAD_REQUEST);
         return;

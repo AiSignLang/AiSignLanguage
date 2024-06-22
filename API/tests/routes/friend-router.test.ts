@@ -158,7 +158,7 @@ describe('Delete', ()=>{
         const responseShort = await request(app).delete(`${friendRoute}/${usernameShort}/friends/${validUser}`);
         const responseLong = await request(app).delete(`${friendRoute}/${userNameLong}/friends/${validUser}`);
 
-        expect(responseShort.statusCode).toBe(400);
+        expect(responseShort.statusCode).toBe(404);
         expect(responseLong.statusCode).toBe(400);
     })
 
@@ -166,7 +166,7 @@ describe('Delete', ()=>{
         const responseShort = await request(app).delete(`${friendRoute}/${validUser}/friends/${usernameShort}`);
         const responseLong = await request(app).delete(`${friendRoute}/${validUser}/friends/${userNameLong}`);
 
-        expect(responseShort.statusCode).toBe(400);
+        expect(responseShort.statusCode).toBe(404);
         expect(responseLong.statusCode).toBe(400);
     })
 

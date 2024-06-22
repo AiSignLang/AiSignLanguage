@@ -7,6 +7,7 @@ import config from "./config";
 import axios from 'axios';
 import {v4 as uuidv4} from 'uuid';
 import {writeFile} from "node:fs";
+import {StatusCodes} from "http-status-codes";
 
 export const publicPath = path.join(__dirname, '../public/')
 
@@ -61,7 +62,7 @@ export async function deleteFile(filePath: string):Promise<boolean> {
 }
 
 export function isNameLengthValid(line: string): boolean {
-    return line.length > 1 && line.length <= 20;
+    return line.length >= 1 && line.length <= 20;
 }
 
 export function isIDValid(id: string): boolean {
@@ -93,7 +94,11 @@ export async function resizeImage(file:string, resolutions:number[], deleteOld:b
             await deleteFile(outFile)
         }
         const s = sharp(file)
-            .extract({left: Math.round(left), top: Math.round(top), width: Math.round(minDimension), height: Math.round(minDimension)})
+            .extract({
+                left: Math.round(left),
+                top: Math.round(top),
+                width: Math.round(minDimension),
+                height: Math.round(minDimension)})
             .resize(resolution,resolution)
         await s.toFile(outFile).catch((err) => {
             console.error(`Error resizing image: ${err}`);
@@ -126,11 +131,34 @@ export async function convertToWebp(file: string, deleteOld: boolean,outName:str
         if (deleteOld) {
             await deleteFile(file)
         }
-        return (await resizeImage(newFile, [32, 64, 128,256, 512, 1024, 2048])).map((name) => 
+        return (await resizeImage(newFile, [32, 64, 128,256 , 512, 1024, 2048])).map((name) => 
             name.split("public").at(-1)?.slice(1) ?? name);
     } else {
         console.error(`Failed to convert file ${file} to WebP: ${result}`);
         return null;
+    }
+}
+export async function fetchRestEndpoint<t>(route: string, method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH", data?: object | string, authentication: string  |null = null, onError?: (code: StatusCodes) => void): Promise<t | undefined> {
+    const options: RequestInit = {method};
+    const auth = authentication ?? "";
+    console.log('auth', auth);
+    options.headers = {
+        "Content-Type": typeof data == "string" ? 'text/plain' : ' application/json',
+        "Authorization": `Bearer ${auth}`
+    };
+    if (data) {
+        options.body = JSON.stringify(data);
+    }
+    const res = await fetch(route, options);
+    if (!res.ok) {
+        onError?.(res.status);
+    }
+    if (!res.ok) {
+        const error = new Error(`${method} ${res.url} ${res.status} (${res.statusText})`);
+        throw error;
+    }
+    if (res.status !== 204) {
+        return await res.json();
     }
 }
 
