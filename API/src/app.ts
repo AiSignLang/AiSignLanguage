@@ -7,9 +7,10 @@ import {friendRouter} from "./routes/friend-router";
 import googleAuthRouter from "./routes/auth/google-auth-router";
 import * as fs from "node:fs";
 import config from "./config";
-
+configDotenv()
 import cors from "cors";
 import aslAuthRouter from "./routes/auth/asl-auth-router";
+import {configDotenv} from "dotenv";
 export const app = express();
 
 if(!process.env.ASL_SECRET ||
