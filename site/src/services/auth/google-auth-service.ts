@@ -7,7 +7,7 @@ import {navigate} from "../../model/Utils.ts";
 import {userService} from "../UserService.ts";
 
 export async function googleAuth() {
-    const  refresh_token = localStorage.getItem('refresh_token');
+    const  refresh_token = localStorage.getItem('refresh_token_g');
     
     if(refresh_token !== null) {
         if (await refreshToken(refresh_token)){
@@ -30,7 +30,7 @@ export async function googleAuth() {
         return;
     }
     
-    const response = await fetch(`${config.externalAddress}/auth/google-auth/request`, {
+    const response = await fetch(`${config.externalAddress}/oauth/google-auth/request`, {
         method: "POST",
     });
     const data = await response.json();
@@ -44,14 +44,14 @@ export async function getUserData(access_token: string): Promise<OAuthGoogleUser
 }
 
 export async function refreshToken(refresh_token: string): Promise<boolean> {
-    const data = await fetchRestEndpoint<Credentials>(`${config.externalAddress}/auth/google-auth/refresh`, "POST",{refresh_token});
+    const data = await fetchRestEndpoint<Credentials>(`${config.externalAddress}/oauth/google-auth/refresh`, "POST",{refresh_token});
     if (!data || !data.access_token || !data.refresh_token) {
         navigate("/Unauthorized");
         return false;
     }
     sessionStorage.setItem('access_token', data!.access_token!);
     sessionStorage.setItem('id_token', data!.id_token!);
-    localStorage.setItem('refresh_token', data!.refresh_token!);
+    localStorage.setItem('refresh_token_g', data!.refresh_token!);
     const userData = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/me`, "GET");
     if (!userData) {
         navigate("/Unauthorized");
@@ -62,7 +62,7 @@ export async function refreshToken(refresh_token: string): Promise<boolean> {
 }
 
 export async function verifyGoogleAuth(access_token: string): Promise<boolean> {
-    const response = await fetch(`${config.externalAddress}/auth/google-auth/verify`, {
+    const response = await fetch(`${config.externalAddress}/oauth/google-auth/verify`, {
         method: "POST",
         body: JSON.stringify({access_token}),
         headers: {

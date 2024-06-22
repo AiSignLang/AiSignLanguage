@@ -24,7 +24,7 @@ const ProgressBar = (prop: IProps) => {
                     <button onClick={()=> prop.changeStep(2)} className={`w-10 h-10 border-2 border-primary flex items-center justify-center rounded-full ${prop.progressStep === 2 ? 'bg-primary' : ''}`}>
                         02
                     </button>
-                    <p className="ml-2">picture</p>
+                    <p className="ml-2">name</p>
                 </div>
                 <div className="md:w-0 w-6 border-t bg-white"/>
                 <div className="flex items-center">
@@ -33,7 +33,7 @@ const ProgressBar = (prop: IProps) => {
                         className={`min-w-15 w-10 h-10 border-2 border-primary flex items-center justify-center rounded-full ${prop.progressStep === 3 ? 'bg-primary' : ''}`}>
                         03
                     </button>
-                    <p className="ml-2">name</p>
+                    <p className="ml-2">picture</p>
                 </div>
             </div>
         </div>

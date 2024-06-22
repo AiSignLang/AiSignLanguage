@@ -32,6 +32,9 @@ export default defineConfig(({mode}) => {
                     changeOrigin: true,
                 },
                 '/auth': {
+                    target: process.env.VITE_AUTH_BASE_URL,
+                    changeOrigin: true,
+                },'/oauth': {
                     target: process.env.VITE_API_BASE_URL,
                     changeOrigin: true,
                 },
