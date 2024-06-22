@@ -20,7 +20,8 @@ aslAuthRouter.post( "/token", async (req, res) => {
         return;
     }
 
-    const secret = process.env.ASL_SECRET ?? "";
+    const secret = process.env.ASL_SECRET!;
+    
 //hashing the access code with secret
     const hmac = crypto.createHmac('sha256', secret);
     hmac.update(code);

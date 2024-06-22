@@ -12,6 +12,12 @@ import cors from "cors";
 import aslAuthRouter from "./routes/auth/asl-auth-router";
 export const app = express();
 
+if(!process.env.ASL_SECRET ||
+    !process.env.GOOGLE_CLIENT_ID ||
+    !process.env.GOOGLE_CLIENT_SECRET){
+    throw new Error('Environment variables not set');
+}
+
 app.use(config.staticEndpoint,express.static("public"));
 app.use(express.json());
 app.use(cors());

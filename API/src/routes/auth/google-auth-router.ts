@@ -12,6 +12,7 @@ configDotenv()
 
 const redirect = `${config.externalAddress}/google-redirect`;
 console.log('redirect: ', redirect);
+
 const client = new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
