@@ -43,7 +43,7 @@ export function Exercise(props: IProps) {
     };
     const handleCollected = (res: string[]) => {
         setIsCollecting(false);
-        console.log(res);
+        console.log("DATA HAS BEEN COLLECTED ", res);
     }
     const handleNextStep = (data: CallBackProps) => {
         const { status } = data;
@@ -147,7 +147,7 @@ export function Exercise(props: IProps) {
 
                 {level && courseService.isVisualTask(level.tasks[currentTaskIndex].type) && (
                     <div className="mt-8 overflow-hidden rounded-3xl">
-                        <AIView isCollecting={isCollecting} collectionCallback={handleCollected}/>
+                        <AIView collectionCallback={handleCollected}/>
                         <button className="p-4 bg-primary" onClick={() => {
                             handleUserInput('A');
                         }}>P</button>
