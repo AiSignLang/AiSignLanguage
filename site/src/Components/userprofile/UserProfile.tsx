@@ -10,7 +10,7 @@ import Joyride, {CallBackProps, STATUS} from "react-joyride"
 
 export default function UserProfile(){
     NavService.changeNavHighlight(useLocation().pathname);
-    
+
     const steps = [
         {
             target: '#streak',
@@ -41,6 +41,7 @@ export default function UserProfile(){
         }
     };
 
+
     if (sessionStorage.getItem('id_token') === null
         || sessionStorage.getItem("username") === null) {
         navigate('/login');
@@ -60,12 +61,16 @@ export default function UserProfile(){
                 <div className="w-1/2 flex c-md:w-4/6 xs:w-full h-fit mr-10">
                     <div className="w-full bg-bg-secondary rounded-3xl p-10">
                         <User username={sessionStorage.getItem("username")??"John Doe" }/>
-                        <Friends/>
+                        <span id="friends">
+                            <Friends />
+                        </span>
                     </div>
                 </div>
 
                 <div className="w-1/6 xs:w-0">
-                    <Recommendations/>
+                    <span id="recommendations">
+                        <Recommendations />
+                    </span>
                 </div>
             </div>
             {localStorage.getItem('profileGuideDone') === 'true' ? null :  <Joyride

@@ -11,7 +11,8 @@ import {
     Tooltip,
     Legend, BarController, BarElement, RadarController, RadialLinearScale,
 } from 'chart.js'
-import {Bar, Radar} from 'react-chartjs-2'
+import {Bar} from 'react-chartjs-2'
+import {courseService} from "../../services/CourseService.ts";
 
 ChartJS.register(
     CategoryScale,
@@ -46,6 +47,7 @@ interface IProps {
 export function Course(props: IProps) {
     NavService.changeNavHighlight(useLocation().pathname);
     console.log("Courseprops", props);
+    console.log(courseService.getDoneTasksCount())
     const data2 = {
         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
         datasets: [
@@ -92,37 +94,6 @@ export function Course(props: IProps) {
             }
         }
     };
-
-    const radarData = {
-        labels: ['Running', 'Swimming', 'Cycling', 'Weightlifting', 'Yoga'],
-        datasets: [
-            {
-                label: 'My First Dataset',
-                data: [20, 10, 4, 2, 12],
-                fill: true,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgb(255, 99, 132)',
-                pointBackgroundColor: 'rgb(255, 99, 132)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgb(255, 99, 132)'
-            }
-        ]
-    };
-    const radarOptions = {
-        scales: {
-            r: {
-                angleLines: {
-                    color: 'rgb(255,255,255,.1)'  // this will set the color of the radial lines on the radar chart
-                },
-                grid: {
-                    color: 'rgb(255,255,255,.1)',  // this will set the color of the circular grid lines on the radar chart
-                },
-                suggestedMin: 0,
-                suggestedMax: 50
-            }
-        }
-    };
     //Saturated colours
     //                    'rgba(0,132,255,0.2)',                     "rgba(0,132,255,1)",
     return (
@@ -143,10 +114,7 @@ export function Course(props: IProps) {
                     </div>
                 </div>
             </div>
-            <div className="flex w-full mt-20 gap-20">
-                <div className="w-1/4">
-                    <Radar data={radarData} options={radarOptions}/>
-                </div>
+            <div className="flex w-full mt-20 gap-20 justify-center">
               <div className="w-1/2">
                   <Bar data={data2} options={options}/>
               </div>

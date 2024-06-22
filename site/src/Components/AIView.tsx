@@ -3,9 +3,15 @@ import React,{useEffect, useRef, useState} from "react";
 
 import {drawConnectors, drawLandmarks} from "@mediapipe/drawing_utils";
 import {FACEMESH_TESSELATION, HAND_CONNECTIONS, Holistic, POSE_CONNECTIONS, Results} from "@mediapipe/holistic";
+import config from "../config.ts";
 
 
-const AIView: React.FC = () =>{
+interface IProps {
+    isCollecting: boolean; //! Obsolete or redundant
+    collectionCallback: (res: string[]) => void;
+}
+
+export function AIView(props: IProps) {
     //const [holistic,setHolistic] = useState<Holistic|null>(null);
     const VideoWidth = 1280;
     const VideoHeight = 720;
@@ -16,7 +22,63 @@ const AIView: React.FC = () =>{
     
     const [inputVideoReady, setInputVideoReady] = useState(false);
     const [loaded, setLoaded] = useState(false);
-    
+    const [keypoints, setKeypoints] = useState<number[][]>([]);
+
+    let socket = new WebSocket(config.tfServing);
+    useEffect(() => {
+        socket = new WebSocket(config.tfServing);
+        socket.onopen = () => {
+            console.log('Connected to TFServing socket');
+        }
+        socket.onmessage = (event) => {
+            props.collectionCallback(JSON.parse(event.data));
+        }
+        socket.onclose = () => {
+            console.log('Disconnected from TFServing socket');
+        }
+        console.log("init")
+
+        // Clean up function to close the socket when the component unmounts
+        return () => {
+            socket.close();
+        };
+    }, []); // Empty dependency array ensures this runs once on mount and unmount
+
+    let frameCountr = 0;
+    function extractKeypoints(results: Results) {
+        let pose: number[], face: number[], lh: number[], rh: number[];
+
+        if (results.poseLandmarks) {
+            pose = results.poseLandmarks.flatMap(res =>
+                res.x !== undefined && res.y !== undefined && res.z !== undefined && res.visibility !== undefined
+                    ? [res.x, res.y, res.z, res.visibility]
+                    : [0, 0, 0, 0]
+            );
+        } else {
+            pose = new Array(33 * 4).fill(0);
+        }
+
+        if (results.faceLandmarks) {
+            face = results.faceLandmarks.flatMap(res => [res.x, res.y, res.z]);
+        } else {
+            face = new Array(468 * 3).fill(0);
+        }
+
+        if (results.leftHandLandmarks) {
+            lh = results.leftHandLandmarks.flatMap(res => [res.x, res.y, res.z]);
+        } else {
+            lh = new Array(21 * 3).fill(0);
+        }
+
+        if (results.rightHandLandmarks) {
+            rh = results.rightHandLandmarks.flatMap(res => [res.x, res.y, res.z]);
+        } else {
+            rh = new Array(21 * 3).fill(0);
+        }
+
+        return [...pose, ...face, ...lh, ...rh];
+    }
+
     useEffect(() => {
         /*setHolistic(new Holistic({
             locateFile: (file) => {
@@ -71,11 +133,37 @@ const AIView: React.FC = () =>{
 
     },  [inputVideoReady]);
 
-    
-    
     function onResults(results: Results) {
 
-        if (canvasRef.current === null || contextRef.current === null) return; 
+        if (canvasRef.current === null || contextRef.current === null) return;
+        const newKeypoints = keypoints;
+        newKeypoints.push(extractKeypoints(results));
+        if(newKeypoints.length > 30){
+            newKeypoints.shift();
+        }
+        frameCountr++;
+  //      const newFrameCo  unt = frameCount + 1;
+   //     setFrameCount(newFrameCount);
+    //    console.log("RightFrames: " + newFrameCount +  "Frames: " + frameCount + " Keypoints: " + newKeypoints.length);
+        console.log(frameCountr);
+        console.log(socket !== null)
+        if(frameCountr >= 20 && newKeypoints.length === 30 && socket !== null){
+            console.log("Set to 0")
+            frameCountr = 0;
+            //print input shape
+            console.log(newKeypoints.length);
+            socket.send(JSON.stringify({instances: newKeypoints}));
+      //      setFrameCount(0)
+       /*     courseService.getPrediction(newKeypoints).then((res) => {
+                console.log(res);
+                res.json().then((data) => {
+                    console.log(data);
+                    props.collectionCallback(data);
+                });
+
+            });*/
+        }
+        setKeypoints(newKeypoints);
         
         //canvasCtx.drawImage(results.segmentationMask, 0, 0, canvasElement.width, canvasElement.height);
         setLoaded(true);
@@ -129,7 +217,7 @@ const AIView: React.FC = () =>{
     return (
         <>
             <div
-                className={"relative items-center block bg-white border border-gray-100 dark:bg-gray-800 dark:border-gray-800 dark:hover:bg-gray-700"}
+                className={"relative items-center block bg-white dark:bg-gray-800 dark:border-gray-800 dark:hover:bg-gray-700"}
                 style={{width: VideoWidth, height: VideoHeight}}>
                 <video autoPlay ref={(el) => {
                     videoRef.current = el;
