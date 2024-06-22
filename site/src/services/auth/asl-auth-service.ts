@@ -2,6 +2,7 @@ import config from "../../config.ts";
 import {fetchRestEndpoint} from "../../support/FetchEndpoint.ts";
 import {OAuthASLTokens} from "../../model/auth/OAuthASL.ts";
 import {StatusCodes} from "http-status-codes";
+import {userService} from "../UserService.ts";
 
 async function Login(email:string,  password:string,onSuccess?:()=>void,onError?:(response:StatusCodes)=>void):Promise<boolean>{
     const response =  await fetchRestEndpoint<{code:string}>(`${config.externalAddress}/auth/Account/Login`,"POST",{
@@ -21,6 +22,8 @@ async function Login(email:string,  password:string,onSuccess?:()=>void,onError?
     }
     sessionStorage.setItem("id_token",tokens.accessToken);
     localStorage.setItem("refresh_token", tokens.refreshToken);
+    const userData = await  userService.getMe();
+    sessionStorage.setItem("username",userData?.userName ?? "sdfkl");
     if (onSuccess)
         onSuccess()
     return true;
