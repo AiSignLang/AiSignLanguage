@@ -1,5 +1,6 @@
 
 import { PhotoIcon } from '@heroicons/react/24/solid'
+import {useNavigate} from "react-router-dom";
 
 interface IProps {
     // TODO: Define your props here
@@ -8,6 +9,8 @@ interface IProps {
 }
 
 export default function UploadForm(prop: IProps) {
+    const navigate = useNavigate();
+    
     return (
         <div>
             <form className="container mx-auto text-blueGray-500 border border-gray-500">
@@ -44,11 +47,11 @@ export default function UploadForm(prop: IProps) {
                     inline-flex">go back
                 </button>
                 <button onClick={() => {
-                    prop.changeStep(3);
+                    navigate('/profile');
                 }} type="submit"
                         className="w-full justify-center py-2 px-4 rounded-md shadow-sm
                     text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none
-                    focus:ring-2 focus:ring-offset-2 focus:ring-primary inline-flex">nearly done!
+                    focus:ring-2 focus:ring-offset-2 focus:ring-primary inline-flex">finnish up!
                 </button>
             </div>
 

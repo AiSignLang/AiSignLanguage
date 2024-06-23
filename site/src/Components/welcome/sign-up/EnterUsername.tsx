@@ -3,11 +3,11 @@ import {
     replaceValue, validateUsername,
     ValidationErrors
 } from "../../../support/Validation.ts";
-import AslAuthService from "../../../services/auth/asl-auth-service.ts";
 import {userService} from "../../../services/UserService.ts";
 
 interface IProps {
     changeStep: (step: number) => void;
+    
 }
 
 
@@ -74,28 +74,45 @@ export default function EnterUsername(prop: IProps){
 
 
             <div className="flex justify-between rounded mt-5 space-x-4">
-                <button onClick={() => {
+                <button onClick={async() => {
                     usernameValidation(null as unknown as React.ChangeEvent<HTMLInputElement>);
                     if (usernameErrors.length === 0){
-                        const response = userService.postUser(username);
+                        const curUser = await userService.getMe();
+                        if (!curUser) {
+                            return;   
+                        }
+                        const response = await  userService.patchUser(curUser!.userName, {userName: username});
+                        if (!response) {
+                            return;
+                        }
+                        localStorage.setItem("username", response!.userName);
                     }
-                    prop.changeStep(2);
+                    prop.changeStep(1);
                 }} type="submit"
                         className="w-full justify-center py-2 px-4 rounded-md shadow-sm
                     text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none
                     focus:ring-2 focus:ring-offset-2 focus:ring-primary
                     inline-flex">go back
                 </button>
-                <button onClick={() => {
+                <button onClick={async () => {
                     usernameValidation(null as unknown as React.ChangeEvent<HTMLInputElement>);
 
-                    alert("can navigate to the next page")
-                    console.log(username)
-
+                    if (usernameErrors.length === 0) {
+                        const curUser = await userService.getMe();
+                        if (!curUser) {
+                            return;
+                        }
+                        const response = await userService.patchUser(curUser!.userName, {userName: username});
+                        if (!response) {
+                            return;
+                        }
+                        localStorage.setItem("username", response!.userName);
+                    }
+                    prop.changeStep(3);
                 }} type="submit"
                         className="w-full justify-center py-2 px-4 rounded-md shadow-sm
                     text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none
-                    focus:ring-2 focus:ring-offset-2 focus:ring-primary inline-flex">finish up!
+                    focus:ring-2 focus:ring-offset-2 focus:ring-primary inline-flex">nearly done!
                 </button>
             </div>
         </div>

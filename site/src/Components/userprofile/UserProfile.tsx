@@ -10,8 +10,7 @@ import Joyride, {CallBackProps, STATUS} from "react-joyride"
 
 export default function UserProfile(){
     NavService.changeNavHighlight(useLocation().pathname);
-    
-    //if (sessionStorage.getItem('id_token') === null
+
     const steps = [
         {
             target: '#streak',
@@ -42,7 +41,8 @@ export default function UserProfile(){
         }
     };
 
-    if (sessionStorage.getItem('access_token') === null
+
+    if (sessionStorage.getItem('id_token') === null
         || sessionStorage.getItem("username") === null) {
         navigate('/login');
         return ;

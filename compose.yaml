@@ -2,8 +2,8 @@
   web:
     build: "./site/"
     ports:
-      - "443:443"
-    image: ital3x/ai-sign-language_web_dev:latest
+      - "7859:7859"
+    image: ital3x/ai-sign-language_web:latest
     env_file:
       - ./site/.env.production
     external_links:
@@ -12,8 +12,10 @@
     networks:
       - back-tier
       - front-tier
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
     pull_policy: always
-      
+    
   api:
     build: "./API/"
     env_file:
