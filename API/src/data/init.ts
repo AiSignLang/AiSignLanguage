@@ -35,7 +35,8 @@ export async function initDB(){
                 taskName: task[0],
                 words: task[1],
                 videoPath: task[2],
-                levelId: levels[idx].levelId
+                levelId: levels[idx].levelId,
+                tfSolution: task[3]
             });
         }
 

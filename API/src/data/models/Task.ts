@@ -31,7 +31,7 @@ class Task extends Model{
     @IsUUID(4)
     @PrimaryKey
     @Column({
-       type:DataType.UUID,
+        type:DataType.UUID,
         defaultValue: DataType.UUIDV4
     })
     declare taskId: string;
@@ -44,6 +44,7 @@ class Task extends Model{
     declare levelId: string;
 
     @Column({
+        allowNull: false,
         type: DataType.STRING,
         validate: {
             isString: isString
@@ -58,6 +59,15 @@ class Task extends Model{
         }
     })
     declare videoPath: string;
+
+    @Column({
+        allowNull: false,
+        type: DataType.STRING,
+        validate: {
+            isString: isString
+        }
+    })
+    declare tfSolution:string
     
     @BelongsTo(()=>Level)
     declare level: Level;
