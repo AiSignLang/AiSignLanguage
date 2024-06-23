@@ -35,10 +35,16 @@ export async function initDB(){
                 taskName: task[0],
                 words: task[1],
                 videoPath: task[2],
-                levelId: levels[idx].levelId
+                levelId: levels[idx].levelId,
+                tfSolution: task[3]
             });
         }
 
+        const mist = await Task.findAll();
+        for(const m of mist){
+            console.log(m.words + " " + m.tfSolution);
+
+        }
         await transaction.commit();
 
     }catch(err){
