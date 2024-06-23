@@ -22,7 +22,7 @@ export default class Friends extends React.Component {
             <div className="w-full mt-10">
                 <h1 className="text-xl font-bold text-center border-t border-b py-4">Friends</h1>
                 <ul>
-                    {this.state.friends.map((friends: IUser) => (
+                    {this.state && this.state.friends && this.state.friends.map((friends: IUser) => (
                         <li key={friends.userId}
                             className="flex content-center justify-between gap-x-6 py-5 text-gray-300">
                             <div className="flex min-w-0 gap-x-4">

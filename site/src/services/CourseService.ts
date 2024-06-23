@@ -1,6 +1,11 @@
-import {ILevel} from "../model/ILevel.ts";
+import {ILevel} from "../model/backend/ILevel.ts";
 import {TaskType} from "../model/TaskType.ts";
+import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
+import config from "../config.ts";
+import {IUser} from "../model/backend/IUser.ts";
+import {StatusCodes} from "http-status-codes";
 type TaskTuple = [number, number];
+
 
 class CourseService {
     public getDoneTasksCount(): TaskTuple[] {
@@ -13,43 +18,12 @@ class CourseService {
         return [];
     }
     public async getNextLevel() {
-        //Instance of ILevel
-        const level: ILevel = {
-            levelID: 1,
-            isTraining: true,
-            tasks: [
-                {
-                    taskID: 1,
-                    levelID: 1,
-                    type: TaskType.SPELLING,
-                    skipped: false,
-                    hints: ['https://www.google.com'],
-                    taskData: ['A', 'l', 'e', 'x'],
-                    mistakes: null
-                },
-                {
-                    taskID: 2,
-                    levelID: 1,
-                    type: TaskType.TRANSLATION,
-                    hints: ['https://www.google.com'],
-                    taskData: ['World'],
-                    skipped: false,
-                    mistakes: null
-                },
-
-                {
-                    taskID: 3,
-                    levelID: 1,
-                    skipped: false,
-                    type: TaskType.TRANSLATION,
-                    hints: ['https://www.google.com', 'https://www.google.com', 'https://www.google.com', 'https://www.google.com'],
-                    taskData: ['Sie', 'sind', 'ein', 'Mensch'],
-                    mistakes: null
-                }
-            ]
-        };
-        console.log(level);
-        return level
+        const sessionUser = sessionStorage.getItem('user');
+        if(!sessionUser){
+            return null; //! TODO Renaviagte to login
+        }
+        const user = JSON.parse(sessionUser) as IUser;
+        return await fetchRestEndpoint<ILevel>(`${config.externalAddress}/api/levels/${user.levelNumber}`, "GET", undefined, true,(code:StatusCodes) => {   console.log("Error", code);});
     }
 
     public isVisualTask(taskType: TaskType) {

@@ -1,4 +1,6 @@
-interface ITask {
+import {IMistake} from "./IMistake.ts";
+
+export interface ITask {
     taskName: string;
     taskId: string;
     levelId: string;

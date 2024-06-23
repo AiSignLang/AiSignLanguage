@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Navbar from "../navbar/Navbar.tsx";
 import {useLocation} from "react-router-dom";
 import {courseService} from "../../services/CourseService.ts";
-import {ILevel} from "../../model/ILevel.ts";
+import {ILevel} from "../../model/backend/ILevel.ts";
 import {TaskType} from "../../model/TaskType.ts";
 import AIView from "../AIView.tsx";
 import {Alert} from "../errors/Alert.tsx";
@@ -22,7 +22,6 @@ export function Exercise(props: IProps) {
     const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
     const [userInput, setUserInput] = useState<string[]>([]);
     const [showJoyride, setShowJoyride] = useState(false);
-    const [isCollecting, setIsCollecting] = useState(false);
 
     const handleNextTask = (skipped: boolean, userSolution: string[] | null) => {
         console.log('userSolution', userSolution);
@@ -41,9 +40,8 @@ export function Exercise(props: IProps) {
     const handleAlertClose = () => {
         setShowJoyride(true);
     };
-    const handleCollected = (res: string[]) => {
-        setIsCollecting(false);
-        console.log("DATA HAS BEEN COLLECTED ", res);
+    const handleCollected = (res: {classes: string[], probabilities: number[]}) => {
+        console.log("DATA HAS BEEN COLLECTED");
     }
     const handleNextStep = (data: CallBackProps) => {
         const { status } = data;
@@ -52,16 +50,40 @@ export function Exercise(props: IProps) {
         }
     };
     useEffect(() => {
+
+        console.log("use effect type")
         switch (type) {
             case 'next': {
-                courseService.getNextLevel().then(levelData => setLevel(levelData));
+                console.log("YOGHURT 2");
+                courseService.getNextLevel().then(levelData => {
+                    console.log("levelData", levelData);
+                    if(levelData){
+                        setLevel(levelData)
+                    }else{
+                        //! TODO: Redirect to course page
+                    }
+                });
                 console.log(level);
                 break;
             }
             case null: {
-                courseService.getNextLevel().then(levelData => setLevel(levelData));
+                courseService.getNextLevel().then(levelData => {
+                    if(levelData){
+                        setLevel(levelData)
+                    }else{
+                        //! TODO: Redirect to course page
+                    }
+                });
                 console.log("it gets null here");
                 break;
+            }
+            default: {
+                courseService.getNextLevel().then(levelData => {
+                    if(levelData){
+                        setLevel(levelData)
+                    }else{
+                        //! TODO: Redirect to course page
+                    }});
             }
         }
     }, [type]);
@@ -127,16 +149,6 @@ export function Exercise(props: IProps) {
                         }} className="bg-primary rounded-2xl h-fit w-fit p-4 hover:bg-primary-hover">Next Task →</button>
                     ) : (
                         <div>
-                            {isCollecting && (<button disabled
-                                    className="collect bg-btn-bg-disable rounded-2xl h-fit w-fit p-4">Collect</button>
-                            )}
-                            {!isCollecting && (
-                                <button className="collect bg-primary rounded-2xl h-fit w-fit p-4 hover:bg-primary-hover" onClick={() => {
-                                    setIsCollecting(true);
-                                    console.log("changed it");
-                                    console.log(isCollecting);
-                                }} >Collect</button>
-                            )}
                             <button disabled
                                     className="next-task ml-5 bg-btn-bg-disable text-btn-text-disable rounded-2xl h-fit w-fit p-4">Next
                                 Task →
