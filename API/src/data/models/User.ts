@@ -54,7 +54,7 @@ class User extends Model {
     @Column({
         allowNull: false,
         type:DataType.STRING,
-        defaultValue: `${config.externalAddress}${config.staticEndpoint}/default_pfp.webp`
+        defaultValue: `${config.staticEndpoint}/default_pfp.webp`
     })
     declare profilePic: string;
     

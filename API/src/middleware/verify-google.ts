@@ -10,9 +10,13 @@ const client = new OAuth2Client(
     redirect);
 
 export async function verifyGoogleToken(token: string): Promise<TokenPayload | undefined> {
-    const ticket = await client.verifyIdToken({
-        idToken: token,
-        audience: process.env.GOOGLE_CLIENT_ID,
-    });
-    return ticket.getPayload();
+    try{
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        return ticket.getPayload();
+    }catch (e){
+        return undefined
+    }
 }
