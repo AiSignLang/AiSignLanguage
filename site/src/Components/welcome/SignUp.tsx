@@ -1,14 +1,13 @@
 import ProgressBar from "./sign-up/ProgressBar.tsx";
 import EmailPassword from "./sign-up/EmailPassword.tsx";
 import OtherAuth from "./sign-up/OtherAuth.tsx";
-import {useState} from "react";
+import React, {useState} from "react";
 import UploadForm from "./sign-up/UploadForm.tsx";
 import EnterUsername from "./sign-up/EnterUsername.tsx";
 
 
 export function SignUp() {
     const [progressStep, setProgressStep] = useState<number>(1);
-
     const changeStep = (step: number)=>{
         setProgressStep(step);
     }
@@ -22,7 +21,7 @@ export function SignUp() {
 
                 {progressStep === 1 &&
                     <>
-                        <EmailPassword changeStep={changeStep}/>
+                        <EmailPassword changeStep={changeStep} />
                         <OtherAuth/>
                     </>
                 }
@@ -30,19 +29,21 @@ export function SignUp() {
                 {
                     progressStep === 2 &&
                     <>
-                        <UploadForm changeStep={changeStep}/>
+                        <EnterUsername changeStep={changeStep}/>
                     </>
+                    
                 }
 
                 {
                     progressStep === 3 &&
                     <>
-                        <EnterUsername changeStep={changeStep}/>
+                        <UploadForm changeStep={changeStep}/>
                     </>
                 }
-
+                <p className="mt-6 text-center text-sm text-text-primary">
+                    Already a member? <a href="/login" className="font-medium text-primary hover:text-primary-hover">Login</a>
+                </p>
             </div>
-
         </div>
     );
 }

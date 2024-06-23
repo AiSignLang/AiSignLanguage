@@ -11,7 +11,56 @@ class UserService{
     // TODO: change route as needed
     public async getUser(username: string,onUnauthorized?:()=>void): Promise<IUser | null>{
         try{
-            const user = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/${username}`, "GET",undefined,(err:StatusCodes)=>
+            const user = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/${username}`, "GET",undefined,true,(err:StatusCodes)=>
+            {
+                if(err === StatusCodes.UNAUTHORIZED){
+                    onUnauthorized?.();
+                }
+            });
+            if (user) {
+                console.log(user);
+                return user;
+            }
+            return null;
+            
+        }catch (e){
+            console.error(e);
+            return null;
+        }
+    }
+    public async getMe(onUnauthorized?:()=>void): Promise<IUser | null>{
+        try{
+            const user = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/me`, "GET",undefined,true,(err:StatusCodes)=>
+            {
+                if(err === StatusCodes.UNAUTHORIZED){
+                    onUnauthorized?.();
+                }
+            });
+            if (user) {
+                console.log(user);
+                return user;
+            }
+            return null;
+            
+        }catch (e){
+            console.error(e);
+            return null;
+        }
+    }
+    
+    public async validateUsername(username: string): Promise<boolean>{
+        try{
+            await fetchRestEndpoint<void>(`${config.externalAddress}/api/user/validate-username`, "POST", {username});
+            
+        }catch (e){
+            console.error(e);
+            return false;
+        }
+        return true;
+    }
+    public async patchUser(username: string, data: Partial<IUser>,onUnauthorized?:()=>void): Promise<IUser | null>{
+        try{
+            const user = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/${username}`, "PATCH", data,true,(err:StatusCodes)=>
             {
                 if(err === StatusCodes.UNAUTHORIZED){
                     onUnauthorized?.();
@@ -29,7 +78,6 @@ class UserService{
             return null;
         }
     }
-
 }
 
 

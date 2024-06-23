@@ -1,9 +1,9 @@
-services:
+﻿services:
   web:
     build: "./site/"
     ports:
-      - "443:443"
-    image: ital3x/ai-sign-language_web_dev:latest
+      - "7859:7859"
+    image: ital3x/ai-sign-language_web:latest
     env_file:
       - ./site/.env.production
     external_links:
@@ -12,15 +12,13 @@ services:
     networks:
       - back-tier
       - front-tier
-    volumes:
-      - /etc/letsencrypt:/etc/letsencrypt
     pull_policy: always
     
   api:
     build: "./API/"
     env_file:
       - ./API/.env
-    image: ital3x/ai-sign-language_api_dev:latest
+    image: ital3x/ai-sign-language_api:latest
     volumes:
       - db-data:/app/data/
     networks:
@@ -30,13 +28,6 @@ services:
     depends_on:
       - sqlite
     pull_policy: always
-  
-  sqlite:
-    container_name: aisl-sqlite
-    image: nouchka/sqlite3:latest
-    volumes:
-      - db-data:/app/data/
-    restart: always
 
 volumes:
     db-data:
