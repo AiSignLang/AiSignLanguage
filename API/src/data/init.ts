@@ -40,11 +40,6 @@ export async function initDB(){
             });
         }
 
-        const mist = await Task.findAll();
-        for(const m of mist){
-            console.log(m.words + " " + m.tfSolution);
-
-        }
         await transaction.commit();
 
     }catch(err){
