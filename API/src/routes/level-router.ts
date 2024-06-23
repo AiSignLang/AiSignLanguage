@@ -23,29 +23,6 @@ levelRouter.get("/", async (_, res) => {
     }
 })
 
-levelRouter.get("/:levelId", async (req, res) => {
-    const levelId = req.params.levelId;
-
-    if(!isIDValid(levelId)){
-        res.sendStatus(StatusCodes.BAD_REQUEST);
-        return;
-    }
-
-    try{
-        const level = await Level.findByPk(levelId);
-        if(level === null) {
-            res.sendStatus(StatusCodes.BAD_REQUEST);
-            return;
-        }
-
-        res.json(level);
-
-    }catch (err){
-        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
-    }
-
-});
-
 levelRouter.get("/:index", async (req,res)=>{
     let index = parseInt(req.params.index);
     if(!req.params.index || isNaN(index) || index < 0){
