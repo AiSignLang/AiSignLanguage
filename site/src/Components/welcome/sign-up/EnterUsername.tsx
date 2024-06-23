@@ -96,6 +96,7 @@ export default function EnterUsername(prop: IProps){
                 </button>
                 <button onClick={async () => {
                     usernameValidation(null as unknown as React.ChangeEvent<HTMLInputElement>);
+
                     if (usernameErrors.length === 0) {
                         const curUser = await userService.getMe();
                         if (!curUser) {

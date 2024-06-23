@@ -2,7 +2,7 @@ import {faGithub, faGoogle} from "@fortawesome/free-brands-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {googleAuth} from "../../services/auth/google-auth-service.ts";
 import aslAuthService from "../../services/auth/asl-auth-service.ts";
-import React, {useState} from "react";
+import  {useState} from "react";
 import {useNavigate} from "react-router-dom";
 
 
