@@ -11,7 +11,7 @@ import Joyride, {CallBackProps, STATUS} from "react-joyride"
 export default function UserProfile(){
     NavService.changeNavHighlight(useLocation().pathname);
     
-    if (sessionStorage.getItem('id_token') === null
+    //if (sessionStorage.getItem('id_token') === null
     const steps = [
         {
             target: '#streak',
