@@ -1,7 +1,7 @@
 import ProgressBar from "./sign-up/ProgressBar.tsx";
 import EmailPassword from "./sign-up/EmailPassword.tsx";
 import OtherAuth from "./sign-up/OtherAuth.tsx";
-import {useState} from "react";
+import  {useState} from "react";
 import UploadForm from "./sign-up/UploadForm.tsx";
 import EnterUsername from "./sign-up/EnterUsername.tsx";
 
@@ -40,9 +40,10 @@ export function SignUp() {
                         <UploadForm changeStep={changeStep}/>
                     </>
                 }
-
+                <p className="mt-6 text-center text-sm text-text-primary">
+                    Already a member? <a href="/login" className="font-medium text-primary hover:text-primary-hover">Login</a>
+                </p>
             </div>
-
         </div>
     );
 }

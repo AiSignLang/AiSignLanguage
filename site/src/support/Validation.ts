@@ -37,7 +37,7 @@ export const validatePassword = (password: string): ValidationErrors[] => {
 
 export const validateUsername = async (username: string)=>{
     const errors: ValidationErrors[] = [];
-    if(username.length === 20){
+    if(username.length > 20){
         errors.push(ValidationErrors.TOO_LONG);
         return errors;
     }

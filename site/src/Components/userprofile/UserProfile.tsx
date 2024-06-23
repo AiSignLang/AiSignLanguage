@@ -41,6 +41,7 @@ export default function UserProfile(){
         }
     };
 
+
     if (sessionStorage.getItem('id_token') === null
         || sessionStorage.getItem("username") === null) {
         navigate('/login');
