@@ -1,6 +1,8 @@
 ﻿import { useEffect, useRef, useState } from "react";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import { FACEMESH_TESSELATION, HAND_CONNECTIONS, Holistic, POSE_CONNECTIONS, Results } from "@mediapipe/holistic";
+import useWebSocket, { ReadyState } from "react-use-websocket"
+
 import config from "../config.ts";
 
 interface IProps {
@@ -14,29 +16,25 @@ export function AIView(props: IProps) {
     const contextRef = useRef<CanvasRenderingContext2D | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const videoRef = useRef<HTMLVideoElement | null>(null);
-    const socketRef = useRef<WebSocket | null>(null);
+    const {sendJsonMessage, readyState, lastJsonMessage} = useWebSocket(config.tfServing, {
+        onOpen: () => console.log('Connected to TFServing socket'),
+        onClose: () => console.log('Disconnected from TFServing socket'),
+        shouldReconnect: () => true,
+    });
 
     const [inputVideoReady, setInputVideoReady] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const [keypoints, setKeypoints] = useState<number[][]>([]);
 
     useEffect(() => {
-        // Open WebSocket connection
-        socketRef.current = new WebSocket(config.tfServing);
-        socketRef.current.onopen = () => console.log('Connected to TFServing socket');
-        socketRef.current.onmessage = (event) => {
-            props.collectionCallback(JSON.parse(event.data))
-            return false;
-        };
-        socketRef.current.onclose = () => console.log('Disconnected from TFServing socket');
+        if (lastJsonMessage && lastJsonMessage) {
+            console.log(lastJsonMessage)
+        }
+    }, [lastJsonMessage]);
 
-        // Clean up function to close the socket when the component unmounts
-        return () => {
-            if (socketRef.current) {
-                socketRef.current.close();
-            }
-        };
-    }, [props.collectionCallback]);
+    useEffect(() => {
+        console.log("WTF")
+    }, [readyState]);
 
     let frameCounter = 0;
 
@@ -111,10 +109,10 @@ export function AIView(props: IProps) {
         if (newKeypoints.length > 30) newKeypoints.shift();
 
         frameCounter++;
-        if (frameCounter >= 20 && newKeypoints.length === 30 && socketRef.current) {
+        if (frameCounter >= 20 && newKeypoints.length === 30 && readyState === ReadyState.OPEN) {
             frameCounter = 0;
             console.log("Sending Data")
-            socketRef.current.send(JSON.stringify({ instances: newKeypoints }));
+            sendJsonMessage({ instances: newKeypoints });
         }
 
         setKeypoints(newKeypoints);
