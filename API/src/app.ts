@@ -9,8 +9,12 @@ import * as fs from "node:fs";
 import config from "./config";
 
 import cors from "cors";
+
 import aslAuthRouter from "./routes/auth/asl-auth-router";
 import {configDotenv} from "dotenv";
+import {initDB} from "./data/init";
+import Level from "./data/models/Level";
+
 export const app = express();
 configDotenv()
 
@@ -35,6 +39,17 @@ if (!fs.existsSync(path.join(__dirname, '../data/db.sqlite3'))) {
     sequelize.createSchema('test',{logging: true}).then(() => {
         console.log('Schema created');
     });
+
+    sequelize.sync({force: true}).then(async () => {
+        initDB().then(() => {
+            sequelize.sync({force: true}).then(async () => {
+                console.log('Database synchronized');
+                Level.findAll().then((levels) => {
+                    console.log(levels);
+                })
+            })
+        });
+    })
 }
 /* just testing
 sequelize.sync({force:true}).then(async () => {
