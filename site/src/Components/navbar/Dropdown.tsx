@@ -28,12 +28,12 @@ export default function Dropdown() {
                     <div className="py-1">
 
 
-                        <MenuItem disabled={true}>
+                        <MenuItem>
                             {({ focus }) => (
                                 <Link
                                     to="/training-read"
                                     className={classNames(
-                                        focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                        focus ? 'bg-gray-100 text-gray-900' : 'text-white',
                                         'block px-4 py-2 text-sm'
                                     )}
                                 >

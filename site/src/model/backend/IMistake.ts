@@ -1,4 +1,4 @@
-interface IMistake {
+export interface IMistake {
     taskId: string;
     mistakeId: string;
     mistake: string;
