@@ -6,7 +6,6 @@ import Text from "./subcomponents/Text.tsx";
 function LandingPage(){
     return (
         <div className="bg-bg-secondary">
-
             <Subnav/>
             <Header/>
             <Text/>

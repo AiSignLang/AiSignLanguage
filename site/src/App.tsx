@@ -18,8 +18,8 @@ import {SignIn} from "./Components/welcome/SignIn.tsx";
 import {SignUp} from "./Components/welcome/SignUp.tsx";
 import {Unauthorized} from "./Components/errors/Unauthorized.tsx";
 import OAuthRedirect from "./Components/auth/OAuthRedirect.tsx";
-import UploadForm from "./Components/welcome/sign-up/UploadForm.tsx";
 import {Pause} from "./Components/pause/Pause.tsx";
+import Training from './Components/training/Training.tsx';
 
 
 function App() {
@@ -28,7 +28,6 @@ function App() {
       <Router>
         <Routes>
             {/*   <Route path="/" element={<XnotFound subject={"Profile"} message={"Please try again later."}/>}/> */}
-            <Route path="/progress" element={<UploadForm changeStep={() => 1}/>}></Route>
             <Route path="/" element={<LandingPage/>}/>
             <Route path="/login" element={<SignIn/>}/>
             <Route path="/signup" element={<SignUp/>}/>
@@ -36,6 +35,7 @@ function App() {
             <Route path="/course" element={<Course courseID="next"/>}/>
             <Route path="/sandbox" element={<Sandbox/>}/>
             <Route path="/exercise" element={<Exercise/>}/>
+            <Route path="/training" element={<Training/>}/>
             <Route path="/training-read" element={<TrainingRead/>}/>
             <Route path="/training-sign" element={<TrainingSign/>}/>
             <Route path="*" element={<XnotFound subject="Page"/>}/>
