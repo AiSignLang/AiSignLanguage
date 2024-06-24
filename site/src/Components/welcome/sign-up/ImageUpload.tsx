@@ -1,6 +1,7 @@
 import {fetchRestEndpoint} from "../../../support/FetchEndpoint.ts";
 import config from "../../../config.ts";
 import React, {useState} from "react";
+import {IUser} from "../../../model/backend/IUser.ts";
 
 interface IProps {
     setPicture: (picture: string) => void;
