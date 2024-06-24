@@ -1,4 +1,3 @@
-import {userService} from "../services/UserService.ts";
 
 export enum ValidationErrors {
     TOO_SHORT,
@@ -46,12 +45,7 @@ export const validateUsername = async (username: string)=>{
         errors.push(ValidationErrors.USERNAME_TOO_SHORT);
         return errors;
     }
-    const isValid = await userService.validateUsername(username); // TODO: check if user exists auth stuff
-
-    if(!isValid){
-        errors.push(ValidationErrors.ALREADY_IN_USE);
-    }
-
+    
     return errors;
 }
 
