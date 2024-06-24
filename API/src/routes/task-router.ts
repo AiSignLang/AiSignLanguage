@@ -27,3 +27,20 @@ taskRouter.get("/:levelId", async (req,res)=>{
 
     res.json(tasks);
 })
+
+taskRouter.get("/task/:taskId", async(req,res) => {
+    const taskId = req.params.taskId;
+    if(!taskId || !isIDValid(taskId)){
+        res.sendStatus(StatusCodes.BAD_REQUEST);
+        return;
+    }
+
+    const task = await Task.findByPk(taskId);
+
+    if(task === null){
+        res.sendStatus(StatusCodes.NOT_FOUND);
+        return;
+    }
+
+    res.json(task);
+})

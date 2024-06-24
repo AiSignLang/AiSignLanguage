@@ -48,12 +48,12 @@ mistakeRouter.get("/:mistakeId", async (req, res) => {
     }
 
     try{
-        const score = await Score.findByPk(mistakeId);
-        if(score === null) {
+        const mistake = await Mistake.findByPk(mistakeId);
+        if(mistake === null) {
             res.sendStatus(StatusCodes.BAD_REQUEST);
             return;
         }
-        res.json(score);
+        res.json(mistake);
     }catch (err){
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
