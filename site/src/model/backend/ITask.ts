@@ -5,6 +5,7 @@ export interface ITask {
     videoPath: string;
     words: string;
     tfSolution: string;
+    type: string | null;
     created_at: Date;
     updated_at: Date;
 }

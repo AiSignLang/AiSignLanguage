@@ -29,7 +29,8 @@ export function Exercise(props: IProps) {
         console.log('userSolution', userInput.current);
         if (skipped && level && level.tasks[currentTaskIndex.current]) {
             console.log("SKIPPED") // TODO
-        } else if (level && level.tasks[currentTaskIndex.current]) {
+        }else if (level && level.tasks[currentTaskIndex.current]) {
+            // TODO: Add logic here or remove the empty block
         }
         currentTaskIndex.current++;
         userInput.current = [];
@@ -57,8 +58,9 @@ export function Exercise(props: IProps) {
         const result = topThree.map(item => item.string);
         console.log("RESULTS >>>>>>>>> ", result);
 
-        if(result.includes(level?.tasks[currentTaskIndex.current].tfSolution.split(',')[wordIndex])){
-            handleUserInput(level?.tasks[currentTaskIndex.current].tfSolution.split(',')[wordIndex]);
+        const word = level?.tasks[currentTaskIndex.current].tfSolution.split(',')[wordIndex];
+        if(word && result.includes(word)){
+            handleUserInput(word);
             setWordIndex(prevIndex => prevIndex + 1);
         }
     }
@@ -141,7 +143,7 @@ export function Exercise(props: IProps) {
             />
             <Navbar></Navbar>
             <div className="w-full flex flex-col items-center">
-                <div className="bg-bg-secondary rounded-2xl p-4 w-1/3 mt-20" key={level && level.tasks[currentTaskIndex.current].taskID}>
+                <div className="bg-bg-secondary rounded-2xl p-4 w-1/3 mt-20" key={level && level.tasks[currentTaskIndex.current].taskId}>
                     {level && level.tasks[currentTaskIndex.current] && level.tasks[currentTaskIndex.current].words && level.tasks[currentTaskIndex.current].words.split(',').map((data: string, index: number) => (
                         <React.Fragment key={index}>
                             <span><button className="underline" data-tooltip-target={`tooltip-${index}`}
