@@ -50,6 +50,8 @@ levelRouter.get("/next",Authorize, async (req:any, res) =>{
     })
     if (level === null){
         console.log("Level not found");
+        const levels = await Level.findAll();
+        console.log(levels);
         res.sendStatus(StatusCodes.NOT_FOUND);
         return;
     }
