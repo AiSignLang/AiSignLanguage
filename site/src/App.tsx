@@ -20,7 +20,6 @@ import {Unauthorized} from "./Components/errors/Unauthorized.tsx";
 import OAuthRedirect from "./Components/auth/OAuthRedirect.tsx";
 import {Pause} from "./Components/pause/Pause.tsx";
 import Training from './Components/training/Training.tsx';
-import MistComponent from "./Components/exercise/MistComponent.tsx";
 
 
 function App() {
@@ -29,7 +28,6 @@ function App() {
       <Router>
         <Routes>
             {/*   <Route path="/" element={<XnotFound subject={"Profile"} message={"Please try again later."}/>}/> */}
-            <Route path="/test" element={<MistComponent/>}></Route>
             <Route path="/" element={<LandingPage/>}/>
             <Route path="/login" element={<SignIn/>}/>
             <Route path="/signup" element={<SignUp/>}/>
