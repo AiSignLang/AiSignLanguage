@@ -81,21 +81,22 @@ function TrainingRead(){
         }
     }
     return (
-
-        <div className="h-screen bg-bg-secondary">
+        <div className="h-screen bg-bg-primary justify-center min-h-screen">
             <Navbar/>
-            <div className="grid grid-cols-2">
-                <div>
-                    {currentVid && <VideoPlayer videoPath={currentVid}/>}
-                    {currentMistake ? <ReadTrainingAttachment changeVideo={changeVideo} mistake={currentMistake}/> : null}
+            <div className="grid grid-cols-2 w-full m-4 mt-10 p-10">
 
+                <div className="flex flex-col items-center justify-center bg-gray-800 rounded-3xl">
+                    <h2 className="w-1/2 text-white p-2 rounded text-center">Train on your
+                        mistakes!</h2>
+                    {currentVid && <VideoPlayer videoPath={currentVid}/>}
+                    <div className="w-1/2">
+                        {currentMistake ? <ReadTrainingAttachment changeVideo={changeVideo} mistake={currentMistake}/> : null}
+                    </div>
                 </div>
-                <div>
+                <div className="h-full">
                     <ImgPlaceholder/>
                 </div>
             </div>
-
-
         </div>
     )
 }
