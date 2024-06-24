@@ -3,6 +3,7 @@ import {fetchRestEndpoint} from "../../../support/FetchEndpoint.ts";
 import config from "../../../config.ts";
 import {useEffect, useState} from "react";
 import ImageUpload from "./ImageUpload.tsx";
+import {IUser} from "../../../model/backend/IUser.ts";
 
 interface IProps {
     // TODO: Define your props here
