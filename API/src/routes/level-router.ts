@@ -25,6 +25,7 @@ levelRouter.get("/", async (_, res) => {
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
 })
+
 levelRouter.get("/next",Authorize, async (req:any, res) =>{
     if (!req.user){
         res.sendStatus(StatusCodes.BAD_REQUEST);
