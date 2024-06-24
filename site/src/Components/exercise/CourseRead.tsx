@@ -22,6 +22,7 @@ export default function CourseRead(prop : IProp){
         setCurrentVid(currentTask!.videoPath);
     }, []);
 
+    // TODO: look into task service
     return (
         <div className="h-screen bg-bg-primary justify-center min-h-screen">
             <Navbar/>

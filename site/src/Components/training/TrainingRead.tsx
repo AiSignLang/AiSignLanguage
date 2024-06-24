@@ -8,8 +8,10 @@ import ImgPlaceholder from "./training-read/ImgPlaceholder.tsx";
 import {useEffect, useState} from "react";
 import {navigate} from "../../model/Utils.ts";
 import ToolTip from "./training-read/ToolTip.tsx";
+import {mistakeService} from "../../services/MistakeService.ts";
+import {taskService} from "../../services/TaskService.ts";
 
-const mistakes: IMistake[] = [
+/*const mistakes: IMistake[] = [
     {
         taskId: "task1",
         mistakeId: "mistake1",
@@ -38,44 +40,43 @@ const mistakes: IMistake[] = [
         updated_at: new Date()
     }
 ];
-const preparedTaskVideos = [
-    "https://media.spreadthesign.com/video/mp4/22/232422.mp4",
-    "https://media.spreadthesign.com/video/mp4/22/135514.mp4",
-    "https://media.spreadthesign.com/video/mp4/22/139918.mp4"
-]
+
+ */
 
 function TrainingRead(){
     NavService.changeNavHighlight(useLocation().pathname);
 
     const [currentVid, setCurrentVid] = useState<string>('');
     const [taskVideos, setTaskVideos] = useState<string[]>([] as string[]);
-    const [currentMistake, setCurrentMistake] = useState<IMistake>(mistakes[0])
-    useEffect(() => {
+    const [allMistakes, setAllMistakes] = useState([] as IMistake[])
+    const [currentMistake, setCurrentMistake] = useState<IMistake>(allMistakes[0])
 
-        /*setTaskVideos(mistakes.map((mistake) => {
-            //fetchRestEndpoint()
-            console.log(mistake);
-            return 'https://media.spreadthesign.com/video/mp4/22/232422.mp4';
-        }))
-         */
-        // todo: with the stored taskId get the task, in the task is the video path, set that
-        // or get all the tasks instantly, and set it
-        setTaskVideos(preparedTaskVideos);
-        setCurrentVid('https://media.spreadthesign.com/video/mp4/22/232422.mp4');
+    useEffect(() => {
+        (async () => {
+            const mistakes = await mistakeService.getAll();
+            setAllMistakes(mistakes);
+            const taskVideos = await Promise.all(mistakes.map(async (mistake) => {
+                const t = await taskService.getPer(mistake);
+                return t ? t.videoPath : "";
+            }));
+            setTaskVideos(taskVideos);
+        })();
+
+        setCurrentVid(taskVideos[0]);
     }, []);
 
     const changeVideo = () => {
 
         const index = taskVideos.indexOf(currentVid);
-        const mistakeIndex = mistakes.indexOf(currentMistake);
+        const mistakeIndex = allMistakes.indexOf(currentMistake);
 
         const newVideo =  taskVideos[index + 1];
-        const newMistake = mistakes[mistakeIndex + 1];
+        const newMistake = allMistakes[mistakeIndex + 1];
         if (newVideo && newMistake) {
             setCurrentVid(newVideo);
             setCurrentMistake(newMistake);
         } else {
-            navigate('/training');
+            navigate('/pause');
         }
     }
     return (
