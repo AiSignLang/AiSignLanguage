@@ -35,14 +35,23 @@ export function Exercise(props: IProps) {
     };
     const handleTaskDone = () => {
         setRerender(!rerender);
+        console.log("DOne")
         currentTaskIndex.current += 1;
         if(currentTaskIndex.current === level?.tasks.length){
             courseService.completeLevel(level!.levelId).then(() => {
-
+                console.log("Completed level");
                 nav('/course'); //Should redirect
-            })
+            }).catch(() => {
+                console.log("Error completing level");
+                nav('/course'); //Should redirect
+            });
         }
     }
+
+    useEffect(() => {
+        setRerender(!rerender);
+        console.log("Caused rerender")
+    }, [currentTaskIndex.current]);
     useEffect(() => {
 
         console.log("use effect type")

@@ -32,9 +32,9 @@ export function Translation(props: IProps) {
     const handleCollected = (res: {classes: string[], probabilities: number[]}) => {
         const combined = res.classes.map((str, index) => ({ string: str, probability: res.probabilities[index] }));
 
-        // Sort the combined array based on probabilities in descending order
+        // Sort the combined array based on probabilities in descending orde
         combined.sort((a, b) => b.probability - a.probability);
-        const topThree = combined.slice(0, 3);
+        const topThree = combined.slice(0, 5);
         const result = topThree.map(item => item.string);
         console.log("RESULTS >>>>>>>>> ", result);
 
@@ -92,4 +92,4 @@ export function Translation(props: IProps) {
             )}
         </div>
     );
-};
+}
