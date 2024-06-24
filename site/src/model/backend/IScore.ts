@@ -1,4 +1,4 @@
-interface IScore {
+export interface IScore {
     dailyStreak: number;
     allTimeCorrect: number;
     perfectlyDone: number;

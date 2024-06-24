@@ -1,9 +1,12 @@
-import { Fragment } from 'react'
+import {Fragment, useEffect, useState} from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Logout} from "../../services/auth/auth-service.ts";
 import Dropdown from "./Dropdown.tsx";
+import {userService} from "../../services/UserService.ts";
+import * as Utils from "../../model/Utils.ts";
+import {IUser} from "../../model/backend/IUser.ts";
 
 export const navigation = [
     { name: 'Profile', href: '/profile', current: true },
@@ -17,6 +20,30 @@ function classNames(...classes: string[]) {
 
 
 export default function Navbar() {
+    const navigate = useNavigate();
+    //Get user data
+    const [user, setUser] = useState<IUser | null>(null);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            console.log('fetching user')
+            const result = await userService.getUser(sessionStorage.getItem('username')!,()=>{
+                alert('Unauthorized')
+                Utils.navigate('/Unauthorized');
+                return;
+            });
+            console.log('result', result)
+
+            if(result === null){
+                navigate('/ProfileNotFound');
+                return;
+            }
+            setUser(result);
+        };
+
+        fetchUser();
+    }, []);
+
     return (
         <Disclosure as="nav" className="bg-bg-secondary">
             {({ open }) => (
@@ -82,7 +109,10 @@ export default function Navbar() {
                                             <span className="sr-only">Open user menu</span>
                                             <img
                                                 className="h-8 w-8 rounded-full"
-                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                src={user
+                                                    ? user.profilePic
+                                                        ? user.profilePic
+                                                        : undefined : "../../../public/img/placeholders/pfp.png"}
                                                 alt=""
                                             />
                                         </Menu.Button>

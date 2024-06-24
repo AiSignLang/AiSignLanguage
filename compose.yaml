@@ -13,7 +13,7 @@
       - back-tier
       - front-tier
     pull_policy: always
-    
+
   api:
     build: "./API/"
     env_file:

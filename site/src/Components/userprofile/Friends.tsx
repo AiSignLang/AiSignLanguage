@@ -1,20 +1,41 @@
 import React from "react";
 import {friendService} from "../../services/FriendService.ts";
+import {IUser} from "../../model/backend/IUser.ts";
 
-export default class Friends extends React.Component {
+interface IState {
+    friends: IUser[];
+}
 
-    state = {
+interface IProps {
+    changeState: boolean;
+}
+
+export default class Friends extends React.Component<IProps,IState> {
+
+    state: IState = {
         friends: [] as IUser[],
     };
+
+    constructor(props: IProps) {
+        super(props);
+    }
+
+    componentDidUpdate(prevProps: Readonly<IProps>) {
+        console.log("UPDATE");
+        if (prevProps.changeState !== this.props.changeState) {
+            friendService.getFriends().then((data) => {
+                this.setState({friends: data});
+                console.log("FORCED UDPATE")
+                this.forceUpdate();
+            });
+        }
+    }
 
     componentDidMount() {
         friendService.getFriends().then((data) => {
             this.setState({friends: data});
+            this.forceUpdate();
         });
-    }
-
-    update(){
-        this.forceUpdate()
     }
 
     render(){
@@ -22,12 +43,12 @@ export default class Friends extends React.Component {
             <div className="w-full mt-10">
                 <h1 className="text-xl font-bold text-center border-t border-b py-4">Friends</h1>
                 <ul>
-                    {this.state.friends.map((friends: IUser) => (
+                    {this.state && this.state.friends && this.state.friends.map((friends: IUser) => (
                         <li key={friends.userId}
                             className="flex content-center justify-between gap-x-6 py-5 text-gray-300">
                             <div className="flex min-w-0 gap-x-4">
                                 <img className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                                     src={friends.profilePic ? friends.profilePic : undefined}
+                                     src={friends.profilePic}
                                      alt="user profile"/> {/*TODO: add alt text + change profile picture to default image*/}
                                 <div className="min-w-0 flex-auto">
                                     <p className="text-lg leading-6 font-bold">{friends.userName}</p>

@@ -5,6 +5,7 @@ import config from "../../config.ts";
 import {Logout} from "./auth-service.ts";
 import {navigate} from "../../model/Utils.ts";
 import {userService} from "../UserService.ts";
+import {IUser} from "../../model/backend/IUser.ts";
 
 export async function googleAuth() {
     const  refresh_token = localStorage.getItem('refresh_token_g');

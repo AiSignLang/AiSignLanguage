@@ -7,7 +7,6 @@ import {userService} from "../../../services/UserService.ts";
 
 interface IProps {
     changeStep: (step: number) => void;
-    
 }
 
 
@@ -38,7 +37,6 @@ export default function EnterUsername(prop: IProps){
             if(possibleErrors.length === 0){
                 console.log("username in validation block: "+typedUsername);
                 setUsername(typedUsername);
-                
             }
         })();
     }
@@ -79,7 +77,7 @@ export default function EnterUsername(prop: IProps){
                     if (usernameErrors.length === 0){
                         const curUser = await userService.getMe();
                         if (!curUser) {
-                            return;   
+                            return;
                         }
                         const response = await  userService.patchUser(curUser!.userName, {userName: username});
                         if (!response) {
@@ -112,7 +110,7 @@ export default function EnterUsername(prop: IProps){
                 }} type="submit"
                         className="w-full justify-center py-2 px-4 rounded-md shadow-sm
                     text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none
-                    focus:ring-2 focus:ring-offset-2 focus:ring-primary inline-flex">nearly done!
+                    focus:ring-2 focus:ring-offset-2 focus:ring-primary inline-flex">finish up!
                 </button>
             </div>
         </div>

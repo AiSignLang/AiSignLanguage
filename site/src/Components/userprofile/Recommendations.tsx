@@ -1,21 +1,36 @@
 import {friendService} from "../../services/FriendService.ts";
 import React from "react";
+import {IUser} from "../../model/backend/IUser.ts";
 
-export class Recommendations extends React.Component {
-    state = {
-        suggestions: [] as IUser[],
+
+interface IProps {
+    changeCallback: () => void;
+}
+
+interface IState {
+    suggestions: IUser[];
+}
+export class Recommendations extends React.Component<IProps,IState> {
+    state: IState = {
+        suggestions: []
     };
-
+    constructor(props: IProps) {
+        super(props);
+    }
 
     componentDidMount() {
         friendService.getSuggestions().then((suggestions) => {
-            console.log("Got them")
             this.setState({suggestions: suggestions});
+            this.forceUpdate();
         });
     }
     handleAddFiend(username: string){
         friendService.addFriend(username).then(() => {
-            this.forceUpdate()
+            friendService.getSuggestions().then((suggestions) => {
+                this.setState({suggestions: suggestions});
+                this.forceUpdate();
+                this.props.changeCallback();
+            });
         });
     }
 
@@ -29,7 +44,7 @@ export class Recommendations extends React.Component {
                             className="text-gray-300 flex justify-between items-center mb-7">
                             <div className="flex items-center">
                                 <img className="h-12 w-12 flex-none rounded-full bg-gray-50 mr-7"
-                                     src={suggestion.profilePic ? suggestion.profilePic : undefined}
+                                     src={suggestion.profilePic}
                                      alt=""/> {/*TODO: add alt text + change profile picture to default image*/}
                                 <div className="min-w-0 flex-auto">
                                     <p className="text-sm leading-6 font-bold">{suggestion.userName}</p>

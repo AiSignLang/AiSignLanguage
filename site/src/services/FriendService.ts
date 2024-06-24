@@ -1,5 +1,6 @@
 import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
 import config from "../config.ts";
+import {IUser} from "../model/backend/IUser.ts";
 //import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
 
 class FriendService{
