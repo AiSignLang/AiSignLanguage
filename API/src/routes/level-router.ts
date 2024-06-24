@@ -25,30 +25,6 @@ levelRouter.get("/", async (_, res) => {
         res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
 })
-
-levelRouter.get("/:levelId", async (req, res) => {
-    const levelId = req.params.levelId;
-
-    if(!isIDValid(levelId)){
-        res.sendStatus(StatusCodes.BAD_REQUEST);
-        return;
-    }
-
-    try{
-        const level = await Level.findByPk(levelId);
-        if(level === null) {
-            res.sendStatus(StatusCodes.BAD_REQUEST);
-            return;
-        }
-
-        res.json(level);
-
-    }catch (err){
-        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
-    }
-
-});
-
 levelRouter.get("/next",Authorize, async (req:any, res) =>{
     if (!req.user){
         res.sendStatus(StatusCodes.BAD_REQUEST);
@@ -71,7 +47,8 @@ levelRouter.get("/next",Authorize, async (req:any, res) =>{
         },
         include: Task
     })
-    if (level == null){
+    if (level === null){
+        console.log("Level not found");
         res.sendStatus(StatusCodes.NOT_FOUND);
         return;
     }

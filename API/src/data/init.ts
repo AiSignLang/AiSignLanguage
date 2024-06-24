@@ -13,11 +13,15 @@ export async function initDB(){
         const levelNames = levelContent.split(os.EOL);
 
         for(const name of levelNames.slice(1,levelNames.length)){
+            console.log(name.split(';')[1])
             const level = await Level.create({
-                levelName: name
+                levelName: name.split(';')[0],
+                levelNumber: name.split(';')[1]
             });
             await level.save()
         }
+
+
 
         const levels = await Level.findAll();
 
