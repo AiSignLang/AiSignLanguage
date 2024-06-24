@@ -7,6 +7,7 @@ import {TaskType} from "../../model/TaskType.ts";
 import AIView from "../AIView.tsx";
 import {Alert} from "../errors/Alert.tsx";
 import Joyride, {CallBackProps, STATUS} from "react-joyride";
+import CourseRead from "./CourseRead.tsx";
 
 interface IProps {
     // TODO: Define your props here
@@ -109,6 +110,10 @@ export function Exercise(props: IProps) {
         }
     }, [type]);
 
+    const taskDone = () => {
+        handleNextTask(true);
+    }
+
 /*    if (!level || !level.tasks[currentTaskIndex]) {
         console.log("coming in");
         return <Navigate to="/course"/>;
@@ -179,11 +184,17 @@ export function Exercise(props: IProps) {
                     )}
                 </div>
 
-                {level && (
+                {Math.round(Math.random()) === 1
+                    ? (<CourseRead task={level?.tasks[currentTaskIndex.current]} taskDone={taskDone}></CourseRead>)
+                    : (level && (<div className="mt-8 overflow-hidden rounded-3xl">
+                        <AIView collectionCallback={handleCollected}/>
+                    </div>))}
+
+                {/*level && (
                     <div className="mt-8 overflow-hidden rounded-3xl">
                         <AIView collectionCallback={handleCollected}/>
                     </div>
-                )}
+                )*/}
             </div>
             {showJoyride && localStorage.getItem('exerciseGuideCompleted') !== 'true' && (
                 <Joyride

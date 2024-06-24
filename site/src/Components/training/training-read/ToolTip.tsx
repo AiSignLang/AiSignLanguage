@@ -1,7 +1,6 @@
 import {useState} from "react";
-import {IMistake} from "../../../model/backend/IMistake.ts";
 interface IProp{
-    mistake: IMistake
+    solution: string
 }
 
 
@@ -14,7 +13,7 @@ export default function ToolTip(prop: IProp) {
                 className="bg-primary text-white font-semibold py-0 px-2 rounded-3xl"
                 onMouseEnter={() => setIsVisible(true)}
                 onMouseLeave={() => setIsVisible(false)}
-            >   ?
+            > ?
             </button>
             {isVisible && (
                 <div
@@ -22,7 +21,7 @@ export default function ToolTip(prop: IProp) {
                     onMouseLeave={() => setIsVisible(false)}
 
                     className="absolute left-0 top-0 mt-2 w-fit bg-bg-primary rounded-md overflow-hidden shadow-bg-primary shadow-lg z-10">
-                    <div className="px-8 py-2 text-white text-sm">{prop.mistake.solution}</div>
+                    <div className="px-8 py-2 text-white text-sm">{prop.solution}</div>
                 </div>
             )}
         </div>

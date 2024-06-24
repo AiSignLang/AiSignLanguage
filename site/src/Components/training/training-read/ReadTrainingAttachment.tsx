@@ -1,8 +1,7 @@
 import React, {useState} from "react";
-import {IMistake} from "../../../model/backend/IMistake.ts";
 
 interface IProp{
-    mistake: IMistake
+    solution: string
     changeVideo: () => void
 }
 
@@ -32,7 +31,7 @@ export default function ReadTrainingAttachment(prop: IProp){
                     type="text"
                     name="user-input"
                     id="submit"
-                    placeholder="z.b hallo oder wie geht es dir?"
+                    placeholder="hallo | wie geht es dir? | a"
                     className="w-full mt-1 s px-3 py-2 bg-primary-greyed text-text-primary border border-primary-greyed-hover
                        rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
                 />
@@ -40,10 +39,11 @@ export default function ReadTrainingAttachment(prop: IProp){
 
             <button onClick={async () => {
 
-                if (userInput.toLowerCase() === prop.mistake.solution.toLowerCase()) {
+                if (userInput.toLowerCase() === prop.solution.toLowerCase()) {
                     setError('');
                     setUserInput('');
-                    prop.changeVideo();
+                    prop.changeVideo && prop.changeVideo();
+
                 } else {
                     setError('Not correct, try again');
                 }

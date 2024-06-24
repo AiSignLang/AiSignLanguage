@@ -71,7 +71,6 @@ function TrainingRead(){
 
         const newVideo =  taskVideos[index + 1];
         const newMistake = mistakes[mistakeIndex + 1];
-        console.log(newVideo);
         if (newVideo && newMistake) {
             setCurrentVid(newVideo);
             setCurrentMistake(newMistake);
@@ -86,16 +85,16 @@ function TrainingRead(){
 
                 <div className="flex flex-col items-center justify-center bg-gray-800 rounded-3xl">
                     <h2 className="w-1/2 text-white p-2 rounded text-center">Train on your
-                        mistakes! <ToolTip mistake={currentMistake}/>
+                        mistakes! <ToolTip solution={currentMistake.solution}/>
                     </h2>
 
                     {currentVid && <VideoPlayer videoPath={currentVid}/>}
                     <div className="w-1/2">
-                        {currentMistake ? <ReadTrainingAttachment changeVideo={changeVideo} mistake={currentMistake}/> : null}
+                        {currentMistake ? <ReadTrainingAttachment changeVideo={changeVideo} solution={currentMistake.solution}/> : null}
                     </div>
                 </div>
                 <div className="h-full flex justify-center">
-                    <ImgPlaceholder/>
+                    <ImgPlaceholder picturePath={"Studying-amico.png"}/>
                 </div>
             </div>
         </div>
