@@ -143,7 +143,7 @@ export function Exercise(props: IProps) {
             <Navbar></Navbar>
             <div className="w-full flex flex-col items-center">
                 <div className="bg-bg-secondary rounded-2xl p-4 w-1/3 mt-20" key={level && level.tasks[currentTaskIndex.current].taskID}>
-                    {level && level.tasks[currentTaskIndex.current] && level.tasks[currentTaskIndex.current].words && level.tasks[currentTaskIndex.current].words.split(',').map((data, index) => (
+                    {level && level.tasks[currentTaskIndex.current] && level.tasks[currentTaskIndex.current].words && level.tasks[currentTaskIndex.current].words.split(',').map((data: string, index: number) => (
                         <React.Fragment key={index}>
                             <span><button className="underline" data-tooltip-target={`tooltip-${index}`}
                                           key={index}>{data}</button> </span>
