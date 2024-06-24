@@ -60,7 +60,7 @@ levelRouter.get("/next",Authorize, async (req:any, res) =>{
         include: Level
     })
     const index = current?.levelNumber;
-    if (!index){
+    if (index === undefined){
         res.sendStatus(StatusCodes.NOT_FOUND);
         return;
     }

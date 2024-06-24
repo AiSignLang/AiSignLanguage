@@ -1,4 +1,5 @@
 import { readFile } from "../Utils";
+import "./database";
 import sequelize from "./database";
 import Level from "./models/Level";
 import * as os from "node:os";
@@ -12,9 +13,10 @@ export async function initDB(){
         const levelNames = levelContent.split(os.EOL);
 
         for(const name of levelNames.slice(1,levelNames.length)){
-            await Level.create({
+            const level = await Level.create({
                 levelName: name
             });
+            await level.save()
         }
 
         const levels = await Level.findAll();
@@ -31,12 +33,13 @@ export async function initDB(){
                 idx++;
             }
 
-            await Task.create({
+            const t = await Task.create({
                 taskName: task[0],
                 words: task[1],
                 videoPath: task[2],
                 levelId: levels[idx].levelId
             });
+            await t.save()
         }
 
         await transaction.commit();
