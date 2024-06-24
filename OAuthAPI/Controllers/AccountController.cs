@@ -41,7 +41,7 @@ public class AccountController(DataContext context, TokenService tokenService, E
 
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
-
+            tokenService.GenerateToken(account);
             return Ok(new{code=tokenService.GenerateAccessCode(account)});
         }
         catch (Exception)
@@ -192,10 +192,18 @@ public class AccountController(DataContext context, TokenService tokenService, E
     }
     
     [HttpGet("confirm-email")]
-    public IActionResult Confirm()
+    public IActionResult Confirm([FromQuery] string token)
     {
-        
-        return Ok(context.Accounts.ToList());
+        var email = tokenService.VerifyToken(token);
+        if (email == null) 
+        {
+            return Unauthorized();
+        }
+        var account = context.Accounts.FirstOrDefault(a => a.Email == email);
+        if(account == null) return ValidationProblem("User not found");
+        account.EmailConfirmed = true;
+        context.SaveChanges();
+        return Ok(new{message="Email confirmed"});
     }
     
     public static string? GetGuidFromToken(HttpContext httpContext)

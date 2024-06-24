@@ -40,7 +40,7 @@ public class EmailService
             IsBodyHtml = true,
         };
         mailMessage.To.Add(email);
-
+        mailMessage.IsBodyHtml = true;
         await smtpClient.SendMailAsync(mailMessage);
     }
 }
