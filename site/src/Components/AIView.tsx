@@ -1,8 +1,6 @@
 ﻿import { useEffect, useRef, useState } from "react";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import { FACEMESH_TESSELATION, HAND_CONNECTIONS, Holistic, POSE_CONNECTIONS, Results } from "@mediapipe/holistic";
-import useWebSocket, { ReadyState } from "react-use-websocket";
-import config from "../config.ts";
 import {courseService} from "../services/CourseService.ts";
 
 interface IProps {
@@ -123,24 +121,24 @@ export function AIView(props: IProps) {
 
         contextRef.current.restore();
 
-        console.log("Results:", isRecordingRef.current);
         if (isRecordingRef.current && frameCountRef.current < 30) {
             recordedFrames.current.push(extractKeypoints(results));
             frameCountRef.current++;
 
             if (frameCountRef.current >= 30) {
-                console.log("Logging 30 frames:", recordedFrames);
                 isRecordingRef.current = false; // Stop recording after logging
                 frameCountRef.current = 0; // Reset frame count
-                recordedFrames.current = []; // Reset recorded frames
-                setButtonisDisabled(false);
                 courseService.getPrediction(recordedFrames.current).then(res => {
                     res.json().then(data => {
-                        if(data && data.classes && data.probabilities && data.classes.length === data.probabilities.length){
+                        console.log(data);
+                        if(data && data.classes && data.probabilities){
                             props.collectionCallback({classes: data.classes, probabilities: data.probabilities});
+                            console.log("Callback called")
                         }
                     });
                 });
+                recordedFrames.current = []; // Reset recorded frames
+                setButtonisDisabled(false);
             }
         }
     }
@@ -180,7 +178,7 @@ export function AIView(props: IProps) {
                         Start Recording
                     </button>
                 ) : (
-                    <button onClick={startRecording} className="ml-2 bg-blue-500 text-white p-2 rounded">
+                    <button id="collect" onClick={startRecording} className="ml-2 bg-blue-500 text-white p-2 rounded">
                         Start Recording
                     </button>
                 )}
@@ -195,7 +193,7 @@ export function AIView(props: IProps) {
                     <label
                         className="inline-block pl-[0.15rem] hover:cursor-pointer"
                         htmlFor="flexSwitchCheckDefault"
-                    >Default switch checkbox input</label>
+                    >Toggle keypoint drawing </label>
                 </div>
 
             </div>

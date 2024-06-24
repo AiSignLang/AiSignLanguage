@@ -2,7 +2,6 @@ import {ILevel} from "../model/backend/ILevel.ts";
 import {TaskType} from "../model/TaskType.ts";
 import {fetchRestEndpoint} from "../support/FetchEndpoint.ts";
 import config from "../config.ts";
-import {IUser} from "../model/backend/IUser.ts";
 import {StatusCodes} from "http-status-codes";
 type TaskTuple = [number, number];
 
@@ -22,8 +21,7 @@ class CourseService {
         if(!sessionUser){
             return null; //! TODO Renaviagte to login
         }
-        const user = JSON.parse(sessionUser) as IUser;
-        return await fetchRestEndpoint<ILevel>(`${config.externalAddress}/api/levels/${user.levelNumber}`, "GET", undefined, true,(code:StatusCodes) => {   console.log("Error", code);});
+        return await fetchRestEndpoint<ILevel>(`${config.externalAddress}/api/levels/next`, "GET", undefined, true,(code:StatusCodes) => {   console.log("Error", code);});
     }
 
     public isVisualTask(taskType: TaskType) {
@@ -37,6 +35,7 @@ class CourseService {
     }
 
     public getPrediction(taskData: (number[])[]) {
+        console.log(taskData.length);
         return fetch('http://localhost:8501/predict', {
             method: 'POST',
             headers: {
