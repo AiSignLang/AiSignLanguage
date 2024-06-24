@@ -1,5 +1,3 @@
-
-import { PhotoIcon } from '@heroicons/react/24/solid'
 import {useNavigate} from "react-router-dom";
 import {fetchRestEndpoint} from "../../../support/FetchEndpoint.ts";
 import config from "../../../config.ts";
@@ -17,7 +15,7 @@ export default function UploadForm(prop: IProps) {
     const [picture, setPicture] = useState("");
     useEffect(() => {
         (async () => {
-            const response = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/${localStorage.getItem("username")}`, "GET", null, true);
+            const response = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/${localStorage.getItem("username")}`, "GET", undefined, true);
             if (response) {
                 setPicture(response!.profilePic);
             }})();

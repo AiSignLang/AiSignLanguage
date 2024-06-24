@@ -7,9 +7,7 @@ import {userService} from "../../../services/UserService.ts";
 
 interface IProps {
     changeStep: (step: number) => void;
-    
 }
-
 
 export default function EnterUsername(prop: IProps){
 
@@ -70,7 +68,6 @@ export default function EnterUsername(prop: IProps){
 
             <div className="mt-2">
                 <input
-                    value={cacheUsername}
                     onChange={usernameValidation}
                     type="text"
                     name="first-name"
@@ -99,7 +96,7 @@ export default function EnterUsername(prop: IProps){
                         if (!response) {
                             return;
                         }
-                        localStorage.setItem("username", response!.userName);
+                        sessionStorage.setItem("username", response!.userName);
                     }
                     prop.changeStep(1);
                 }} type="submit"
@@ -123,7 +120,8 @@ export default function EnterUsername(prop: IProps){
                         if (!response) {
                             return;
                         }
-                        localStorage.setItem("username", response!.userName);
+                        console.log("user saved");
+                        sessionStorage.setItem("username", response!.userName);
                         prop.changeStep(3);
                     }
                     
