@@ -12,7 +12,7 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route('/predict', methods=['POST'])
+@app.route('/ai/predict', methods=['POST'])
 def predict():
     try:
         data = request.get_json()
