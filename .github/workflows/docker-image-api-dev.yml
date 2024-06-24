@@ -1,4 +1,3 @@
-
 name: Docker Image API DEV 
 
 on:
@@ -32,3 +31,5 @@ jobs:
         push: true
         tags: ital3x/ai-sign-language_api_dev:${{ env.NEW_VERSION }},  ital3x/ai-sign-language_api_dev:latest
 
+  
+      

@@ -3,6 +3,7 @@
 SavedModels/*.h5
 SavedModels/*.keras
 SavedModels/*.npy
+**/.idea/
 
 
 # Byte-compiled / optimized / DLL files
@@ -143,8 +144,6 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
-# mkdocs documentation
-/site
 
 # mypy
 .mypy_cache/
@@ -360,10 +359,12 @@ fabric.properties
 
 ### react ###
 .DS_*
-*.log
+
 logs
 **/*.backup.*
 **/*.back.*
+/API/coverage/
+/API/node_modules/*
 
 node_modules
 bower_components
