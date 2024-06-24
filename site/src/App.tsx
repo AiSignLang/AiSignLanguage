@@ -19,6 +19,7 @@ import {SignUp} from "./Components/welcome/SignUp.tsx";
 import {Unauthorized} from "./Components/errors/Unauthorized.tsx";
 import OAuthRedirect from "./Components/auth/OAuthRedirect.tsx";
 import UploadForm from "./Components/welcome/sign-up/UploadForm.tsx";
+import {Pause} from "./Components/pause/Pause.tsx";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/" element={<LandingPage/>}/>
             <Route path="/login" element={<SignIn/>}/>
             <Route path="/signup" element={<SignUp/>}/>
+            <Route path="/pause" element={<Pause/>}/>
             <Route path="/course" element={<Course courseID="next"/>}/>
             <Route path="/sandbox" element={<Sandbox/>}/>
             <Route path="/exercise" element={<Exercise/>}/>
