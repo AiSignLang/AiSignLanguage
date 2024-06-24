@@ -28,8 +28,7 @@ export function Exercise(props: IProps) {
     const handleNextTask = (skipped: boolean) => {
         console.log('userSolution', userInput.current);
         if (skipped && level && level.tasks[currentTaskIndex.current]) {
-            level.tasks[currentTaskIndex.current].skipped = true;
-            level.tasks[currentTaskIndex.current].mistakes = null;
+            console.log("SKIPPED") // TODO
         } else if (level && level.tasks[currentTaskIndex.current]) {
         }
         currentTaskIndex.current++;
