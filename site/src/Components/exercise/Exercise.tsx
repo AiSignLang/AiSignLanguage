@@ -118,7 +118,7 @@ export function Exercise(props: IProps) {
         <div className="bg-bg-primary text-text-primary h-full min-h-screen w-full">
             <Alert
                 title={"Plug-in your device"}
-                image={"/public/img/error/charge.gif"}
+                image={"/img/error/charge.gif"}
                 width={150}
                 height={150}
                 description={"For an enhanced experience, we recommend connecting your device with an outlet."}
