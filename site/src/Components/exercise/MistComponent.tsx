@@ -1,7 +1,6 @@
 import CourseRead from "./CourseRead.tsx";
 import {ITask} from "../../model/backend/ITask.ts";
 import {TaskType} from "../../model/TaskType.ts";
-import {useState} from "react";
 
 /*
 * export interface ITask {
