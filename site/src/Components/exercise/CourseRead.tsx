@@ -17,7 +17,7 @@ export default function CourseRead(prop : IProp){
     NavService.changeNavHighlight(useLocation().pathname);
 
     const [currentVid, setCurrentVid] = useState<string>('');
-    const [currentTask, setCurrentTask] = useState<ITask | undefined>(prop.task)
+    const [currentTask] = useState<ITask | undefined>(prop.task)
     useEffect(() => {
         setCurrentVid(currentTask!.videoPath);
     }, []);
