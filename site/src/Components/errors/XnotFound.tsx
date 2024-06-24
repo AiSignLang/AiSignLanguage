@@ -17,7 +17,7 @@ export function XnotFound(props: IProps) {
                 </div>
             </div>
             <div className="w-full sm:w-1/2 flex items-center justify-center">
-                <img src="../../../public/img/error/404.svg" alt="404 error image"
+                <img src="/img/error/404.svg" alt="404 error image"
                      className="object-cover h-full w-full "/>
             </div>
         </div>
