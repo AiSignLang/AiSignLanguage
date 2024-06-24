@@ -14,6 +14,7 @@ import aslAuthRouter from "./routes/auth/asl-auth-router";
 import {configDotenv} from "dotenv";
 import {initDB} from "./data/init";
 import Level from "./data/models/Level";
+import {levelRouter} from "./routes/level-router";
 
 export const app = express();
 configDotenv()
@@ -30,6 +31,7 @@ app.use(cors());
 
 app.use("/api/user", userRouter);
 app.use("/api/friends", friendRouter);
+app.use("/api/levels", levelRouter);
 app.use("/oauth/google-auth/", googleAuthRouter);
 app.use("/oauth/asl-auth/", aslAuthRouter);
 if (!fs.existsSync(path.join(__dirname, '../data/db.sqlite3'))) {

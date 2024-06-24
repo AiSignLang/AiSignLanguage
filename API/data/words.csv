@@ -1,16 +1,16 @@
-TaskName;Words;VideoPath
-Begrüßung;Hallo;default_path
-Pronomen;Du;default_path
-Verabschiedung;Tschüss;default_path
-Pronomen;Ich;default_path
-Verb;mögen;default_path
-Pronomen;Wir;default_path
-Verb;helfen;default_path
-Fragewort;wie;default_path
-Verb;können;default_path
-Frage;Wie geht es dir?;default_path
-Fragewort;Warum;default_path
-Nomen;Ananas;default_path
-Präposition;auf;default_path
-Nomen;Pizza;default_path
-Verb;gehen;default_path
+TaskName;Words;VideoPath;tfSolution
+Begrüßung;Hallo;default_path;hallo
+Pronomen;Du;default_path;du
+Verabschiedung;Tschüss;default_path;tschüss
+Pronomen;Ich;default_path;ich
+Verb;mögen;default_path;mögen
+Pronomen;Wir;default_path;wir
+Verb;helfen;default_path;helfen
+Fragewort;wie;default_path;wie
+Verb;können;default_path;können
+Frage;Wie geht es dir?;default_path;wiegehtesdir
+Fragewort;Warum;default_path;warum
+Nomen;Ananas;default_path;ananas
+Präposition;auf;default_path;auf
+Nomen;Pizza;default_path;pizza
+Verb;gehen;default_path;gehen
