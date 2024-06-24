@@ -9,18 +9,23 @@ interface IProps {
     changeStep: (step: number) => void;
 }
 
-
 export default function EnterUsername(prop: IProps){
 
     const [username, setUsername] = useState('');
     const [cacheUsername, setCacheUsername] = useState('');
     const [usernameErrors, setUsernameErrors] = useState([] as ValidationErrors[]);
     useEffect(() => {
-        const storedUsername = sessionStorage.getItem("username") || '';
-        console.log(storedUsername);
-        setCacheUsername(storedUsername);
-        setUsername(storedUsername); // TODO: might be a bug, when  I set it directly to the username
-    }, []);
+        userService.getMe().then(async (user)=>{
+            let storedUsername = user?.userName ?? sessionStorage.getItem("username") ?? '';
+            const isGeneratedValid = await validateUsername(user?.userName ?? '')
+            if (isGeneratedValid.length !== 0){
+                storedUsername = sessionStorage.getItem("username") ?? '';
+            }
+            console.log(storedUsername);
+            setCacheUsername(storedUsername);
+            setUsername(storedUsername); // TODO: might be a bug, when  I set it directly to the username
+        })
+    }, [prop.changeStep]);
 
     const usernameValidation = (event: React.ChangeEvent<HTMLInputElement>)=>{
         const typedUsername = event !== null ?  event.target.value : cacheUsername;
@@ -29,10 +34,14 @@ export default function EnterUsername(prop: IProps){
         (async()=>{
             //const possibleErrors: ValidationErrors[] =  validateUsername(typedUsername);
             const possibleErrors = await validateUsername(typedUsername);
+            userService.validateUsername(typedUsername).then((isValid) => {
+                if (!isValid && !usernameErrors.includes(ValidationErrors.ALREADY_IN_USE)) {
+                    setUsernameErrors([...usernameErrors, ValidationErrors.ALREADY_IN_USE]);
+                }
+            })
             setUsernameErrors(possibleErrors);
             setCacheUsername(typedUsername);
 
-            sessionStorage.setItem("username", typedUsername);
 
             if(possibleErrors.length === 0){
                 console.log("username in validation block: "+typedUsername);
@@ -58,7 +67,6 @@ export default function EnterUsername(prop: IProps){
 
             <div className="mt-2">
                 <input
-                    value={cacheUsername}
                     onChange={usernameValidation}
                     type="text"
                     name="first-name"
@@ -74,7 +82,11 @@ export default function EnterUsername(prop: IProps){
             <div className="flex justify-between rounded mt-5 space-x-4">
                 <button onClick={async() => {
                     usernameValidation(null as unknown as React.ChangeEvent<HTMLInputElement>);
-                    if (usernameErrors.length === 0){
+                    const isValid = await userService.validateUsername(username);
+                    if (!isValid && !usernameErrors.includes(ValidationErrors.ALREADY_IN_USE)) {
+                            setUsernameErrors([...usernameErrors, ValidationErrors.ALREADY_IN_USE]);
+                    }
+                    if (usernameErrors.length === 0 && isValid){
                         const curUser = await userService.getMe();
                         if (!curUser) {
                             return;
@@ -83,7 +95,7 @@ export default function EnterUsername(prop: IProps){
                         if (!response) {
                             return;
                         }
-                        localStorage.setItem("username", response!.userName);
+                        sessionStorage.setItem("username", response!.userName);
                     }
                     prop.changeStep(1);
                 }} type="submit"
@@ -94,8 +106,11 @@ export default function EnterUsername(prop: IProps){
                 </button>
                 <button onClick={async () => {
                     usernameValidation(null as unknown as React.ChangeEvent<HTMLInputElement>);
-
-                    if (usernameErrors.length === 0) {
+                    const isValid = await userService.validateUsername(username);
+                    if (!isValid && !usernameErrors.includes(ValidationErrors.ALREADY_IN_USE)) {
+                        setUsernameErrors([...usernameErrors, ValidationErrors.ALREADY_IN_USE]);
+                    }
+                    if (usernameErrors.length === 0 && isValid) {
                         const curUser = await userService.getMe();
                         if (!curUser) {
                             return;
@@ -104,9 +119,11 @@ export default function EnterUsername(prop: IProps){
                         if (!response) {
                             return;
                         }
-                        localStorage.setItem("username", response!.userName);
+                        console.log("user saved");
+                        sessionStorage.setItem("username", response!.userName);
+                        prop.changeStep(3);
                     }
-                    prop.changeStep(3);
+                    
                 }} type="submit"
                         className="w-full justify-center py-2 px-4 rounded-md shadow-sm
                     text-sm font-medium text-text-primary bg-primary hover:bg-primary-hover focus:outline-none
