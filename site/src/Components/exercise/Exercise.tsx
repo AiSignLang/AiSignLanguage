@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Navbar from "../navbar/Navbar.tsx";
 import {useLocation} from "react-router-dom";
 import {courseService} from "../../services/CourseService.ts";
-import {ILevel} from "../../model/ILevel.ts";
+import {ILevel} from "../../model/backend/ILevel.ts";
 import {TaskType} from "../../model/TaskType.ts";
 import AIView from "../AIView.tsx";
 import {Alert} from "../errors/Alert.tsx";
@@ -19,31 +19,50 @@ export function Exercise(props: IProps) {
 
     //States
     const [level, setLevel] = useState<ILevel | null>(null);
-    const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
-    const [userInput, setUserInput] = useState<string[]>([]);
+    const currentTaskIndex = useRef<number>(0);
+    const [rerender,setRerender] = useState<boolean>(false);
+    const userInput = useRef<string[]>([]);
     const [showJoyride, setShowJoyride] = useState(false);
-    const [isCollecting, setIsCollecting] = useState(false);
+    const [wordIndex, setWordIndex] = useState(0);
 
-    const handleNextTask = (skipped: boolean, userSolution: string[] | null) => {
-        console.log('userSolution', userSolution);
-        if (skipped && level && level.tasks[currentTaskIndex]) {
-            level.tasks[currentTaskIndex].skipped = true;
-            level.tasks[currentTaskIndex].mistakes = null;
-        } else if (level && level.tasks[currentTaskIndex]) {
-
+    const handleNextTask = (skipped: boolean) => {
+        console.log('userSolution', userInput.current);
+        if (skipped && level && level.tasks[currentTaskIndex.current]) {
+            console.log("SKIPPED") // TODO
+        }else if (level && level.tasks[currentTaskIndex.current]) {
+            // TODO: Add logic here or remove the empty block
         }
-        setCurrentTaskIndex(prevIndex => prevIndex + 1);
-        setUserInput([]);
+        currentTaskIndex.current++;
+        userInput.current = [];
+        setWordIndex(0);
+        console.log("Cleared: ",userInput)
     };
+
+    useEffect(() => {
+        setRerender(!rerender);
+    }, [userInput.current]);
+
     const handleUserInput = (input: string) => {
-        setUserInput(prevUserInput => [...prevUserInput, input]);
+        userInput.current.push(input);
+        console.log("Pushed: ",userInput.current);
     }
     const handleAlertClose = () => {
         setShowJoyride(true);
     };
-    const handleCollected = (res: string[]) => {
-        setIsCollecting(false);
-        console.log(res);
+    const handleCollected = (res: {classes: string[], probabilities: number[]}) => {
+        const combined = res.classes.map((str, index) => ({ string: str, probability: res.probabilities[index] }));
+
+        // Sort the combined array based on probabilities in descending order
+        combined.sort((a, b) => b.probability - a.probability);
+        const topThree = combined.slice(0, 3);
+        const result = topThree.map(item => item.string);
+        console.log("RESULTS >>>>>>>>> ", result);
+
+        const word = level?.tasks[currentTaskIndex.current].tfSolution.split(',')[wordIndex];
+        if(word && result.includes(word)){
+            handleUserInput(word);
+            setWordIndex(prevIndex => prevIndex + 1);
+        }
     }
     const handleNextStep = (data: CallBackProps) => {
         const { status } = data;
@@ -52,16 +71,40 @@ export function Exercise(props: IProps) {
         }
     };
     useEffect(() => {
+
+        console.log("use effect type")
         switch (type) {
             case 'next': {
-                courseService.getNextLevel().then(levelData => setLevel(levelData));
+                console.log("YOGHURT 2");
+                courseService.getNextLevel().then(levelData => {
+                    console.log("levelData", levelData);
+                    if(levelData){
+                        setLevel(levelData)
+                    }else{
+                        //! TODO: Redirect to course page
+                    }
+                });
                 console.log(level);
                 break;
             }
             case null: {
-                courseService.getNextLevel().then(levelData => setLevel(levelData));
+                courseService.getNextLevel().then(levelData => {
+                    if(levelData){
+                        setLevel(levelData)
+                    }else{
+                        //! TODO: Redirect to course page
+                    }
+                });
                 console.log("it gets null here");
                 break;
+            }
+            default: {
+                courseService.getNextLevel().then(levelData => {
+                    if(levelData){
+                        setLevel(levelData)
+                    }else{
+                        //! TODO: Redirect to course page
+                    }});
             }
         }
     }, [type]);
@@ -79,8 +122,8 @@ export function Exercise(props: IProps) {
             content: 'In case you cannot spell the word, you can skip the task.',
         },
         {
-            target: '.collect',
-            content: 'For each underlined word, click this button. After a countdown, sign the word. 👋📸.',
+            target: '#collect',
+            content: 'As soon as you\'re ready sign, just click this button and sign until it turns grey.👋📸.',
         },
         {
             target: '.next-task',
@@ -100,8 +143,8 @@ export function Exercise(props: IProps) {
             />
             <Navbar></Navbar>
             <div className="w-full flex flex-col items-center">
-                <div className="bg-bg-secondary rounded-2xl p-4 w-1/3 mt-20" key={level && level.tasks[currentTaskIndex].taskID}>
-                    {level && level.tasks[currentTaskIndex] && level.tasks[currentTaskIndex].taskData.map((data, index) => (
+                <div className="bg-bg-secondary rounded-2xl p-4 w-1/3 mt-20" key={level && level.tasks[currentTaskIndex.current].taskId}>
+                    {level && level.tasks[currentTaskIndex.current] && level.tasks[currentTaskIndex.current].words && level.tasks[currentTaskIndex.current].words.split(',').map((data: string, index: number) => (
                         <React.Fragment key={index}>
                             <span><button className="underline" data-tooltip-target={`tooltip-${index}`}
                                           key={index}>{data}</button> </span>
@@ -115,28 +158,19 @@ export function Exercise(props: IProps) {
                     ))}
                 </div>
                 <div className="w-1/3 flex justify-between mt-5">
-                    {level && level.tasks[currentTaskIndex] && level.tasks[currentTaskIndex].type !== TaskType.RECOGNITION && ( //TODO MAYBE GENERALIZE, COULD BE ISSUE LATER
-                        <button onClick={() => {handleNextTask(true,null)}} className="cant-spell hover:bg-primary-greyed-hover border-2 border-primary-greyed rounded-2xl h-fit w-fit p-4">I
-                    can't {level.tasks[currentTaskIndex].type} right now.
+                    {level && level.tasks[currentTaskIndex.current] && level.tasks[currentTaskIndex.current].type !== TaskType.RECOGNITION && ( //TODO MAYBE GENERALIZE, COULD BE ISSUE LATER
+                        <button onClick={() => {handleNextTask(true)}} className="cant-spell hover:bg-primary-greyed-hover border-2 border-primary-greyed rounded-2xl h-fit w-fit p-4">I
+                    can't {level.tasks[currentTaskIndex.current].type} right now.
                 </button>
                 )}
                     {/*! TODO Change handleNext user solution param to actual user input*/}
-                    {level && level.tasks[currentTaskIndex] && level.tasks[currentTaskIndex].taskData.length === userInput.length ? (
+                    {userInput.current.length === level?.tasks[currentTaskIndex.current].tfSolution.split(',').length &&
+                    userInput.current.every((val) => level?.tasks[currentTaskIndex.current].tfSolution.split(',').includes(val)) ? (
                         <button onClick={() => {
-                            handleNextTask(false, level.tasks[currentTaskIndex].taskData)
+                            handleNextTask(false)
                         }} className="bg-primary rounded-2xl h-fit w-fit p-4 hover:bg-primary-hover">Next Task →</button>
                     ) : (
                         <div>
-                            {isCollecting && (<button disabled
-                                    className="collect bg-btn-bg-disable rounded-2xl h-fit w-fit p-4">Collect</button>
-                            )}
-                            {!isCollecting && (
-                                <button className="collect bg-primary rounded-2xl h-fit w-fit p-4 hover:bg-primary-hover" onClick={() => {
-                                    setIsCollecting(true);
-                                    console.log("changed it");
-                                    console.log(isCollecting);
-                                }} >Collect</button>
-                            )}
                             <button disabled
                                     className="next-task ml-5 bg-btn-bg-disable text-btn-text-disable rounded-2xl h-fit w-fit p-4">Next
                                 Task →
@@ -145,12 +179,9 @@ export function Exercise(props: IProps) {
                     )}
                 </div>
 
-                {level && courseService.isVisualTask(level.tasks[currentTaskIndex].type) && (
+                {level && (
                     <div className="mt-8 overflow-hidden rounded-3xl">
-                        <AIView isCollecting={isCollecting} collectionCallback={handleCollected}/>
-                        <button className="p-4 bg-primary" onClick={() => {
-                            handleUserInput('A');
-                        }}>P</button>
+                        <AIView collectionCallback={handleCollected}/>
                     </div>
                 )}
             </div>

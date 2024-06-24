@@ -2,6 +2,7 @@ import {userService} from "../../services/UserService.ts";
 import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import * as Utils from "../../model/Utils.ts";
+import {IUser} from "../../model/backend/IUser.ts";
 interface IProps {
     username: string;
 }
@@ -14,12 +15,14 @@ export default function User(props: IProps){
         const fetchUser = async () => {
             console.log('fetching user')
             const result = await userService.getUser(props.username,()=>{
+                alert('Unauthorized')
                 Utils.navigate('/Unauthorized');
                 return;
             });
             console.log('result', result)
             
             if(result === null){
+                alert('Profile not found')
                 navigate('/ProfileNotFound');
                 return;
             }
