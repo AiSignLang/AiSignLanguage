@@ -1,3 +1,4 @@
+import {useEffect, useRef} from "react";
 
 interface IProp{
     videoPath:string,
@@ -5,17 +6,21 @@ interface IProp{
 
 
 
-function VideoPlayer(prop: IProp) {
+function VideoPlayer(prop: IProp){
+    const videoRef = useRef<HTMLVideoElement | null>(null);
 
-    console.log("this is the video player: " + prop.videoPath);
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.load();
+        }
+    }, [prop.videoPath]);
 
     return (
-        <div className="justify-center items-center h-screen p-10">
-            <video className="rounded" controls autoPlay muted loop>
-                <source src={prop.videoPath} type="video/mp4"/>
-            </video>
-        </div>
-    )
+        <video className="w-1/3"
+            ref={videoRef} controls loop autoPlay muted>
+            <source src={prop.videoPath} type="video/mp4" />
+        </video>
+    );
 }
 
 export default VideoPlayer;
