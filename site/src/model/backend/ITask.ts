@@ -1,3 +1,5 @@
+import {TaskType} from "../TaskType.ts";
+
 export interface ITask {
     taskName: string;
     taskId: string;
@@ -5,7 +7,7 @@ export interface ITask {
     videoPath: string;
     words: string;
     tfSolution: string;
-    type: string | null;
+    type: TaskType | null;
     created_at: Date;
     updated_at: Date;
 }
