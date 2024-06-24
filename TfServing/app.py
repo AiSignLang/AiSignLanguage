@@ -1,57 +1,51 @@
 import json
 import tensorflow as tf
 import numpy as np
-import asyncio
-import websockets
+from flask import Flask, request, jsonify
 
 # Load the .keras model
 model = tf.keras.models.load_model('dynamicModel.keras')
-
 actions = ['hallo', 'wiegehtesdir', 'tschüss', 'ich', 'du', 'wir']
 
+app = Flask(__name__)
 
-async def handle_client_connection(websocket, path):
-    print(f'New connection from {websocket.remote_address}')
+
+@app.route('/predict', methods=['POST'])
+def predict():
     try:
-        request = await websocket.recv()
-        print(f"Received request: Request")
-        # Parse the JSON request
-        data = json.loads(request)
+        data = request.get_json()
+        print(f"Received request: {data}")
         if 'instances' not in data:
-            response = json.dumps({'error': 'no instances key found'})
-            if websocket.open:  # Check if the connection is still open
-                await websocket.send(response)
-            return
+            return jsonify({'error': 'no instances key found'}), 400
 
         data_reshaped = np.reshape(data['instances'], (-1, 30, 1662))
         input_tensor = tf.convert_to_tensor(data_reshaped)
-        #print input shape
+        # Print input shape
+        print(f"Input shape: {input_tensor.shape}")
+
         # Perform prediction
         predictions = model(input_tensor)
         prediction_list = predictions.numpy().tolist()
         print(f"Predictions: {prediction_list}")
 
-        # Send the response
-        response = json.dumps(
-            {
-                'classes': actions,
-                'probabilities': prediction_list
-            }
-        )
-        if websocket.open:  # Check if the connection is still open
-            await websocket.send(response)
+        response = {
+            'classes': actions,
+            'probabilities': prediction_list
+        }
+        return jsonify(response)
+    except json.JSONDecodeError:
+        error_msg = {'error': 'Invalid JSON format'}
+        print(f"JSON Error: {error_msg}")
+        return jsonify(error_msg), 400
+    except tf.errors.InvalidArgumentError as e:
+        error_msg = {'error': f'Invalid model input: {str(e)}'}
+        print(f"TensorFlow Error: {error_msg}")
+        return jsonify(error_msg), 400
     except Exception as e:
-        response = json.dumps({'error': str(e)})
-        print(f"Error: {response}")
-        if websocket.open:  # Check if the connection is still open
-            await websocket.send(response)
-
-
-async def main():
-    async with websockets.serve(handle_client_connection, "localhost", 8501):
-        print("Server started at ws://localhost:8501")
-        await asyncio.Future()  # Run forever
+        error_msg = {'error': str(e)}
+        print(f"Error: {error_msg}")
+        return jsonify(error_msg), 500
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    app.run(host='0.0.0.0', port=8501)
