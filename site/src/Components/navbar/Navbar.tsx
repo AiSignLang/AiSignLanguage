@@ -6,6 +6,7 @@ import {Logout} from "../../services/auth/auth-service.ts";
 import Dropdown from "./Dropdown.tsx";
 import {userService} from "../../services/UserService.ts";
 import * as Utils from "../../model/Utils.ts";
+import {IUser} from "../../model/backend/IUser.ts";
 
 export const navigation = [
     { name: 'Profile', href: '/profile', current: true },
