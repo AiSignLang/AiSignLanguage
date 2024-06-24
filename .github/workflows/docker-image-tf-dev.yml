@@ -1,5 +1,5 @@
 
-name: Docker Image API DEV 
+name: Docker Image AI DEV 
 
 on:
   push:
