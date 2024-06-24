@@ -14,6 +14,7 @@ import aslAuthRouter from "./routes/auth/asl-auth-router";
 import {configDotenv} from "dotenv";
 import {initDB} from "./data/init";
 import Level from "./data/models/Level";
+import {levelRouter} from "./routes/level-router";
 
 export const app = express();
 configDotenv()
@@ -30,27 +31,26 @@ app.use(cors());
 
 app.use("/api/user", userRouter);
 app.use("/api/friends", friendRouter);
+app.use("/api/levels",levelRouter)
 app.use("/oauth/google-auth/", googleAuthRouter);
 app.use("/oauth/asl-auth/", aslAuthRouter);
 if (!fs.existsSync(path.join(__dirname, '../data/db.sqlite3'))) {
-    sequelize.sync({force: true}).then(async () => {
-        console.log('Database synchronized');
-    });
     sequelize.createSchema('test',{logging: true}).then(() => {
         console.log('Schema created');
+        sequelize.sync({force:true}).then(()=>{
+            initDB().then(() => {
+                sequelize.sync().then(async () => {
+                    console.log('Database synchronized');
+                    Level.findAll().then((levels) => {
+                        console.log(levels);
+                    })
+                })
+            });
+        })
     });
 
-    sequelize.sync({force: true}).then(async () => {
-        initDB().then(() => {
-            sequelize.sync({force: true}).then(async () => {
-                console.log('Database synchronized');
-                Level.findAll().then((levels) => {
-                    console.log(levels);
-                })
-            })
-        });
-    })
 }
+
 /* just testing
 sequelize.sync({force:true}).then(async () => {
     const u =await user.create({

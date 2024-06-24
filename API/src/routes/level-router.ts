@@ -3,6 +3,9 @@ import {StatusCodes} from "http-status-codes";
 import Level from "../data/models/Level";
 import {isIDValid} from "../Utils";
 import Score from "../data/models/Score";
+import {Authorize} from "../middleware/authorization-middleware";
+import User from "../data/models/User";
+import Task from "../data/models/Task";
 
 export const levelRouter = express.Router();
 
@@ -23,27 +26,36 @@ levelRouter.get("/", async (_, res) => {
     }
 })
 
-levelRouter.get("/:levelId", async (req, res) => {
-    const levelId = req.params.levelId;
-
-    if(!isIDValid(levelId)){
+levelRouter.get("/next",Authorize, async (req:any, res) =>{
+    if (!req.user){
         res.sendStatus(StatusCodes.BAD_REQUEST);
+    }
+    const current = await User.findOne({
+        where:{
+            userName:req.user.userName
+        },
+        include: Level
+    })
+    const index = current?.levelNumber;
+    if (index === undefined){
+        res.sendStatus(StatusCodes.NOT_FOUND);
         return;
     }
 
-    try{
-        const level = await Level.findByPk(levelId);
-        if(level === null) {
-            res.sendStatus(StatusCodes.BAD_REQUEST);
-            return;
-        }
-
-        res.json(level);
-
-    }catch (err){
-        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    const level = await Level.findOne({
+        where: {
+            levelNumber: index+1
+        },
+        include: Task
+    })
+    if (level === null){
+        console.log("Level not found");
+        const levels = await Level.findAll();
+        console.log(levels);
+        res.sendStatus(StatusCodes.NOT_FOUND);
+        return;
     }
-
+    res.json(level);
 });
 
 levelRouter.get("/:index", async (req,res)=>{

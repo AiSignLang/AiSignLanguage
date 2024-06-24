@@ -30,12 +30,12 @@ aslAuthRouter.post( "/token", async (req, res) => {
     
     const tokens = 
         await fetchRestEndpoint<OAuthASLTokens>(
-            `${config.externalAddress}/auth/Account/token`, "POST", {
+            `${config.authURL}/auth/Account/token`, "POST", {
                 'accessCode': hashedAccessCode, 
                 'email': email,
     }, null);
     const userData =
-        await  fetchRestEndpoint<OAuthASLUserData>(`${config.externalAddress}/auth/Account/`,"GET",undefined,tokens?.accessToken)
+        await  fetchRestEndpoint<OAuthASLUserData>(`${config.authURL}/auth/Account/`,"GET",undefined,tokens?.accessToken)
     const tempUsername = `User${userData?.id}`
     const existingUser = await OAuthAccount.findOne({
         where: {
