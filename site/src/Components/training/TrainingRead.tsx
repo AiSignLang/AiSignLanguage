@@ -7,6 +7,7 @@ import ReadTrainingAttachment from "./training-read/ReadTrainingAttachment.tsx";
 import ImgPlaceholder from "./training-read/ImgPlaceholder.tsx";
 import {useEffect, useState} from "react";
 import {navigate} from "../../model/Utils.ts";
+import ToolTip from "./training-read/ToolTip.tsx";
 
 const mistakes: IMistake[] = [
     {
@@ -67,9 +68,7 @@ function TrainingRead(){
 
         const index = taskVideos.indexOf(currentVid);
         const mistakeIndex = mistakes.indexOf(currentMistake);
-        console.log(taskVideos);
-        console.log(currentVid);
-        console.log(index);
+
         const newVideo =  taskVideos[index + 1];
         const newMistake = mistakes[mistakeIndex + 1];
         console.log(newVideo);
@@ -87,13 +86,15 @@ function TrainingRead(){
 
                 <div className="flex flex-col items-center justify-center bg-gray-800 rounded-3xl">
                     <h2 className="w-1/2 text-white p-2 rounded text-center">Train on your
-                        mistakes!</h2>
+                        mistakes! <ToolTip mistake={currentMistake}/>
+                    </h2>
+
                     {currentVid && <VideoPlayer videoPath={currentVid}/>}
                     <div className="w-1/2">
                         {currentMistake ? <ReadTrainingAttachment changeVideo={changeVideo} mistake={currentMistake}/> : null}
                     </div>
                 </div>
-                <div className="h-full">
+                <div className="h-full flex justify-center">
                     <ImgPlaceholder/>
                 </div>
             </div>

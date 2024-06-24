@@ -16,9 +16,10 @@ function VideoPlayer(prop: IProp){
     }, [prop.videoPath]);
 
     return (
-        <video className="w-1/2 flex"
-            ref={videoRef} controls loop autoPlay muted>
-            <source src={prop.videoPath} type="video/mp4" />
+
+        <video className="w-1/2 flex rounded-md"
+               ref={videoRef} controls loop autoPlay muted>
+            <source src={prop.videoPath} type="video/mp4"/>
         </video>
     );
 }
