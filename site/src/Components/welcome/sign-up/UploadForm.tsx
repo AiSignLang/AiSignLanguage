@@ -16,7 +16,7 @@ export default function UploadForm(prop: IProps) {
     const [picture, setPicture] = useState("");
     useEffect(() => {
         (async () => {
-            const response = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/${localStorage.getItem("username")}`, "GET", undefined, true);
+            const response = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/${sessionStorage.getItem("username")}`, "GET", undefined, true);
             if (response) {
                 setPicture(response!.profilePic);
             }})();

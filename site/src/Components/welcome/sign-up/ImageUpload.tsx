@@ -20,7 +20,7 @@ export default function ImageUpload(prop: IProps) {
                 if (file && file.type.startsWith('image/')) { // Check if the file is an image
                     const form = new FormData();
                     form.append("avatar", file);
-                    const response = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/${localStorage.getItem("username")}/avatar`, "PUT", form, true);
+                    const response = await fetchRestEndpoint<IUser>(`${config.externalAddress}/api/user/${sessionStorage.getItem("username")}/avatar`, "PUT", form, true);
                     if (response) {
                         prop.setPicture(response!.profilePic);
                     }
