@@ -48,77 +48,30 @@ export function Course(props: IProps) {
     NavService.changeNavHighlight(useLocation().pathname);
     console.log("Courseprops", props);
     console.log(courseService.getDoneTasksCount())
-    const data2 = {
-        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-        datasets: [
-            {
-                label: '✅ Tasks Done',
-                data: [3, 3, 3, 5, 3, 5],
-                backgroundColor: 'rgba(47,47,47,0.8)',
-                borderColor: "rgba(47,47,47,1)",
-                borderWidth: 1,
-            },
-            {
-                label: '⭐ Perfect Tasks',
-                data: [1, 2, 3, 5, 2, 3],
-                backgroundColor: 'rgba(0,0,0,0.8)',
-                borderColor: 'rgb(0,0,0)',
-                borderWidth: 1,
-            }
-        ],
-    };
-
-    const options = {
-        scales: {
-            x: {
-                grid: {
-                    color: 'rgb(255,255,255,.1)',  // this will set the color of the grid lines on the x-axis
-                },
-                stacked: true,
-            },
-            y: {
-                grid: {
-                    color: 'rgb(255,255,255,.1)',  // this will set the color of the grid lines on the y-axis
-                },
-                beginAtZero: true,
-            },
-            r: {
-                angleLines: {
-                    color: 'rgb(255,255,255,.1)'  // this will set the color of the radial lines on the radar chart
-                },
-                grid: {
-                    color: 'rgb(255,255,255,.1)',  // this will set the color of the circular grid lines on the radar chart
-                },
-                suggestedMin: 0,
-                suggestedMax: 50
-            }
-        }
-    };
     //Saturated colours
     //                    'rgba(0,132,255,0.2)',                     "rgba(0,132,255,1)",
     return (
-        <div className="bg-bg-primary text-text-primary h-full min-h-screen w-full">
+        <div className="bg-bg-primary text-text-primary h-full min-h-screen w-full flex flex-col justify-center">
             <Navbar></Navbar>
-            <div className="flex justify-center w-full ">
+            <div className="flex justify-center w-full flex-grow items-center">
                 <div className="mt-20">
-                    <h1 className="text-4xl font-bold text-gray-600">You <span
-                        className="text-gradient bg-clip-text bg-red-gradient">haven't</span> done your exercises today
-                        :(</h1>
+                    <h1 className="text-4xl font-bold text-gray-600">
+                        You <span className="text-gradient bg-clip-text bg-red-gradient">haven't</span> done your
+                        exercises today :(
+                    </h1>
                     <div className="flex justify-center gap-10">
-                        <Link to="/exercise?type=next" className="mt-10 text-xl bg-primary w-fit p-3.5 rounded hover:bg-primary-hover">
+                        <Link to="/exercise?type=next"
+                              className="mt-10 text-xl bg-primary w-fit p-3.5 rounded hover:bg-primary-hover">
                             Do them now
                         </Link>
-                        <Link to="/pause" className="mt-10 text-xl w-fit p-3.5 rounded text-gray-600 hover:text-text-primary">
+                        <Link to="/pause"
+                              className="mt-10 text-xl w-fit p-3.5 rounded text-gray-600 hover:text-text-primary">
                             I need time off →
                         </Link>
                     </div>
                 </div>
             </div>
-            <div className="flex w-full mt-20 gap-20 justify-center">
-              <div className="w-1/2">
-                  <Bar data={data2} options={options}/>
-              </div>
-            </div>
         </div>
+
     );
 }
