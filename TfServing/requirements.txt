@@ -1,13 +1,19 @@
 absl-py==2.1.0
 astunparse==1.6.3
+blinker==1.8.2
 certifi==2024.6.2
 charset-normalizer==3.3.2
+click==8.1.7
+Flask==3.0.3
+Flask-Cors==4.0.1
 flatbuffers==24.3.25
 gast==0.5.4
 google-pasta==0.2.0
 grpcio==1.64.1
 h5py==3.11.0
 idna==3.7
+itsdangerous==2.2.0
+Jinja2==3.1.4
 keras==3.3.3
 libclang==18.1.1
 Markdown==3.6
@@ -25,7 +31,6 @@ Pygments==2.18.0
 requests==2.32.3
 rich==13.7.1
 six==1.16.0
-tensorboard==2.16.2
 tensorboard-data-server==0.7.2
 tensorflow==2.16.1
 tensorflow-io-gcs-filesystem==0.37.0
