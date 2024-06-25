@@ -1,7 +1,6 @@
 import {NavService} from "../../services/NavigationService.ts";
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
-import Navbar from "../navbar/Navbar.tsx";
 import ToolTip from "../training/training-read/ToolTip.tsx";
 import VideoPlayer from "../training/VideoPlayer.tsx";
 import ReadTrainingAttachment from "../training/training-read/ReadTrainingAttachment.tsx";
@@ -25,9 +24,7 @@ export default function CourseRead(prop : IProp){
     // TODO: look into task service
     return (
         <div className="h-screen bg-bg-primary justify-center min-h-screen">
-            <Navbar/>
             <div className="grid grid-cols-2 w-full m-4 mt-10 p-10">
-
                 <div className="h-full flex justify-center">
                     <ImgPlaceholder picturePath={"Studying-rafiki.png"}/>
                 </div>

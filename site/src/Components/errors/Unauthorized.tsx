@@ -12,7 +12,7 @@ export function Unauthorized() {
                 </div>
             </div>
             <div className="w-full sm:w-1/2 flex items-center justify-center">
-                <img src="../../../public/img/error/401.svg" alt="401 error image"
+                <img src="/img/error/401.svg" alt="401 error image"
                      className="object-cover h-full w-full "/>
             </div>
         </div>

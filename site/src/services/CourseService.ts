@@ -24,6 +24,14 @@ class CourseService {
         return await fetchRestEndpoint<ILevel>(`${config.externalAddress}/api/levels/next`, "GET", undefined, true,(code:StatusCodes) => {   console.log("Error", code);});
     }
 
+    public async completeLevel(levelNumber: string) {
+        const sessionUser = sessionStorage.getItem('user');
+        if(!sessionUser){
+            return null; //! TODO Renaviagte to login
+        }
+        return await fetchRestEndpoint<ILevel>(`${config.externalAddress}/api/levels/${levelNumber}/complete`, "POST", undefined, true,(code:StatusCodes) => {   console.log("Error", code);});
+    }
+
     public isVisualTask(taskType: TaskType) {
         const visualTasks = {
             [TaskType.SPELLING]: true,
@@ -36,7 +44,7 @@ class CourseService {
 
     public getPrediction(taskData: (number[])[]) {
         console.log(taskData.length);
-        return fetch('http://localhost:8501/predict', {
+        return fetch('https://aisl.lambourne.at/ai/predict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
