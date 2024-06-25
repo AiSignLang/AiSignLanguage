@@ -49,7 +49,7 @@ function TrainingRead(){
     const [currentVid, setCurrentVid] = useState<string>('');
     const [taskVideos, setTaskVideos] = useState<string[]>([] as string[]);
     const [allMistakes, setAllMistakes] = useState([] as IMistake[])
-    const [currentMistake, setCurrentMistake] = useState<IMistake>(allMistakes[0])
+    const [currentMistake, setCurrentMistake] = useState<IMistake>(allMistakes[0] || "")
 
     useEffect(() => {
         (async () => {
@@ -85,11 +85,16 @@ function TrainingRead(){
             <div className="grid grid-cols-2 w-full m-4 mt-10 p-10">
 
                 <div className="flex flex-col items-center justify-center bg-gray-800 rounded-3xl">
-                    <h2 className="w-1/2 text-white p-2 rounded text-center">Train on your
-                        mistakes! <ToolTip solution={currentMistake.solution}/>
+                    <h2 className="w-1/2 text-white p-2 rounded text-center">Train on your mistakes!
+
+                        {(currentMistake
+                            ? (<ToolTip solution={currentMistake.solution}/>)
+                            : <></>)}
+
                     </h2>
 
                     {currentVid && <VideoPlayer videoPath={currentVid}/>}
+                    {!currentMistake ? <h1 className="text-white font-bold mt-10">No more mistakes to train on!</h1> : null}
                     <div className="w-1/2">
                         {currentMistake ? <ReadTrainingAttachment changeVideo={changeVideo} solution={currentMistake.solution}/> : null}
                     </div>
