@@ -41,6 +41,7 @@ export function Translation(props: IProps) {
         const word = props.task.tfSolution.split(',')[wordIndex];
         if(word && result.includes(word)){
             handleUserInput(word);
+            console.log(word);
             setWordIndex(prevIndex => prevIndex + 1);
         }
     }

@@ -44,7 +44,7 @@ class CourseService {
 
     public getPrediction(taskData: (number[])[]) {
         console.log(taskData.length);
-        return fetch('https://aisl.lambourne.at:5002/ai/predict', {
+        return fetch('http://localhost:5002/ai/predict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
